@@ -1,0 +1,15 @@
+*~
+*.swp
+*.swo
+xtq.js
+node_modules
+npm-debug.log
+~*
+dump*
+*.db*
+media/
+.npmrc
+*.anki2
+*.srf
+config
+coverage/

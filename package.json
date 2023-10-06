@@ -1,0 +1,26 @@
+{
+  "name": "@ig3/srf-scheduler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint . && c8 multi-tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ig3/srf-scheduler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@ig3/eslint-config-entrain": "^3.0.1",
+    "better-sqlite3": "^8.7.0",
+    "c8": "^8.0.1",
+    "multi-tape": "^1.7.0",
+    "tape": "^5.7.0"
+  },
+  "eslintConfig": {
+    "extends": "@ig3/eslint-config-entrain"
+  }
+}
