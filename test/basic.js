@@ -89,6 +89,22 @@ t.test('getNextCard', t => {
     date: dateDaysAgo(30)
   });
 
+  function getMultiplier (unit) {
+    const units = [
+      ['seconds', 1],
+      ['minutes', 60],
+      ['hours', 3600],
+      ['days', 3600 * 24],
+      ['weeks', 3600 * 24 * 7],
+      ['months', 3600 * 24 * 365 / 12],
+      ['years', 3600 * 24 * 365]
+    ];
+    for (let i = 0; i < units.length; i++) {
+      if (units[i][0].startsWith(unit)) return units[i][1];
+    }
+    throw new Error('Unsupported unit: ', unit);
+  }
+
   const srf = {
     getStatsNext24Hours: function () {
       return {
@@ -105,6 +121,21 @@ t.test('getNextCard', t => {
     },
     getCountCardsOverdue: function () {
       return 0;
+    },
+    resolveUnits: function (value) {
+      if (typeof value === 'string') {
+        const match = value.match(/^([0-9]+)\s*(.*)/);
+        if (match) {
+          const number = Number(match[1] || 0);
+          const units = match[2].toLowerCase();
+          if (units) {
+            const multiplier = getMultiplier(units);
+            if (!multiplier) throw new Error('Unsupported unit: ' + units);
+            return number * multiplier;
+          }
+        }
+      }
+      return value;
     }
   };
   const scheduler = require('..')({
@@ -336,7 +367,7 @@ function formatLocalDate (date) {
 }
 
 function dateDaysAgo (n) {
-  var d = new Date();
+  const d = new Date();
 
   d.setDate(d.getDate() - n);
 

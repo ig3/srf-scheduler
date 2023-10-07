@@ -296,11 +296,13 @@ function intervalEasy (card) {
 
   return (
     Math.floor(
-      self.config.maxInterval,
-      self.config.maxEasyInterval,
-      Math.max(
-        self.config.easyMinInterval,
-        intervalGood.call(self, card) * self.config.easyFactor
+      Math.min(
+        self.config.maxInterval,
+        self.config.maxEasyInterval,
+        Math.max(
+          self.config.easyMinInterval,
+          intervalGood.call(self, card) * self.config.easyFactor
+        )
       )
     )
   );
@@ -369,7 +371,7 @@ function getNextNew () {
     limit 1
   `).get(
     now() + self.config.minTimeBetweenRelatedCards,
-    (now() - self.config.mintimeBetweenRelatedCards) * 1000
+    (now() - self.config.minTimeBetweenRelatedCards) * 1000
   );
   return card;
 }
@@ -563,6 +565,50 @@ function now () {
   return (Math.floor(Date.now() / 1000));
 }
 
+function defaultConfigParameters () {
+  const self = this;
+
+  const config = self.config;
+
+  const defaults = {
+    decayFactor: 0.95,
+    easyFactor: 1.5,
+    easyMinInterval: '1 day',
+    failFactor: 0.5,
+    failMaxInterval: '1 day',
+    goodFactor: 1.0,
+    goodMinFactor: 1.1,
+    goodMinInterval: '5 minutes',
+    hardFactor: 0.8,
+    hardMaxInterval: '1 week',
+    learningThreshold: '1 week',
+    matureThreshold: '21 days',
+    maxEasyInterval: '1 year',
+    maxGoodInteral: '1 year',
+    maxInterval: '1 year',
+    maxNewCardsPerDay: 20,
+    maxViewTime: '2 minutes',
+    minPercentCorrectCount: 10,
+    minStudyTime: '20 minutes',
+    minTimeBetweenRelatedCards: '1 hour',
+    percentCorrectSensitivity: 0.0001,
+    percentCorrectTarget: 90,
+    percentCorrectWindow: '1 month',
+    probabilityOldestDue: 0.2,
+    targetStudyTime: '30 minutes',
+    weightEasy: 2,
+    weightFail: 0,
+    weightGood: 1.5,
+    weightHard: 1
+  };
+
+  Object.keys(defaults).forEach(key => {
+    if (typeof (config[key]) === 'undefined') {
+      config[key] = self.srf.resolveUnits(defaults[key]);
+    }
+  });
+}
+
 const api = {
   getCountCardsDueToday,
   getIntervals,
@@ -581,6 +627,10 @@ module.exports = function (opts = {}) {
   instance.srf = opts.srf;
   instance.config = opts.config;
   instance.reviewsSinceLastNewCard = 0;
+
+  if (instance.config) {
+    defaultConfigParameters.call(instance);
+  }
 
   return instance;
 };

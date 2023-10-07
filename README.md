@@ -90,3 +90,212 @@ recording the review of the card.
 The new interval and due time for the card are calculated according to
 ease.
 
+
+## Configuration
+
+The scheduler is configured by the following configuration parameters.
+
+### config.decayFactor
+
+decayFactor determines the exponential decay of ease weight to determine
+the card ease factor. The resulting card ease factor is one of the factors
+that contributes the overall factor by which interval is increased for Good
+and Easy responses.
+
+### config.easyFactor
+
+The interval for an Easy response is the interval for a Good response
+multiplied by easyFactor.
+
+### config.easyMinInterval
+
+easyMinInterval is the minimum interval after an Easy response.
+
+### config.failFactor
+
+failFactor is the factor by which interval is multiplied after a Fail
+response.
+
+### config.failMaxInterval
+
+failMaxInterval is the maximum interval after a Fail response.
+
+### config.goodFactor
+
+After a Good response, the interval is multiplied by goodFactor and the
+card ease factor. The product of these is the overal factor by which
+interval is multiplied.
+
+### config.goodMinFactor
+
+goodMinFactor is the minimum factor by which interval is multiplied after a
+Good response. 
+
+### config.goodMinInterval
+
+goodMinInterval is the minimum interval after a Good response.
+
+### config.hardFactor
+
+hardFactor is the factor by which interval is multiplied after a Hard
+response.
+
+### config.hardMaxInterval
+
+hardMaxInterval is the maximum interval after a Hard response.
+
+### config.learningThreshold
+
+learningThreshold is the threshold between cards being treated as 'new' and
+'learning' cards.
+
+Card intervals and due dates are modified periodically if their interval is
+between learningThreshold and maxInterval.
+
+### config.matureThreshold
+
+matureThreshold is the threshold between cards being treaded as 'learning'
+and 'mature' cards.
+
+### config.maxEasyInterval
+
+maxEasyInterval is an upper bound on interval after an Easy response.
+
+### config.maxGoodInterval
+
+maxGoodInterval is an upper bound on interval after a Good response.
+
+### config.maxInterval
+
+maxInterval is an upper bound on interval after a Good or Easy response.
+
+### config.maxNewCardsPerDay
+
+maxNewCardsPerDay is the maximum number of new cards which may be presented
+in a 24 hour period.
+
+### config.maxViewTime
+
+maxViewTime is an upper bound on view time recorded in revlog. It doesn't
+have anything to do with the scheduler. It is here for historic reasons,
+pending refactoring the processing of card reviews.
+
+### config.minPercentCorrectCount
+
+minPercentCorrectCount is the minimum number of reviews of mature cards in
+the percentCorrectWindow in order that 'percent correct' is calculated. The
+'percent correct' is a factor in adjusting the intervals and due dates of
+cards.
+
+### config.minStudyTime
+
+minStudyTime is the minimum study time in a 24 hour period below which new
+cards will be presented in preference to due cards. 
+
+### config.minTimeBetweenRelatedCards
+
+Related cards are cares generated from the same field set.
+minTimeBetweenRelatedCards is the minimum time between reviews of related
+cards.
+
+### config.percentCorrectSensitivity
+
+percentCorrectSensitivity is a factor that determines the sensitivity to
+the difference between 'percent correct' and percentCorrectTarget. It
+determines how much the intervals and due dates of cards are modified when
+adjusted for percent correct.
+
+### config.percentCorrectTarget
+
+percentCorrectTarget is the target for 'percent correct'. Below this,
+intervals are reduced and due dates moved closer. Above this, intervals are
+increased and due dates moved further away.
+
+### config.percentCorrectWindow
+
+percnetCorrectWindow is the window over which 'percent correct' is
+calculated. Reviews longer ago than this do not contribute.
+
+### config.probabilityOldestDue
+
+probabilityOldestDue is the probability the scheduler will select cards
+according to due date rather than interval.
+
+### config.targetStudyTime
+
+targetStudyTime is an upper bound on study time in a 24 hour period above
+which new cards will not be presented.
+
+### config.weightEasy
+
+weightEasy is the weight of an Easy response in calculating the card ease
+factor by a process of moving average exponential decay.
+
+### config.weightFail
+
+weightFail is the weight of a Fail response in calculating the card ease
+factor by a process of moving average exponential decay.
+
+### config.weightGood
+
+weightGood is the weight of a Good response in calculating the card ease
+factor by a process of moving average exponential decay.
+
+### config.weightHard
+
+weightHard is the weight of an Hard response in calculating the card ease
+factor by a process of moving average exponential decay.
+
+## Algorithms
+
+### interval adjustments
+
+Interval is the interval between card reviews. The interval of a card is
+adjusted each time it is reviewed, according to its 'ease' (Fail, Hard,
+Good or Easy). Interval (and due date) are also adjusted after any card
+with an interval greater than learningThreshold is reviewed, according to
+the difference between 'percent correct' and percentCorrectTarget.
+
+#### Fail
+
+If the ease of a review is Fail, then the new interval is the previous
+interval multiplied by failFactor, with an upper bound of failMaxInterval.
+
+#### Hard
+
+If the ease of a review is Hard, then the new interval is the previous
+interval multiplied by hardFactor, with an upper bound of hardMaxInterval.
+
+#### Good
+
+If the ease of a review is Good, then the new interval is the previous
+interval multiplied by the product of goodFactor and the card ease factor
+(the exponentially weighted moving average of response weights), with a
+minimum of goodMinFactor and a minimum interval of goodMinInterval.
+
+Each ease has a weight (weightFail, weightHard, weightGood and weightEasy)
+and these are averaged by an exponentially weighted moving average with a
+decay factor of decayFactor. This card ease factor reflects how easy or
+difficult the card has been recently.
+
+#### Easy
+
+If the ease of a review is Easy, then the new interval is the interval for
+a Good response multiplied by the easyFactor, with a minimum of
+easyMinInterval and maximum of the lower of maxEasyInterval and maxInteral.
+
+#### Percent Correct
+
+Whenever a card is reviewed with a new interval greater than
+learningThreshold, then the intervals and due dates of all cards with
+interval between learningThreshold and maxInterval are adjusted according
+to the difference between 'percent correct' and percentCorrectTarget,
+multiplied by percentCorrectSensitivity.
+
+## Changes
+
+### 1.0.1 - 20231007
+ * README updates
+ * Default config parameters relevant to the scheduler
+ * Fix error in intervalEasy
+ * Fix typo in getNextNew
