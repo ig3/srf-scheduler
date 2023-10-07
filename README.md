@@ -278,6 +278,19 @@ and these are averaged by an exponentially weighted moving average with a
 decay factor of decayFactor. This card ease factor reflects how easy or
 difficult the card has been recently.
 
+If the adjusted interval of the card is less than learningThreshold then it
+is used to calculate the new interval but if the adjusted interval is more
+than learningThreshold then the average of the adjusted interval and the
+time since last review is used instead. This will make a difference when
+review of the card is delayed from its due date: after a break from
+studying, while clearing the backlog. The rationale is that if you were
+able to recall the card after a longer interval than the scheduled interval
+then the scheduled interval was too short and the longer, actual interval
+is more relevant to rescheduling the card. The implementation is a
+compromise: using the average of the scheduled and actual interval. If
+cards are being studied before they are due, this would cause the new
+interval to be shorter.
+
 #### Easy
 
 If the ease of a review is Easy, then the new interval is the interval for
@@ -300,5 +313,9 @@ multiplied by percentCorrectSensitivity.
  * Fix error in intervalEasy
  * Fix typo in getNextNew
 
-### 1.0.2 - WIP
+### 1.0.2 - 20231008
  * Fix getStatsNext24Hours
+
+### 1.0.3 - WIP
+ * Simplify and improve getAverageStudyTimePerNewCard and
+   getAverageStudyTimePerOldCard

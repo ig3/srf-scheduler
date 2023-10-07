@@ -7,11 +7,6 @@ function review (card, viewTime, studyTime, ease) {
   self.reviewsSinceLastNewCard =
     card.interval === 0 ? 0 : self.reviewsSinceLastNewCard + 1;
 
-  if (viewTime > self.config.maxViewTime) {
-    studyTime = viewTime = 120;
-    ease = 'fail';
-  }
-
   viewTime = Math.floor(viewTime);
   const newInterval = Math.max(1, getNewInterval.call(self, card, ease));
   updateSeenCard.call(self, card, viewTime, studyTime, ease, newInterval);
@@ -21,6 +16,11 @@ function review (card, viewTime, studyTime, ease) {
   }
 }
 
+// Adjust the interval and due of cards according to the difference between
+// 'percent correct' and percentCorrectTarget. Only cards with interval
+// between learningThreshold and maxInterval are adjusted. The purpose of
+// this is to provide a low latency feedback from error rate (percent
+// correct) to interval.
 function adjustCards () {
   const self = this;
 
@@ -180,6 +180,12 @@ function getLastInterval (id) {
   return result ? result.interval : 0;
 }
 
+// newCardFactor implements an exponentially weighted moving average of the
+// ease weights to produce a factor that should correlate with the ease of
+// the card. Assumptions are that some cards are harder/easier than others
+// and that the ease of a card can change over time and reviews. This
+// factor is used by the scheduler to calculate the new interval after Good
+// and Easy reviews.
 function newCardFactor (card, ease) {
   const self = this;
   const easeWeight = {
@@ -194,6 +200,7 @@ function newCardFactor (card, ease) {
   ).toFixed(2);
 }
 
+// Returns YYYY-MM-DD from the given date
 function formatLocalDate (date) {
   const format = (n) => (n < 10 ? '0' : '') + n;
   return date.getFullYear() +
@@ -201,6 +208,8 @@ function formatLocalDate (date) {
     '-' + format(date.getDate());
 }
 
+// Returns the new interval for the card, according to ease
+// There is a different algorithm for each ease.
 function getNewInterval (card, ease) {
   const self = this;
   if (ease === 'fail') return intervalFail.call(self, card);
@@ -308,7 +317,13 @@ function intervalEasy (card) {
   );
 }
 
-// getNext returns the ID of the next card to be reviewed.
+// getNextDue returns the next due card to be studied.
+// One of two sorting algorithms is used, selected randomly.
+// One of the first 5 cards is selected at random, rather than strictly the
+// first card in the selected sort.
+// Normally, only due cards may be returned but if overrideLimits is true
+// then cards are sorted by due date and may be returned even if their due
+// date is in the future.
 function getNextDue (overrideLimits = false) {
   const self = this;
 
@@ -416,35 +431,20 @@ function getStatsNext24Hours () {
   });
 }
 
-function getAverageStudyTimePerOldCard (days = 14) {
+// Returns the recent (10 days) average study time per day per card,
+// considering only cards with interval more than one day.
+function getAverageStudyTimePerOldCard () {
   const self = this;
   let stats =
     self.db.prepare(`
-      select sum(studytime) / count(distinct cardid) as average
-      from revlog
-      where
-        interval > 68400 and
-        id > ?
-      group by revdate
-    `)
-    .all((now() - days * 60 * 60 * 24) * 1000);
-  if (stats && stats.length > 0) {
-    let total = 0;
-    stats.forEach(day => {
-      total += day.average;
-    });
-    return total / stats.length;
-  }
-
-  stats =
-    self.db.prepare(`
-      select sum(studytime) / count(distinct cardid) as average
+      select avg(studytime) as average
       from revlog
       where interval > 68400
       group by revdate
+      order by revdate desc
+      limit 10
     `)
-    .all();
-
+    .all((now() - days * 60 * 60 * 24) * 1000);
   if (stats && stats.length > 0) {
     let total = 0;
     stats.forEach(day => {
@@ -452,37 +452,23 @@ function getAverageStudyTimePerOldCard (days = 14) {
     });
     return total / stats.length;
   }
-
   return 30;
 }
 
-function getAverageStudyTimePerNewCard (days = 14) {
+// Returns the recent (10 days) average study time per day per card,
+// considering only cards with interval less than one day. In this case, it
+// is likely that each card is studied more than once per day. What we want
+// is the average study time per card per day, not per review.
+function getAverageStudyTimePerNewCard () {
   const self = this;
   let stats =
-    self.db.prepare(`
-      select sum(studytime) / count(distinct cardid) as average
-      from revlog
-      where
-        interval < 68400 and
-        id > ?
-      group by revdate
-    `)
-    .all((now() - days * 60 * 60 * 24) * 1000);
-
-  if (stats && stats.length > 0) {
-    let total = 0;
-    stats.forEach(day => {
-      total += day.average;
-    });
-    return total / stats.length;
-  }
-
-  stats =
     self.db.prepare(`
       select sum(studytime) / count(distinct cardid) as average
       from revlog
       where interval < 68400
       group by revdate
+      order by revdate desc
+      limit 10
     `)
     .all();
 
@@ -493,7 +479,6 @@ function getAverageStudyTimePerNewCard (days = 14) {
     });
     return total / stats.length;
   }
-
   return 30;
 }
 
