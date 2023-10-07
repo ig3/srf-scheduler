@@ -420,71 +420,60 @@ function getNextCard (overrideLimits = false) {
 
 function getStatsNext24Hours () {
   const self = this;
-  const countCards = getCardsToReview.call(self, 60 * 60 * 24);
-  const countNewCards = getNewCardsToReview.call(self, 60 * 60 * 24);
-  const countOldCards = countCards - countNewCards;
+  // Get the average time per unique card per day, averaged over the past
+  // 14 days of study. This will be the estimate of time per card due. It
+  // should factor in a typical balance of new cards (reviewed multiple
+  // times per day) and older cards (reviewed only once per day), and the
+  // average recent difficulty / study style.
+  const timePerCard =
+    self.db.prepare(`
+      select avg(t/n) as avg
+      from (
+        select
+          count(distinct cardid) as n,
+          sum(studytime) as t
+        from revlog
+        group by revdate
+        order by revdate desc
+        limit 14
+      )
+    `)
+    .get().avg || 0.5;
+
+  // Get the number of cards due, excluding those that will not be
+  // presented due to minTimeBetweenRelatedCards.
+  const t2 = now() + 60 * 60 * 24;
+  const t1 = Math.min(t2, now() + self.config.minTimeBetweenRelatedCards);
+  let cards =
+    self.db.prepare(`
+      select count(distinct fieldsetid) as count
+      from card
+      where
+        due < ? and
+        interval != 0
+    `)
+    .get(t1).count;
+  if (t2 > t1) {
+    cards +=
+      self.db.prepare(`
+        select count() as count
+        from card
+        where
+          due >= ? and
+          due < ?
+      `)
+      .get(t1, t2).count;
+  }
   return ({
-    count: countCards,
-    time:
-      countOldCards * getAverageStudyTimePerOldCard.call(self) +
-      countNewCards * getAverageStudyTimePerNewCard.call(self)
+    count: cards,
+    time: cards * timePerCard
   });
 }
 
-// Returns the recent (10 days) average study time per day per card,
-// considering only cards with interval more than one day.
-function getAverageStudyTimePerOldCard () {
+function getNewCardsNext24Hours () {
   const self = this;
-  let stats =
-    self.db.prepare(`
-      select avg(studytime) as average
-      from revlog
-      where interval > 68400
-      group by revdate
-      order by revdate desc
-      limit 10
-    `)
-    .all((now() - days * 60 * 60 * 24) * 1000);
-  if (stats && stats.length > 0) {
-    let total = 0;
-    stats.forEach(day => {
-      total += day.average;
-    });
-    return total / stats.length;
-  }
-  return 30;
-}
-
-// Returns the recent (10 days) average study time per day per card,
-// considering only cards with interval less than one day. In this case, it
-// is likely that each card is studied more than once per day. What we want
-// is the average study time per card per day, not per review.
-function getAverageStudyTimePerNewCard () {
-  const self = this;
-  let stats =
-    self.db.prepare(`
-      select sum(studytime) / count(distinct cardid) as average
-      from revlog
-      where interval < 68400
-      group by revdate
-      order by revdate desc
-      limit 10
-    `)
-    .all();
-
-  if (stats && stats.length > 0) {
-    let total = 0;
-    stats.forEach(day => {
-      total += day.average;
-    });
-    return total / stats.length;
-  }
-  return 30;
-}
-
-function getNewCardsToReview (secs) {
-  const self = this;
-  const limit = Math.min(secs, self.config.minTimeBetweenRelatedCards);
+  const t2 = now() + 60 * 60 * 24;
+  const t1 = Math.min(t2, now() + self.config.minTimeBetweenRelatedCards);
   let cardsDue =
     self.db.prepare(`
       select count(distinct fieldsetid) as count
@@ -494,8 +483,9 @@ function getNewCardsToReview (secs) {
         interval < 68400 and
         due <= ?
     `)
-    .get(now() + limit).count;
-  if (secs > limit) {
+    .get(t1).count;
+
+  if (t2 > t1) {
     cardsDue +=
       self.db.prepare(`
         select count() as count
@@ -506,8 +496,9 @@ function getNewCardsToReview (secs) {
           due > ? and
           due < ?
       `)
-      .get(now() + limit, now() + secs).count;
+      .get(t1, t2).count;
   }
+
   return cardsDue;
 }
 

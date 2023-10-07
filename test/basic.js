@@ -333,7 +333,7 @@ t.test('getNextCard', t => {
     },
     500,
     500,
-    'nonesuch'
+    'good'
   );
 
   Math.random = function () {

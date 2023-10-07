@@ -319,3 +319,4 @@ multiplied by percentCorrectSensitivity.
 ### 1.0.3 - WIP
  * Simplify and improve getAverageStudyTimePerNewCard and
    getAverageStudyTimePerOldCard
+ * Refactor calculation of stats for next 24 hours
