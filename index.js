@@ -423,7 +423,7 @@ function getAverageStudyTimePerOldCard (days = 14) {
       select sum(studytime) / count(distinct cardid) as average
       from revlog
       where
-        interval < 68400 and
+        interval > 68400 and
         id > ?
       group by revdate
     `)
@@ -440,7 +440,7 @@ function getAverageStudyTimePerOldCard (days = 14) {
     self.db.prepare(`
       select sum(studytime) / count(distinct cardid) as average
       from revlog
-      where interval < 68400
+      where interval > 68400
       group by revdate
     `)
     .all();

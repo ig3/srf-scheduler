@@ -299,3 +299,6 @@ multiplied by percentCorrectSensitivity.
  * Default config parameters relevant to the scheduler
  * Fix error in intervalEasy
  * Fix typo in getNextNew
+
+### 1.0.2 - WIP
+ * Fix getStatsNext24Hours
