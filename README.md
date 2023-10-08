@@ -21,6 +21,17 @@ current day in localtime, excluding deferred cards.
 Returns an object with the new interval for each possible ease for the
 given card.
 
+### getNewCardMode()
+
+Returns 'go', 'slow' or 'stop'.
+
+Go if new cards will be presented when there are no cards due.
+
+Slow if new cards will be presented, interleaved with due cards but not if
+there are no cards due.
+
+Stop if new cards will not be presented.
+
 ### getNextCard(overrideLimits)
 
 Returns the next card to be studied or undefined.
@@ -323,8 +334,11 @@ multiplied by percentCorrectSensitivity.
 ### 1.0.2 - 20231008
  * Fix getStatsNext24Hours
 
-### 1.0.3 - WIP
+### 1.1.0 - WIP
  * Simplify and improve getAverageStudyTimePerNewCard and
    getAverageStudyTimePerOldCard
  * Refactor calculation of stats for next 24 hours
  * Improve getStatsNext24Hours - better estimates, including new cards
+ * Add API method: getNewCardMode
+ * refactor getNextCard to use getNewCardMode
+

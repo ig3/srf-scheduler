@@ -109,13 +109,13 @@ t.test('getNextCard', t => {
     getStatsNext24Hours: function () {
       return {
         cards: 5,
-        time: 30
+        time: 15
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 15,
-        time: 30,
+        time: 15,
         newCards: 5
       };
     },
@@ -172,7 +172,6 @@ t.test('getNextCard', t => {
 
   let card;
   card = scheduler.getNextCard();
-  console.log('card: ', JSON.stringify(card, null, 2));
   t.ok(card, 'got card');
   t.equal(card.id, 1, 'got card 1');
 

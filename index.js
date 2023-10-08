@@ -391,26 +391,45 @@ function getNextNew () {
   return card;
 }
 
+function getNewCardMode () {
+  const self = this;
+
+  const statsPast24Hours = self.srf.getStatsPast24Hours();
+  const statsNext24Hours = self.srf.getStatsNext24Hours();
+  const cardsOverdue = self.srf.getCountCardsOverdue();
+
+  if (
+    statsPast24Hours.time < self.config.targetStudyTime &&
+    statsNext24Hours.time < self.config.targetStudyTime &&
+    statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
+    cardsOverdue === 0
+  ) {
+    if (statsPast24Hours.time < self.config.minStudyTime) {
+      return 'go';
+    } else {
+      return 'slow';
+    }
+  } else {
+    return 'stop';
+  }
+}
+
 function getNextCard (overrideLimits = false) {
   const self = this;
 
   if (overrideLimits) return self.getNextDue() || self.getNextNew();
 
+  const newCardMode = getNewCardMode.call(self);
+
   const statsPast24Hours = self.srf.getStatsPast24Hours();
-  const statsNext24Hours = self.srf.getStatsNext24Hours();
-  const cardsOverdue = self.srf.getCountCardsOverdue();
-  const minReviewsPerNewCard =
+  const minReviews =
     statsPast24Hours.count / self.config.maxNewCardsPerDay / 2;
 
   const dueCard = self.getNextDue();
+
   if (
-    statsPast24Hours.time < self.config.targetStudyTime &&
-    statsNext24Hours.time < self.config.targetStudyTime &&
-    statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
-    cardsOverdue === 0 && (
-      self.reviewsSinceLastNewCard > minReviewsPerNewCard ||
-      (!dueCard && statsPast24Hours.time < self.config.minStudyTime)
-    )
+    (newCardMode === 'go' && !dueCard) ||
+    (newCardMode !== 'stop' && self.reviewsSinceLastNewCard > minReviews)
   ) {
     return self.getNextNew();
   } else {
@@ -472,7 +491,7 @@ function getStatsNext24Hours () {
   });
 }
 
-function getAverageNewCardsPerDay (days=14) {
+function getAverageNewCardsPerDay (days = 14) {
   const self = this;
 
   return self.db.prepare(`
@@ -487,38 +506,6 @@ function getAverageNewCardsPerDay (days=14) {
     )
   `)
   .get(days).avg;
-}
-
-function getNewCardsNext24Hours () {
-  const self = this;
-  const t2 = now() + 60 * 60 * 24;
-  const t1 = Math.min(t2, now() + self.config.minTimeBetweenRelatedCards);
-  let cardsDue =
-    self.db.prepare(`
-      select count(distinct fieldsetid) as count
-      from card
-      where
-        interval != 0 and
-        interval < 68400 and
-        due <= ?
-    `)
-    .get(t1).count;
-
-  if (t2 > t1) {
-    cardsDue +=
-      self.db.prepare(`
-        select count() as count
-        from card
-        where
-          interval != 0 and
-          interval < 68400 and
-          due > ? and
-          due < ?
-      `)
-      .get(t1, t2).count;
-  }
-
-  return cardsDue;
 }
 
 function getCardsToReview (secs) {
@@ -607,6 +594,7 @@ function defaultConfigParameters () {
 const api = {
   getCountCardsDueToday,
   getIntervals,
+  getNewCardMode,
   getNextCard,
   getNextDue,
   getNextNew,
