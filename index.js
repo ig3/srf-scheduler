@@ -441,7 +441,8 @@ function getStatsNext24Hours () {
     .get().avg || 0.5;
 
   // Get the number of cards due, excluding those that will not be
-  // presented due to minTimeBetweenRelatedCards.
+  // presented due to minTimeBetweenRelatedCards and including average new
+  // cards per day.
   const t2 = now() + 60 * 60 * 24;
   const t1 = Math.min(t2, now() + self.config.minTimeBetweenRelatedCards);
   let cards =
@@ -464,10 +465,28 @@ function getStatsNext24Hours () {
       `)
       .get(t1, t2).count;
   }
+  cards += getAverageNewCardsPerDay.call(this);
   return ({
-    count: cards,
-    time: cards * timePerCard
+    count: Math.floor(cards),
+    time: Math.floor(cards * timePerCard)
   });
+}
+
+function getAverageNewCardsPerDay (days=14) {
+  const self = this;
+
+  return self.db.prepare(`
+    select avg(n) as avg
+    from (
+      select count() as n
+      from revlog
+      where lastinterval = 0
+      group by revdate
+      order by revdate desc
+      limit ?
+    )
+  `)
+  .get(days).avg;
 }
 
 function getNewCardsNext24Hours () {

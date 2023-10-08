@@ -9,12 +9,12 @@ This is the default scheduler for
 $ npm install @ig3/srf-scheduler
 ```
 
-## api
+## API
 
 ### getCountCardsDueToday
 
 Returns the number of cards to be reviewed between now and the end of the
-current day in localtime.
+current day in localtime, excluding deferred cards.
 
 ### getIntervals(card)
 
@@ -77,19 +77,26 @@ Returns an object with properties:
 Where count is the number of cards due in the next 24 hours and time is the
 estimated time (seconds) to study all the cards due in the next 24 hours.
 
+Count is the number of cards due within the next 24 hours, excluding
+deferred cards (multiple cards from the same fieldset due within
+minTimeBetweenRelatedCards) and including recent average number of new
+cards per day.
+
+Time is an estimate of the time to review all these cards, based on recent
+performance.
+
 ### getTimeNextDue
 
 Returns the time (seconds since the epoch) when the card with the earliest
-due time is due.
+due time is due. This may be in the past or in the future, depending on
+current backlog.
 
 ### review(card, viewTime, studyTime, ease)
 
-Updates the given card according to ease and creates a revlog record
-recording the review of the card.
+Updates the given card, setting new interval and due, according to ease and
+creates a revlog record recording the review of the card.
 
-The new interval and due time for the card are calculated according to
-ease.
-
+The new interval and due are calculated according to the ease.
 
 ## Configuration
 
@@ -320,3 +327,4 @@ multiplied by percentCorrectSensitivity.
  * Simplify and improve getAverageStudyTimePerNewCard and
    getAverageStudyTimePerOldCard
  * Refactor calculation of stats for next 24 hours
+ * Improve getStatsNext24Hours - better estimates, including new cards
