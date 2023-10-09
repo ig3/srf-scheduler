@@ -497,9 +497,8 @@ function getAverageNewCardsPerDay (days = 14) {
   return self.db.prepare(`
     select avg(n) as avg
     from (
-      select count() as n
+      select count(case when lastinterval = 0 then 1 end) as n
       from revlog
-      where lastinterval = 0
       group by revdate
       order by revdate desc
       limit ?

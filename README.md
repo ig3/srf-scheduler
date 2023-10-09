@@ -341,4 +341,5 @@ multiplied by percentCorrectSensitivity.
  * Improve getStatsNext24Hours - better estimates, including new cards
  * Add API method: getNewCardMode
  * refactor getNextCard to use getNewCardMode
+ * Fix calculation of average new cards per day
 
