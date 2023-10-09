@@ -443,7 +443,9 @@ function getStatsNext24Hours () {
   // 14 days of study. This will be the estimate of time per card due. It
   // should factor in a typical balance of new cards (reviewed multiple
   // times per day) and older cards (reviewed only once per day), and the
-  // average recent difficulty / study style.
+  // average recent difficulty / study style. Exclude the current revdate
+  // because it will underestimate the total study time of short interval
+  // cards.
   const timePerCard =
     self.db.prepare(`
       select avg(t/n) as avg
@@ -452,6 +454,7 @@ function getStatsNext24Hours () {
           count(distinct cardid) as n,
           sum(studytime) as t
         from revlog
+        where revdate != (select max(revdate) from revlog)
         group by revdate
         order by revdate desc
         limit 14
@@ -494,11 +497,14 @@ function getStatsNext24Hours () {
 function getAverageNewCardsPerDay (days = 14) {
   const self = this;
 
+  // Exclude the current date because it will be incomplete so will
+  // underestimate the number of new cards for the full day.
   return self.db.prepare(`
     select avg(n) as avg
     from (
       select count(case when lastinterval = 0 then 1 end) as n
       from revlog
+      where revdate != (select max(revdate) from revlog)
       group by revdate
       order by revdate desc
       limit ?
