@@ -343,3 +343,4 @@ multiplied by percentCorrectSensitivity.
  * refactor getNextCard to use getNewCardMode
  * Fix calculation of average new cards per day
  * Exclude current date from estimate of time per card and new cards per day
+ * Refactor getNextCard and change new card interval

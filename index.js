@@ -421,20 +421,43 @@ function getNextCard (overrideLimits = false) {
 
   const newCardMode = getNewCardMode.call(self);
 
-  const statsPast24Hours = self.srf.getStatsPast24Hours();
-  const minReviews =
-    statsPast24Hours.count / self.config.maxNewCardsPerDay / 2;
-
   const dueCard = self.getNextDue();
 
   if (
     (newCardMode === 'go' && !dueCard) ||
-    (newCardMode !== 'stop' && self.reviewsSinceLastNewCard > minReviews)
+    (newCardMode !== 'stop' && timeForNewCard.call(self))
   ) {
     return self.getNextNew();
   } else {
-    return self.getNextDue();
+    return dueCard;
   }
+}
+
+function timeForNewCard () {
+  const self = this;
+
+  const minReviews = Math.floor(
+    0.8 *
+    getAverageReviewsPerDay.call(self) / getAverageNewCardsPerDay.call(self)
+  );
+
+  return self.reviewsSinceLastNewCard > minReviews;
+}
+
+function getAverageReviewsPerDay (days = 14) {
+  const self = this;
+  return self.db.prepare(`
+    select avg(n) as avg
+    from (
+      select count() as n
+      from revlog
+      where revdate != (select max(revdate) from revlog)
+      group by revdate
+      order by revdate desc
+      limit ?
+    )
+  `)
+  .get(days).avg || 0;
 }
 
 function getStatsNext24Hours () {
