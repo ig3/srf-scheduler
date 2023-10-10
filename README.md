@@ -334,7 +334,7 @@ multiplied by percentCorrectSensitivity.
 ### 1.0.2 - 20231008
  * Fix getStatsNext24Hours
 
-### 1.1.0 - WIP
+### 1.1.0 - 20231011
  * Simplify and improve getAverageStudyTimePerNewCard and
    getAverageStudyTimePerOldCard
  * Refactor calculation of stats for next 24 hours
