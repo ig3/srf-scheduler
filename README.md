@@ -344,3 +344,6 @@ multiplied by percentCorrectSensitivity.
  * Fix calculation of average new cards per day
  * Exclude current date from estimate of time per card and new cards per day
  * Refactor getNextCard and change new card interval
+
+### 1.1.1 - 20231013
+ * Adjust time between new cards according to average study time

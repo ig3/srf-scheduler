@@ -437,11 +437,27 @@ function timeForNewCard () {
   const self = this;
 
   const minReviews = Math.floor(
-    0.8 *
+    getAverageStudytime.call() / self.config.targetStudyTime *
     getAverageReviewsPerDay.call(self) / getAverageNewCardsPerDay.call(self)
   );
 
   return self.reviewsSinceLastNewCard > minReviews;
+}
+
+function getAverageStudyTime (days = 14) {
+  const self = this;
+  return self.db.prepare(`
+    select avg(n) as avg
+    from (
+      select sum(studytime) as n
+      from revlog
+      where revdate != (select max(revdate) from revlog)
+      group by revdate
+      order by revdate desc
+      limit ?
+    )
+  `)
+  .get(days).avg || 0;
 }
 
 function getAverageReviewsPerDay (days = 14) {
