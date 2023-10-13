@@ -350,3 +350,6 @@ multiplied by percentCorrectSensitivity.
 
 ### 1.1.2 - 20231014
  * Fix typo
+
+### 1.1.3 - 20231014
+ * Fix call to getAverageStudyTime
