@@ -347,3 +347,6 @@ multiplied by percentCorrectSensitivity.
 
 ### 1.1.1 - 20231013
  * Adjust time between new cards according to average study time
+
+### 1.1.2 - 20231014
+ * Fix typo

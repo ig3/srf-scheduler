@@ -437,7 +437,7 @@ function timeForNewCard () {
   const self = this;
 
   const minReviews = Math.floor(
-    getAverageStudytime.call() / self.config.targetStudyTime *
+    getAverageStudyTime.call() / self.config.targetStudyTime *
     getAverageReviewsPerDay.call(self) / getAverageNewCardsPerDay.call(self)
   );
 
