@@ -350,6 +350,9 @@ t.test('getNextCard', t => {
   };
   card = scheduler.getNextCard();
 
+  const stats = scheduler.getStatsNext24Hours();
+  t.ok(stats, 'got stats');
+
   t.end();
 });
 

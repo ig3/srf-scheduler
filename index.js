@@ -297,7 +297,7 @@ function getTimeCardLastSeen (id) {
     where cardid = ?
   `)
   .get(id);
-  return result ? Math.floor(result.id / 1000) : 0;
+  return result.id ? Math.floor(result.id / 1000) : 0;
 }
 
 function intervalEasy (card) {
@@ -365,6 +365,7 @@ function getTimeNextDue () {
     order by due, templateid
     limit 1
   `).get();
+  if (!card) return;
   return card.due;
 }
 
@@ -417,7 +418,7 @@ function getNewCardMode () {
 function getNextCard (overrideLimits = false) {
   const self = this;
 
-  if (overrideLimits) return self.getNextDue() || self.getNextNew();
+  if (overrideLimits) return self.getNextDue(true) || self.getNextNew();
 
   const newCardMode = getNewCardMode.call(self);
 
@@ -438,7 +439,8 @@ function timeForNewCard () {
 
   const minReviews = Math.floor(
     getAverageStudyTime.call(self) / self.config.targetStudyTime *
-    getAverageReviewsPerDay.call(self) / getAverageNewCardsPerDay.call(self)
+    getAverageReviewsPerDay.call(self) /
+    (getAverageNewCardsPerDay.call(self) || self.config.maxNewCardsPerDay)
   );
 
   return self.reviewsSinceLastNewCard > minReviews;
@@ -549,7 +551,7 @@ function getAverageNewCardsPerDay (days = 14) {
       limit ?
     )
   `)
-  .get(days).avg;
+  .get(days).avg || 0;
 }
 
 function getCardsToReview (secs) {
