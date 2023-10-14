@@ -396,7 +396,7 @@ function getNewCardMode () {
   const self = this;
 
   const statsPast24Hours = self.srf.getStatsPast24Hours();
-  const statsNext24Hours = self.srf.getStatsNext24Hours();
+  const statsNext24Hours = self.getStatsNext24Hours();
   const cardsOverdue = self.srf.getCountCardsOverdue();
 
   if (
