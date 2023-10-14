@@ -649,6 +649,10 @@ const api = {
   review
 };
 
+api.private = {
+  formatLocalDate
+};
+
 module.exports = function (opts = {}) {
   const instance = Object.create(api);
 

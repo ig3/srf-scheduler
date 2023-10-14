@@ -356,3 +356,6 @@ multiplied by percentCorrectSensitivity.
 
 ### 1.1.4 - 20231014
  * Add some tests - not very good but better than nothing
+
+### 1.1.5 - WIP
+ * Add test for formatLocalDate
