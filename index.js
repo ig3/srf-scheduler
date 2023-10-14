@@ -649,10 +649,6 @@ const api = {
   review
 };
 
-api.private = {
-  formatLocalDate
-};
-
 module.exports = function (opts = {}) {
   const instance = Object.create(api);
 
@@ -663,6 +659,12 @@ module.exports = function (opts = {}) {
 
   if (instance.config) {
     defaultConfigParameters.call(instance);
+  }
+
+  if (opts.testPrivateMethods) {
+    instance.privateMethods = {
+      formatLocalDate
+    };
   }
 
   return instance;

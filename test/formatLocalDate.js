@@ -8,13 +8,14 @@ t.test('formatLocalDate', t => {
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
+      testPrivateMethods: true
     });
 
-    const d1 = scheduler.private.formatLocalDate(new Date('2023-10-01T01:02:03.000Z'));
+    const d1 = scheduler.privateMethods.formatLocalDate(new Date('2023-10-01T01:02:03.000Z'));
     console.log('d1: ', d1);
     t.equal(d1, '2023-10-01', 'leading zeros');
-    const d2 = scheduler.private.formatLocalDate(new Date('2023-10-11T01:02:03.000Z'));
+    const d2 = scheduler.privateMethods.formatLocalDate(new Date('2023-10-11T01:02:03.000Z'));
     console.log('d2: ', d2);
     t.equal(d2, '2023-10-11', 'no leading zeros');
     t.end();
