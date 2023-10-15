@@ -3,6 +3,7 @@
 const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
+const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
 
 // review is called when a card is reviewed
@@ -443,25 +444,6 @@ function getStatsNext24Hours () {
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard)
   });
-}
-
-function getAverageNewCardsPerDay (days = 14) {
-  const self = this;
-
-  // Exclude the current date because it will be incomplete so will
-  // underestimate the number of new cards for the full day.
-  return self.db.prepare(`
-    select avg(n) as avg
-    from (
-      select count(case when lastinterval = 0 then 1 end) as n
-      from revlog
-      where revdate != (select max(revdate) from revlog)
-      group by revdate
-      order by revdate desc
-      limit ?
-    )
-  `)
-  .get(days).avg || 0;
 }
 
 function getCountCardsDueToday () {
