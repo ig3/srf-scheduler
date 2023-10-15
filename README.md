@@ -367,3 +367,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor getPercentCorrect
  * Refactor adjustCards
  * Refactor deferRelated
+ * Refactor getCardsToReview

@@ -3,6 +3,7 @@
 const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
+const getCardsToReview = require('./getCardsToReview.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -461,33 +462,6 @@ function getAverageNewCardsPerDay (days = 14) {
     )
   `)
   .get(days).avg || 0;
-}
-
-function getCardsToReview (secs) {
-  const self = this;
-  const limit = Math.min(secs, self.config.minTimeBetweenRelatedCards);
-  let cardsDue =
-    self.db.prepare(`
-      select count(distinct fieldsetid) as count
-      from card
-      where
-        interval != 0 and
-        due < ?
-    `)
-    .get(now() + limit).count;
-  if (secs > limit) {
-    cardsDue +=
-      self.db.prepare(`
-        select count() as count
-        from card
-        where
-          interval != 0 and
-          due > ? and
-          due < ?
-      `)
-      .get(now() + limit, now() + secs).count;
-  }
-  return cardsDue;
 }
 
 function getCountCardsDueToday () {
