@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "eslint . && c8 multi-tape test/*.js"
+    "test": "eslint . && c8 --all multi-tape test/*.js"
   },
   "repository": {
     "type": "git",

@@ -361,3 +361,6 @@ multiplied by percentCorrectSensitivity.
  * Add test for formatLocalDate
  * Introduce new cards slowly if predicted study time in the next 24 hours
    is more than config.minStudyTime.
+
+### 1.2.1 - WIP
+ * Refactor formatLocalDate

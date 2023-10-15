@@ -1,5 +1,7 @@
 'use strict';
 
+const formatLocalDate = require('./formatLocalDate.js');
+
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
   const self = this;
@@ -198,14 +200,6 @@ function newCardFactor (card, ease) {
     self.config.decayFactor * (card.factor || 0) +
     (1.0 - self.config.decayFactor) * (easeWeight[ease])
   ).toFixed(2);
-}
-
-// Returns YYYY-MM-DD from the given date
-function formatLocalDate (date) {
-  const format = (n) => (n < 10 ? '0' : '') + n;
-  return date.getFullYear() +
-    '-' + format(date.getMonth() + 1) +
-    '-' + format(date.getDate());
 }
 
 // Returns the new interval for the card, according to ease
@@ -662,12 +656,6 @@ module.exports = function (opts = {}) {
 
   if (instance.config) {
     defaultConfigParameters.call(instance);
-  }
-
-  if (opts.testPrivateMethods) {
-    instance.privateMethods = {
-      formatLocalDate
-    };
   }
 
   return instance;
