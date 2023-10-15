@@ -365,3 +365,4 @@ multiplied by percentCorrectSensitivity.
 ### 1.2.1 - WIP
  * Refactor formatLocalDate
  * Refactor getPercentCorrect
+ * Refactor adjustCards

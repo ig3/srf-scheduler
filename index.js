@@ -1,7 +1,7 @@
 'use strict';
 
 const formatLocalDate = require('./formatLocalDate.js');
-const getPercentCorrect = require('./getPercentCorrect.js');
+const adjustCards = require('./adjustCards.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -16,42 +16,6 @@ function review (card, viewTime, studyTime, ease) {
   deferRelated.call(self, card, now() + self.config.minTimeBetweenRelatedCards);
   if (card.interval > self.config.learningThreshold) {
     adjustCards.call(self);
-  }
-}
-
-// Adjust the interval and due of cards according to the difference between
-// 'percent correct' and percentCorrectTarget. Only cards with interval
-// between learningThreshold and maxInterval are adjusted. The purpose of
-// this is to provide a low latency feedback from error rate (percent
-// correct) to interval.
-function adjustCards () {
-  const self = this;
-
-  const percentCorrect = getPercentCorrect.call(self);
-  if (percentCorrect) {
-    const error = percentCorrect - self.config.percentCorrectTarget;
-    if (Math.abs(error) > 1) {
-      const adjustment = Math.max(
-        -0.5,
-        error * self.config.percentCorrectSensitivity
-      );
-      self.db.prepare(`
-        update card
-        set
-          interval = floor(interval + interval * @adjustment),
-          due = floor(due + interval * @adjustment)
-        where
-          due > @now and
-          interval > @minInterval and
-          interval < @maxInterval
-      `)
-      .run({
-        adjustment: adjustment,
-        minInterval: self.config.learningThreshold,
-        maxInterval: self.config.maxInterval,
-        now: now()
-      });
-    }
   }
 }
 
