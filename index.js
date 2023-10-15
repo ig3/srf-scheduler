@@ -405,7 +405,10 @@ function getNewCardMode () {
     statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {
-    if (statsPast24Hours.time < self.config.minStudyTime) {
+    if (
+      statsPast24Hours.time < self.config.minStudyTime &&
+      statsNext24Hours.time < self.config.minStudyTime
+    ) {
       return 'go';
     } else {
       return 'slow';

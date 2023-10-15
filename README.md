@@ -357,5 +357,7 @@ multiplied by percentCorrectSensitivity.
 ### 1.1.4 - 20231014
  * Add some tests - not very good but better than nothing
 
-### 1.1.5 - WIP
+### 1.2.0 - WIP
  * Add test for formatLocalDate
+ * Introduce new cards slowly if predicted study time in the next 24 hours
+   is more than config.minStudyTime.
