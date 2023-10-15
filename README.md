@@ -366,3 +366,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor formatLocalDate
  * Refactor getPercentCorrect
  * Refactor adjustCards
+ * Refactor deferRelated

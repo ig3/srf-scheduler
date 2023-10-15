@@ -1,7 +1,8 @@
 'use strict';
 
-const formatLocalDate = require('./formatLocalDate.js');
 const adjustCards = require('./adjustCards.js');
+const deferRelated = require('./deferRelated.js');
+const formatLocalDate = require('./formatLocalDate.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -17,24 +18,6 @@ function review (card, viewTime, studyTime, ease) {
   if (card.interval > self.config.learningThreshold) {
     adjustCards.call(self);
   }
-}
-
-function deferRelated (card, due) {
-  const self = this;
-  self.db.prepare(`
-    update card
-    set due = ?
-    where
-      fieldsetid = ? and
-      id != ? and
-      due < ?
-  `)
-  .run(
-    due,
-    card.fieldsetid,
-    card.id,
-    due
-  );
 }
 
 function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
