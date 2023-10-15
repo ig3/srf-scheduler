@@ -1,6 +1,7 @@
 'use strict';
 
 const formatLocalDate = require('./formatLocalDate.js');
+const getPercentCorrect = require('./getPercentCorrect.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -52,42 +53,6 @@ function adjustCards () {
       });
     }
   }
-}
-
-function getPercentCorrect (on, window, minInterval, maxInterval) {
-  const self = this;
-  on ||= now();
-  window ||= self.config.percentCorrectWindow;
-  minInterval ||= self.config.matureThreshold;
-  maxInterval ||= self.config.maxInterval;
-
-  const result = self.db.prepare(`
-    select
-      count() as count,
-      avg(
-        case ease
-        when 'fail' then 0
-        else 1
-        end
-      ) as average
-    from revlog
-    where
-      lastinterval > @minInterval and
-      lastinterval < @maxInterval and
-      id > @from and
-      id < @to
-  `)
-  .get({
-    minInterval: minInterval,
-    maxInterval: maxInterval,
-    from: (on - window) * 1000,
-    to: on * 1000
-  });
-  return (
-    (result && result.count > self.config.minPercentCorrectCount)
-      ? result.average * 100
-      : 0
-  );
 }
 
 function deferRelated (card, due) {
