@@ -369,3 +369,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor deferRelated
  * Refactor getCardsToReview
  * Refactor getAverageNewCardsPerDay
+ * Refactor getAverageReviewsPerDay
