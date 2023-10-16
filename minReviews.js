@@ -14,8 +14,8 @@
 'use strict';
 
 const getAverageStudyTime = require('./getAverageStudyTime.js');
-const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
+const getCardsToReview = require('./getCardsToReview.js');
 
 module.exports = function minReviews () {
   const self = this;
@@ -23,7 +23,7 @@ module.exports = function minReviews () {
   return Math.floor(
     self.config.newCardRateFactor *
     getAverageStudyTime.call(self) / self.config.targetStudyTime *
-    getAverageReviewsPerDay.call(self) /
+    getCardsToReview.call(self, 60 * 60 * 24) /
     (getAverageNewCardsPerDay.call(self) || self.config.maxNewCardsPerDay)
   );
 };

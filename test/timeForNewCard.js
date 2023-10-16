@@ -29,12 +29,30 @@ function setup1 () {
     minPercentCorrectCount: 10,
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
-    maxNewCardsPerDay: 20
+    maxNewCardsPerDay: 20,
+    minTimeBetweenRelatedCards: 60 * 30
   };
 
   self.reviewsSinceLastNewCard = 0;
 
   self.db = require('better-sqlite3')();
+
+  self.db.prepare(`
+    create table card (
+      id integer primary key,
+      fieldsetid integer not null,
+      templateid integer not null,
+      modified integer not null,
+      interval integer not null,
+      lastinterval integer not null,
+      due integer not null,
+      factor integer not null,
+      views integer not null,
+      lapses integer not null,
+      ord integer not null
+    )
+  `).run();
+
   self.db.prepare(`
     create table revlog (
       id integer primary key,
@@ -63,12 +81,77 @@ function setup2 () {
     minPercentCorrectCount: 10,
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
-    maxNewCardsPerDay: 20
+    maxNewCardsPerDay: 20,
+    minTimeBetweenRelatedCards: 60 * 30
   };
 
   self.reviewsSinceLastNewCard = 0;
 
   self.db = require('better-sqlite3')();
+
+  self.db.prepare(`
+    create table card (
+      id integer primary key,
+      fieldsetid integer not null,
+      templateid integer not null,
+      modified integer not null,
+      interval integer not null,
+      lastinterval integer not null,
+      due integer not null,
+      factor integer not null,
+      views integer not null,
+      lapses integer not null,
+      ord integer not null
+    )
+  `).run();
+
+  self.db.prepare(`
+    insert into card (
+      fieldsetid,
+      templateid,
+      modified,
+      interval,
+      lastinterval,
+      due,
+      factor,
+      views,
+      lapses,
+      ord
+    ) values
+      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0)
+  `).run();
+
   self.db.prepare(`
     create table revlog (
       id integer primary key,
@@ -133,12 +216,77 @@ function setup3 () {
     minPercentCorrectCount: 10,
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
-    maxNewCardsPerDay: 20
+    maxNewCardsPerDay: 20,
+    minTimeBetweenRelatedCards: 60 * 30
   };
 
-  self.reviewsSinceLastNewCard = 2;
+  self.reviewsSinceLastNewCard = 8;
 
   self.db = require('better-sqlite3')();
+
+  self.db.prepare(`
+    create table card (
+      id integer primary key,
+      fieldsetid integer not null,
+      templateid integer not null,
+      modified integer not null,
+      interval integer not null,
+      lastinterval integer not null,
+      due integer not null,
+      factor integer not null,
+      views integer not null,
+      lapses integer not null,
+      ord integer not null
+    )
+  `).run();
+
+  self.db.prepare(`
+    insert into card (
+      fieldsetid,
+      templateid,
+      modified,
+      interval,
+      lastinterval,
+      due,
+      factor,
+      views,
+      lapses,
+      ord
+    ) values
+      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0)
+  `).run();
+
   self.db.prepare(`
     create table revlog (
       id integer primary key,

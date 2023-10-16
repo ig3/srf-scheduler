@@ -136,7 +136,7 @@ t.test('getNextCard', t => {
 
     const card = scheduler.getNextCard();
     t.ok(card, 'got a  card');
-    t.equal(card.id, 11, 'card ID 3');
+    t.equal(card.id, 33, 'card ID 33');
     t.equal(card.due, 0, 'new card - not due');
     t.equal(card.interval, 0, 'new card - no interval');
     t.end();
@@ -276,7 +276,8 @@ function setup1 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
+    newCardRateFactor: 0.8
   };
 
   return {
@@ -387,7 +388,8 @@ function setup2 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
+    newCardRateFactor: 0.8
   };
 
   return {
@@ -517,7 +519,8 @@ function setup3 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
+    newCardRateFactor: 0.8
   };
 
   return {
@@ -647,7 +650,8 @@ function setup4 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
+    newCardRateFactor: 0.8
   };
 
   return {
@@ -694,27 +698,40 @@ function setup5 () {
       lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 3, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 3, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 4, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 4, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 5, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 5, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 6, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 6, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 7, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 7, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 8, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 8, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 9, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 9, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 10, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 10, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 20, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
+      ( 17, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 17, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
   `).run();
 
   db.prepare(`
@@ -855,7 +872,8 @@ function setup5 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
+    newCardRateFactor: 0.8
   };
 
   return {

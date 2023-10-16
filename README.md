@@ -375,3 +375,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor minReviews
  * Add minReviews to getStatsNext24Hours result
  * Add config.newCardRateFactor
+ * Base minReviews on cards to study next 24 hours not average
