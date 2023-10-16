@@ -372,3 +372,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor getAverageReviewsPerDay
  * Refactor getAverageStudyTime
  * Refactor timeForNewCard
+ * Refactor minReviews
