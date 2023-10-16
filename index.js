@@ -4,9 +4,8 @@ const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
-const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
-const getAverageStudyTime = require('./getAverageStudyTime.js');
 const getCardsToReview = require('./getCardsToReview.js');
+const timeForNewCard = require('./timeForNewCard.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -345,18 +344,6 @@ function getNextCard (overrideLimits = false) {
   } else {
     return dueCard;
   }
-}
-
-function timeForNewCard () {
-  const self = this;
-
-  const minReviews = Math.floor(
-    getAverageStudyTime.call(self) / self.config.targetStudyTime *
-    getAverageReviewsPerDay.call(self) /
-    (getAverageNewCardsPerDay.call(self) || self.config.maxNewCardsPerDay)
-  );
-
-  return self.reviewsSinceLastNewCard > minReviews;
 }
 
 function getStatsNext24Hours () {
