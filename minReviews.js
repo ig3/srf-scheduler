@@ -21,6 +21,7 @@ module.exports = function minReviews () {
   const self = this;
 
   return Math.floor(
+    self.config.newCardRateFactor *
     getAverageStudyTime.call(self) / self.config.targetStudyTime *
     getAverageReviewsPerDay.call(self) /
     (getAverageNewCardsPerDay.call(self) || self.config.maxNewCardsPerDay)

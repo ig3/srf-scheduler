@@ -11,10 +11,10 @@ t.test('minReviews', t => {
   t.equal(result1, 0, 'Initially, it is 0');
 
   const result2 = minReviews.call(setup2());
-  t.equal(result2, 2, 'With some reviewes');
+  t.equal(result2, 1, 'With some reviewes');
 
   const result3 = minReviews.call(setup3());
-  t.equal(result3, 2, 'study gaps are ignored');
+  t.equal(result3, 1, 'study gaps are ignored');
 
   t.end();
 });
@@ -27,6 +27,7 @@ function setup1 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
+    newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20
   };
@@ -60,6 +61,7 @@ function setup2 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
+    newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20
   };
@@ -129,6 +131,7 @@ function setup3 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
+    newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20
   };

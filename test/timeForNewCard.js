@@ -27,6 +27,7 @@ function setup1 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
+    newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20
   };
@@ -60,6 +61,7 @@ function setup2 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
+    newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20
   };
@@ -129,6 +131,7 @@ function setup3 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
+    newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20
   };

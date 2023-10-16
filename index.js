@@ -444,6 +444,7 @@ function defaultConfigParameters () {
     minPercentCorrectCount: 10,
     minStudyTime: '20 minutes',
     minTimeBetweenRelatedCards: '1 hour',
+    newCardRateFactor: 0.8,
     percentCorrectSensitivity: 0.0001,
     percentCorrectTarget: 90,
     percentCorrectWindow: '1 month',

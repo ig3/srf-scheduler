@@ -374,3 +374,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor timeForNewCard
  * Refactor minReviews
  * Add minReviews to getStatsNext24Hours result
+ * Add config.newCardRateFactor
