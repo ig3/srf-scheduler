@@ -5,6 +5,7 @@ const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
+const minReviews = require('./minReviews.js');
 const timeForNewCard = require('./timeForNewCard.js');
 
 // review is called when a card is reviewed
@@ -399,7 +400,8 @@ function getStatsNext24Hours () {
   cards += getAverageNewCardsPerDay.call(this);
   return ({
     count: Math.floor(cards),
-    time: Math.floor(cards * timePerCard)
+    time: Math.floor(cards * timePerCard),
+    minReviews: minReviews.call(self)
   });
 }
 
