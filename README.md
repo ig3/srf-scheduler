@@ -362,7 +362,7 @@ multiplied by percentCorrectSensitivity.
  * Introduce new cards slowly if predicted study time in the next 24 hours
    is more than config.minStudyTime.
 
-### 1.2.1 - WIP
+### 1.3.0 - WIP
  * Refactor formatLocalDate
  * Refactor getPercentCorrect
  * Refactor adjustCards
@@ -373,3 +373,4 @@ multiplied by percentCorrectSensitivity.
  * Refactor getAverageStudyTime
  * Refactor timeForNewCard
  * Refactor minReviews
+ * Add minReviews to getStatsNext24Hours result

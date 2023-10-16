@@ -401,7 +401,8 @@ function getStatsNext24Hours () {
   return ({
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard),
-    minReviews: minReviews.call(self)
+    minReviews: minReviews.call(self),
+    reviews: self.reviewsSinceLastNewCard
   });
 }
 
