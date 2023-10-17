@@ -379,3 +379,6 @@ multiplied by percentCorrectSensitivity.
 
 ### 1.3.1 - 20231017
  * Test minReviews with 0 new cards per day
+
+### 1.3.2 - WIP
+ * Don't include average new cards in stats for next 24 hours

@@ -3,7 +3,7 @@
 const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
-const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
+// const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
 const minReviews = require('./minReviews.js');
 const timeForNewCard = require('./timeForNewCard.js');
@@ -397,7 +397,7 @@ function getStatsNext24Hours () {
       `)
       .get(t1, t2).count;
   }
-  cards += getAverageNewCardsPerDay.call(this);
+  // cards += getAverageNewCardsPerDay.call(this);
   return ({
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard),
