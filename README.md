@@ -1,7 +1,12 @@
 # @ig3/srf-scheduler
 
 This is the default scheduler for
-[srf](https://www.npmjs.com/package/@ig3/srf).
+[srf](https://www.npmjs.com/package/@ig3/srf) - spaced repetition
+flashcards.
+
+It's primary functions are to update a card after review, scheduling it for
+its next review and producing a revlog record of the review, and retrieving
+the next card for review: a due card or a new card.
 
 ## installation
 
