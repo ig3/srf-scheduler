@@ -391,3 +391,4 @@ multiplied by percentCorrectSensitivity.
  * Fix test of getStatsNext24Hours
  * Add test for getIntervals
  * Add test for getNextDue
+ * Add test for getNextNew
