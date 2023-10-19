@@ -131,6 +131,7 @@ function getNewInterval (card, ease) {
 
 function getIntervals (card) {
   const self = this;
+  if (!card) throw new Error('Missing required argument: card');
   return {
     fail: intervalFail.call(self, card),
     hard: intervalHard.call(self, card),

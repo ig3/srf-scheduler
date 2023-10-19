@@ -389,3 +389,4 @@ multiplied by percentCorrectSensitivity.
  * Don't include average new cards in stats for next 24 hours
  * Add test for getNewCardMode
  * Fix test of getStatsNext24Hours
+ * Add test for getIntervals
