@@ -390,3 +390,4 @@ multiplied by percentCorrectSensitivity.
  * Add test for getNewCardMode
  * Fix test of getStatsNext24Hours
  * Add test for getIntervals
+ * Add test for getNextDue
