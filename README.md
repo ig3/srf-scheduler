@@ -383,7 +383,7 @@ multiplied by percentCorrectSensitivity.
 ### 1.3.1 - 20231017
  * Test minReviews with 0 new cards per day
 
-### 1.3.2 - WIP
+### 1.3.2 - 20231030
  * Don't include average new cards in stats for next 24 hours
  * Add test for getNewCardMode
  * Fix test of getStatsNext24Hours
