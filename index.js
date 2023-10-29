@@ -309,17 +309,14 @@ function getNewCardMode () {
   const statsPast24Hours = self.srf.getStatsPast24Hours();
   const statsNext24Hours = self.getStatsNext24Hours();
   const cardsOverdue = self.srf.getCountCardsOverdue();
+  const studyTime = (statsPast24Hours.time + statsNext24Hours.time) / 2;
 
   if (
-    statsPast24Hours.time < self.config.targetStudyTime &&
-    statsNext24Hours.time < self.config.targetStudyTime &&
+    studyTime < self.config.targetStudyTime &&
     statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {
-    if (
-      statsPast24Hours.time < self.config.minStudyTime &&
-      statsNext24Hours.time < self.config.minStudyTime
-    ) {
+    if (studyTime < self.config.minStudyTime) {
       return 'go';
     } else {
       return 'slow';

@@ -31,7 +31,7 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup4());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'go', 'Mode');
+    t.equal(mode, 'go', 'Mode go');
     t.end();
   });
 
@@ -39,7 +39,7 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup5());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'slow', 'Mode');
+    t.equal(mode, 'slow', 'Mode slow');
     t.end();
   });
 
@@ -47,7 +47,7 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup6());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'stop', 'Mode');
+    t.equal(mode, 'stop', 'Mode stop');
     t.end();
   });
 
@@ -244,12 +244,6 @@ function setup2 () {
     )
   `).run();
   const srf = {
-    getStatsNext24Hours: function () {
-      return {
-        cards: 0,
-        time: 0
-      };
-    },
     getStatsPast24Hours: function () {
       return {
         count: 0,
@@ -382,12 +376,6 @@ function setup3 () {
         newCards: 1
       };
     },
-    getStatsNext24Hours: function () {
-      return {
-        cards: 1,
-        time: 30
-      };
-    },
     getCountCardsOverdue: function () {
       return 0;
     },
@@ -432,8 +420,7 @@ function setup3 () {
 
 //  new cards available
 //  One card due in the future
-//  Study time past 24 hours < config.minStudyTime
-//  Study time next 24 hours < conig.targetStudyTime
+//  Average study time < config.minStudyTime
 //  New cards past 24 hours < config.maxNewCardsPerDay
 function setup4 () {
   const db = require('better-sqlite3')();
@@ -509,14 +496,8 @@ function setup4 () {
     getStatsPast24Hours: function () {
       return {
         count: 1,
-        time: 10,
+        time: 8,
         newCards: 1
-      };
-    },
-    getStatsNext24Hours: function () {
-      return {
-        cards: 1,
-        time: 30
       };
     },
     getCountCardsOverdue: function () {
@@ -563,9 +544,8 @@ function setup4 () {
 
 //  new cards available
 //  One card due in the future
-//  Study time past 24 hours > config.minStudyTime
-//  Study time past 24 hours < config.targetStudyTime
-//  Study time next 24 hours < conig.targetStudyTime
+//  Average study time > config.minStudyTime
+//  Average study time < config.targetStudyTime
 //  New cards past 24 hours < config.maxNewCardsPerDay
 function setup5 () {
   const db = require('better-sqlite3')();
@@ -976,7 +956,7 @@ function setup6 () {
     percentCorrectTarget: 90,
     percentCorrectWindow: 60 * 60 * 24 * 30,
     probabilityOldestDue: 0.5,
-    targetStudyTime: 3600,
+    targetStudyTime: 2520,
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,
@@ -989,7 +969,7 @@ function setup6 () {
     getStatsPast24Hours: function () {
       return {
         count: 120,
-        time: config.targetStudyTime + 1,
+        time: 3600,
         newCards: 10
       };
     },

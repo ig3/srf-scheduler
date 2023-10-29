@@ -45,15 +45,13 @@ If overrideLimits is true then getNextCard returns the next due card if
 there is a card due, otherwise the next new card.
 
 Otherwise, getNextCard returns the next new card if:
- * total study time in the past 24 hours is less than
-   config.targetStudyTime; and
- * total estimated study time in the next 24 hours is less than
+ * average study time in the past and next 24 hours is less than
    config.targetStudyTime; and
  * total new cards studied in the past 24 hours is less than
    config.maxNewCardsPerDay; and
  * there are no overdue cards; and
  * sufficient due cards have been reviewed since the last new card or there
-   is no due card and total study time in the past 24 hours is less than
+   is no due card and average study time is less than
    config.minStudyTime
 
 Otherwise, getNextCard returns the next due card if there is a card due.
@@ -392,3 +390,4 @@ multiplied by percentCorrectSensitivity.
  * Add test for getIntervals
  * Add test for getNextDue
  * Add test for getNextNew
+ * Average study time over past and next 24 hours
