@@ -391,3 +391,4 @@ multiplied by percentCorrectSensitivity.
  * Add test for getNextDue
  * Add test for getNextNew
  * Average study time over past and next 24 hours
+ * Limit range of minReviews

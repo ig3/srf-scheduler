@@ -24,6 +24,9 @@ module.exports = function minReviews () {
     self.config.newCardRateFactor *
     getAverageStudyTime.call(self) / self.config.targetStudyTime *
     getCardsToReview.call(self, 60 * 60 * 24) /
-    (getAverageNewCardsPerDay.call(self) || self.config.maxNewCardsPerDay)
+    Math.max(
+      1,
+      getAverageNewCardsPerDay.call(self) || self.config.maxNewCardsPerDay
+    )
   );
 };
