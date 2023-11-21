@@ -248,6 +248,9 @@ function setup1 () {
     getCountCardsOverdue: function () {
       return 0;
     },
+    getAverageStudyTime: function () {
+      return 1800;
+    },
     resolveUnits: resolveUnits
   };
 
@@ -359,6 +362,9 @@ function setup2 () {
     },
     getCountCardsOverdue: function () {
       return 0;
+    },
+    getAverageStudyTime: function () {
+      return 1800;
     },
     resolveUnits: resolveUnits
   };
@@ -622,6 +628,9 @@ function setup4 () {
     getCountCardsOverdue: function () {
       return 0;
     },
+    getAverageStudyTime: function () {
+      return 1800;
+    },
     resolveUnits: resolveUnits
   };
 
@@ -843,6 +852,9 @@ function setup5 () {
     },
     getCountCardsOverdue: function () {
       return 0;
+    },
+    getAverageStudyTime: function () {
+      return 1800;
     },
     resolveUnits: resolveUnits
   };

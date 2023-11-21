@@ -309,7 +309,11 @@ function getNewCardMode () {
   const statsPast24Hours = self.srf.getStatsPast24Hours();
   const statsNext24Hours = self.getStatsNext24Hours();
   const cardsOverdue = self.srf.getCountCardsOverdue();
-  const studyTime = (statsPast24Hours.time + statsNext24Hours.time) / 2;
+  const studyTime =
+    (
+      (statsPast24Hours.time + statsNext24Hours.time) / 2 +
+      self.srf.getAverageStudyTime()
+    ) / 2;
 
   if (
     studyTime < self.config.targetStudyTime &&

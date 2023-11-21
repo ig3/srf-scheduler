@@ -122,6 +122,9 @@ t.test('getNextCard', t => {
     getCountCardsOverdue: function () {
       return 0;
     },
+    getAverageStudyTime: function () {
+      return 1800;
+    },
     resolveUnits: function (value) {
       if (typeof value === 'string') {
         const match = value.match(/^([0-9]+)\s*(.*)/);
