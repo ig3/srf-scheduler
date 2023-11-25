@@ -396,3 +396,6 @@ multiplied by percentCorrectSensitivity.
 ### 2.0.0 - 20231125
  * Average study time over longer period to determine new card mode
  * Replace reviewsSinceLastNew with reviewsToNextNew
+
+### 2.0.1 - 20231125
+ * truncate reviewsToNextNew to integer on start
