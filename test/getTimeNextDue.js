@@ -162,7 +162,11 @@ function setup1 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -272,7 +276,11 @@ function setup2 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -402,7 +410,11 @@ function setup3 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -532,7 +544,11 @@ function setup4 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {

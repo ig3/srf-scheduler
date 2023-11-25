@@ -6,12 +6,20 @@ const formatLocalDate = require('./formatLocalDate.js');
 // const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
 const minReviews = require('./minReviews.js');
-const timeForNewCard = require('./timeForNewCard.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
   const self = this;
 
+  if (card.interval) {
+    if (self.reviewsToNextNew > 1) {
+      self.reviewsToNextNew--;
+    } else {
+      self.reviewsToNextNew = 0;
+    }
+  } else {
+    self.reviewsToNextNew = minReviews.call(self);
+  }
   self.reviewsSinceLastNewCard =
     card.interval === 0 ? 0 : self.reviewsSinceLastNewCard + 1;
 
@@ -341,7 +349,7 @@ function getNextCard (overrideLimits = false) {
 
   if (
     (newCardMode === 'go' && !dueCard) ||
-    (newCardMode !== 'stop' && timeForNewCard.call(self))
+    (newCardMode !== 'stop' && self.reviewsToNextNew === 0)
   ) {
     return self.getNextNew();
   } else {
@@ -404,7 +412,7 @@ function getStatsNext24Hours () {
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard),
     minReviews: minReviews.call(self),
-    reviews: self.reviewsSinceLastNewCard
+    reviewsToNextNew: self.reviewsToNextNew
   });
 }
 
@@ -465,6 +473,10 @@ function defaultConfigParameters () {
   });
 }
 
+function shutdown () {
+  this.srf.setParam('reviewsToNextNew', this.reviewsToNextNew);
+}
+
 const api = {
   getCountCardsDueToday,
   getIntervals,
@@ -474,7 +486,8 @@ const api = {
   getNextNew,
   getStatsNext24Hours,
   getTimeNextDue,
-  review
+  review,
+  shutdown
 };
 
 module.exports = function (opts = {}) {
@@ -483,7 +496,7 @@ module.exports = function (opts = {}) {
   instance.db = opts.db;
   instance.srf = opts.srf;
   instance.config = opts.config;
-  instance.reviewsSinceLastNewCard = 0;
+  instance.reviewsToNextNew = instance.srf.getParam('reviewsToNextNew') || 0;
 
   if (instance.config) {
     defaultConfigParameters.call(instance);

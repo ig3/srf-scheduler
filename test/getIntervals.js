@@ -114,7 +114,11 @@ function setup1 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {

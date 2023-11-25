@@ -3,7 +3,14 @@
 const t = require('tape');
 
 t.test('load', t => {
-  const scheduler = require('..')();
+  const scheduler = require('..')({
+    srf: {
+      getParam: function (name) {
+        if (name === 'reviewsToNextNew') return 7;
+        throw new Error('Unsupported param: ' + name);
+      }
+    }
+  });
   t.ok(true, 'loaded');
   [
     'getNextCard',
@@ -139,6 +146,10 @@ t.test('getNextCard', t => {
         }
       }
       return value;
+    },
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
     }
   };
   const scheduler = require('..')({

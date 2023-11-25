@@ -65,7 +65,7 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
     t.equal(revlog.interval, 550, 'interval is 550');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsSinceLastNewCard, 1, 'reviews since last new card is 1');
+    t.equal(scheduler.reviewsToNextNew, 6, 'reviews to next new card is 6');
     t.end();
   });
 
@@ -97,7 +97,7 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsSinceLastNewCard, 1, 'reviews since last new card is 1');
+    t.equal(scheduler.reviewsToNextNew, 6, 'reviews to next new card is 6');
     t.end();
   });
 
@@ -129,7 +129,7 @@ t.test('getTimeNextDue', t => {
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsSinceLastNewCard, 1, 'reviews since last new card is 1');
+    t.equal(scheduler.reviewsToNextNew, 6, 'reviews until next new card is 6');
     t.end();
   });
 
@@ -239,7 +239,11 @@ function setup1 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -481,7 +485,11 @@ function setup3 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {

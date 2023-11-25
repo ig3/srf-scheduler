@@ -132,9 +132,10 @@ t.test('getNextCard', t => {
       config: setup.config
     });
 
-    scheduler.reviewsSinceLastNewCard = 100;
+    scheduler.reviewsToNextNew = 0;
 
     const card = scheduler.getNextCard();
+    console.log('card: ', card);
     t.ok(card, 'got a  card');
     t.equal(card.id, 33, 'card ID 33');
     t.equal(card.due, 0, 'new card - not due');
@@ -251,7 +252,11 @@ function setup1 () {
     getAverageStudyTime: function () {
       return 1800;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -366,7 +371,11 @@ function setup2 () {
     getAverageStudyTime: function () {
       return 1800;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -497,7 +506,11 @@ function setup3 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -631,7 +644,11 @@ function setup4 () {
     getAverageStudyTime: function () {
       return 1800;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
@@ -856,7 +873,11 @@ function setup5 () {
     getAverageStudyTime: function () {
       return 1800;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
