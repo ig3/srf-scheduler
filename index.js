@@ -20,8 +20,6 @@ function review (card, viewTime, studyTime, ease) {
   } else {
     self.reviewsToNextNew = minReviews.call(self);
   }
-  self.reviewsSinceLastNewCard =
-    card.interval === 0 ? 0 : self.reviewsSinceLastNewCard + 1;
 
   viewTime = Math.floor(viewTime);
   const newInterval = Math.max(1, getNewInterval.call(self, card, ease));
@@ -454,7 +452,7 @@ function defaultConfigParameters () {
     minPercentCorrectCount: 10,
     minStudyTime: '20 minutes',
     minTimeBetweenRelatedCards: '1 hour',
-    newCardRateFactor: 0.8,
+    newCardRateFactor: 0.9,
     percentCorrectSensitivity: 0.0001,
     percentCorrectTarget: 90,
     percentCorrectWindow: '1 month',

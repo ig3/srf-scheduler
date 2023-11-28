@@ -32,7 +32,6 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
     t.equal(revlog.interval, 300, 'interval is 300');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsSinceLastNewCard, 0, 'reviews since last new card is 0');
     t.end();
   });
 
