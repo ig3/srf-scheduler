@@ -114,11 +114,13 @@ function newCardFactor (card, ease) {
     fail: self.config.weightFail,
     hard: self.config.weightHard,
     good: self.config.weightGood,
-    eash: self.config.weightEasy
+    easy: self.config.weightEasy
   };
   return (
-    self.config.decayFactor * (card.factor || 0) +
-    (1.0 - self.config.decayFactor) * (easeWeight[ease])
+    (
+      self.config.decayFactor * (card.factor || 0) +
+      (1.0 - self.config.decayFactor) * (easeWeight[ease])
+    ) || 0
   ).toFixed(2);
 }
 

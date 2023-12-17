@@ -402,3 +402,5 @@ multiplied by percentCorrectSensitivity.
 
 ### 2.0.2 - WIP
  * revise scheduling of new cards
+ * fix typoe in newCardFactor
+ * handle 'NaN' as card.factor (and other such invalid values)
