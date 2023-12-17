@@ -399,3 +399,6 @@ multiplied by percentCorrectSensitivity.
 
 ### 2.0.1 - 20231125
  * truncate reviewsToNextNew to integer on start
+
+### 2.0.2 - WIP
+ * revise scheduling of new cards

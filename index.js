@@ -5,20 +5,18 @@ const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
 // const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
-const minReviews = require('./minReviews.js');
+const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
   const self = this;
 
-  if (card.interval) {
-    if (self.reviewsToNextNew > 1) {
-      self.reviewsToNextNew--;
-    } else {
-      self.reviewsToNextNew = 0;
-    }
-  } else {
-    self.reviewsToNextNew = minReviews.call(self);
+  if (card.interval === 0) {
+    self.reviewsPerNewCard =
+    self.reviewsToNextNew =
+      getReviewsToNextNew.call(self);
+  } else if (self.reviewsToNextNew > 0) {
+    self.reviewsToNextNew--;
   }
 
   viewTime = Math.floor(viewTime);
@@ -409,7 +407,7 @@ function getStatsNext24Hours () {
   return ({
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard),
-    minReviews: minReviews.call(self),
+    minReviews: self.reviewsPerNewCard,
     reviewsToNextNew: self.reviewsToNextNew
   });
 }
@@ -457,6 +455,7 @@ function defaultConfigParameters () {
     percentCorrectTarget: 90,
     percentCorrectWindow: '1 month',
     probabilityOldestDue: 0.2,
+    studyTimeErrorSensitivity: 1.0,
     targetStudyTime: '30 minutes',
     weightEasy: 2,
     weightFail: 0,
@@ -472,6 +471,7 @@ function defaultConfigParameters () {
 }
 
 function shutdown () {
+  this.srf.setParam('reviewsPerNewCard', this.reviewsPerNewCard);
   this.srf.setParam('reviewsToNextNew', this.reviewsToNextNew);
 }
 
@@ -494,6 +494,8 @@ module.exports = function (opts = {}) {
   instance.db = opts.db;
   instance.srf = opts.srf;
   instance.config = opts.config;
+  instance.reviewsPerNewCard =
+    Math.floor(instance.srf.getParam('reviewsPerNewCard') || 0);
   instance.reviewsToNextNew =
     Math.floor(instance.srf.getParam('reviewsToNextNew') || 0);
 
