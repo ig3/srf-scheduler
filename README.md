@@ -400,7 +400,7 @@ multiplied by percentCorrectSensitivity.
 ### 2.0.1 - 20231125
  * truncate reviewsToNextNew to integer on start
 
-### 2.0.2 - WIP
+### 2.0.2 - 20240210
  * revise scheduling of new cards
  * fix typoe in newCardFactor
  * handle 'NaN' as card.factor (and other such invalid values)
