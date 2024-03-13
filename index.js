@@ -227,7 +227,11 @@ function intervalEasy (card) {
         self.config.maxEasyInterval,
         Math.max(
           self.config.easyMinInterval,
-          intervalGood.call(self, card) * self.config.easyFactor
+          (
+            getTimeSinceLastReview.call(self, card) *
+            self.config.easyFactor *
+            newCardFactor.call(self, card, 'easy')
+          )
         )
       )
     )

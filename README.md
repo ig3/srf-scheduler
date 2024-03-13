@@ -314,9 +314,11 @@ interval to be shorter.
 
 #### Easy
 
-If the ease of a review is Easy, then the new interval is the interval for
-a Good response multiplied by the easyFactor, with a minimum of
-easyMinInterval and maximum of the lower of maxEasyInterval and maxInteral.
+If the ease of a review is Easy, then the new interval is the actual interval
+(i.e. time since the last review, rather than the interval scheduled at the
+last review) multiplied by the easyFactor and the card factor, with a
+minimum of easyMinInterval and maximum of the lower of maxEasyInterval and
+maxInteral.
 
 #### Percent Correct
 
@@ -407,3 +409,4 @@ multiplied by percentCorrectSensitivity.
 
 ### 2.0.3 - WIP
  * Fix tests to handle reviewsPerNewCard parameter
+ * Change intervalEasy to use actual interval

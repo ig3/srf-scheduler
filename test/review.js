@@ -132,6 +132,72 @@ t.test('getTimeNextDue', t => {
     t.end();
   });
 
+  t.test('Review card - easy', t => {
+    const setup = setup3();
+    const scheduler = require('..')({
+      db: setup.db,
+      srf: setup.srf,
+      config: setup.config
+    });
+
+    scheduler.review(
+      {
+        id: 1,
+        interval: 60 * 60 * 24 * 90,
+        views: 1,
+        lapses: 0
+      },
+      20,
+      25,
+      'easy'
+    );
+    const revlog = setup.db.prepare(`
+      select *
+      from revlog
+      order by id desc
+      limit 1
+    `)
+    .get();
+    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.interval, 86400, 'interval is easyMinInterval');
+    t.equal(scheduler.reviewsToNextNew, 6, 'reviews until next new card is 6');
+    t.end();
+  });
+
+  t.test('Review card - easy, delayed', t => {
+    const setup = setup4();
+    const scheduler = require('..')({
+      db: setup.db,
+      srf: setup.srf,
+      config: setup.config
+    });
+
+    scheduler.review(
+      {
+        id: 1,
+        interval: 60 * 60 * 24 * 90,
+        views: 1,
+        lapses: 0
+      },
+      20,
+      25,
+      'easy'
+    );
+    const revlog = setup.db.prepare(`
+      select *
+      from revlog
+      order by id desc
+      limit 1
+    `)
+    .get();
+    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.interval, 129600, 'interval is 129600');
+    t.equal(scheduler.reviewsToNextNew, 6, 'reviews until next new card is 6');
+    t.end();
+  });
+
   t.end();
 });
 
@@ -529,7 +595,7 @@ function setup3 () {
 }
 
 //  new cards available
-//  One card due in the future
+//  One card due now
 //  Study time past 24 hours < config.minStudyTime
 //  Study time next 24 hours < conig.targetStudyTime
 //  New cards past 24 hours < config.maxNewCardsPerDay
@@ -565,7 +631,7 @@ function setup4 () {
       lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+5, 2, 0, 0, 0),
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0, 0),
       ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
       ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
       ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
@@ -599,10 +665,10 @@ function setup4 () {
       studytime,
       lapses
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - (1000 * 60 * 60 * 24 * 10), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(10)
   });
   const srf = {
     getStatsPast24Hours: function () {
@@ -621,19 +687,26 @@ function setup4 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    getParam: function (name) {
+      if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
+      throw new Error('Unsupported param: ' + name);
+    }
   };
 
   const config = {
     decayFactor: 0.95,
     failFactor: 0.5,
     failMaxInterval: 60 * 60,
+    easyMinInterval: 60 * 60 * 24,
     goodFactor: 1.1,
     goodMinFactor: 1.1,
     goodMinInterval: 60 * 5,
     hardMaxInterval: 60 * 60 * 24,
     learningThreshold: 60 * 60 * 24 * 7,
     matureThreshold: 60 * 60 * 24 * 21,
+    maxEasyInterval: 60 * 60 * 24 * 365,
     maxGoodInterval: 60 * 60 * 24 * 365,
     maxInterval: 60 * 60 * 24 * 365,
     maxNewCardsPerDay: 20,
