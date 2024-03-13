@@ -407,6 +407,6 @@ multiplied by percentCorrectSensitivity.
  * fix typoe in newCardFactor
  * handle 'NaN' as card.factor (and other such invalid values)
 
-### 2.0.3 - WIP
+### 2.0.3 - 20240314
  * Fix tests to handle reviewsPerNewCard parameter
  * Change intervalEasy to use actual interval
