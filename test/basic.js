@@ -7,6 +7,7 @@ t.test('load', t => {
     srf: {
       getParam: function (name) {
         if (name === 'reviewsToNextNew') return 7;
+        if (name === 'reviewsPerNewCard') return 14;
         throw new Error('Unsupported param: ' + name);
       }
     }
@@ -149,6 +150,7 @@ t.test('getNextCard', t => {
     },
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     }
   };

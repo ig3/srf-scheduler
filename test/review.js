@@ -241,6 +241,7 @@ function setup1 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     }
   };
@@ -487,6 +488,7 @@ function setup3 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     }
   };

@@ -151,6 +151,7 @@ function setup1 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     },
     getAverageStudyTime: function () {
@@ -264,6 +265,7 @@ function setup2 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     },
     getAverageStudyTime: function () {
@@ -396,6 +398,7 @@ function setup3 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     },
     getAverageStudyTime: function () {
@@ -527,6 +530,7 @@ function setup4 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     },
     getAverageStudyTime: function () {
@@ -755,6 +759,7 @@ function setup5 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     },
     getAverageStudyTime: function () {
@@ -1014,6 +1019,7 @@ function setup6 () {
     resolveUnits: resolveUnits,
     getParam: function (name) {
       if (name === 'reviewsToNextNew') return 7;
+      if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
     },
     getAverageStudyTime: function () {
