@@ -137,6 +137,11 @@ easyMinInterval is the minimum interval after an Easy response.
 failFactor is the factor by which interval is multiplied after a Fail
 response.
 
+### config.failLearningMaxInterval
+
+failLearningMaxInterval is the maximum interval after a Fail response for a
+card with interval less than learningThreshold.
+
 ### config.failMaxInterval
 
 failMaxInterval is the maximum interval after a Fail response.
@@ -160,6 +165,11 @@ goodMinInterval is the minimum interval after a Good response.
 
 hardFactor is the factor by which interval is multiplied after a Hard
 response.
+
+### config.hardLearningMaxInterval
+
+hardLearningMaxInterval is the maximum interval after a Hard response for a
+card with interval less than learningThreshold.
 
 ### config.hardMaxInterval
 
@@ -425,6 +435,6 @@ multiplied by percentCorrectSensitivity.
  * Fix tests to handle reviewsPerNewCard parameter
  * Change intervalEasy to use actual interval
 
-### 2.1.0 - WIP
+### 2.1.0 - 20240322
  * Introduce failLearningMaxInterval and hardLearningMaxInterval
  * Base interval for Good on actual interval
