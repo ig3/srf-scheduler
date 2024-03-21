@@ -121,7 +121,7 @@ function newCardFactor (card, ease) {
       self.config.decayFactor * (card.factor || 0) +
       (1.0 - self.config.decayFactor) * (easeWeight[ease])
     ) || 0
-  ).toFixed(2);
+  ).toFixed(4);
 }
 
 // Returns the new interval for the card, according to ease
@@ -153,7 +153,9 @@ function intervalFail (card) {
       1,
       Math.floor(
         Math.min(
-          self.config.failMaxInterval,
+          card.interval < self.config.learningThreshold
+            ? self.config.failLearningMaxInterval
+            : self.config.failMaxInterval,
           card.interval * self.config.failFactor
         )
       )
@@ -168,7 +170,9 @@ function intervalHard (card) {
       1,
       Math.floor(
         Math.min(
-          self.config.hardMaxInterval,
+          card.interval < self.config.learningThreshold
+            ? self.config.hardLearningMaxInterval
+            : self.config.hardMaxInterval,
           card.interval * self.config.hardFactor
         )
       )
@@ -178,9 +182,6 @@ function intervalHard (card) {
 
 function intervalGood (card) {
   const self = this;
-  const interval = card.interval < self.config.learningThreshold
-    ? card.interval
-    : (card.interval + getTimeSinceLastReview.call(self, card)) / 2;
   return (
     Math.floor(
       Math.min(
@@ -188,9 +189,9 @@ function intervalGood (card) {
         self.config.maxGoodInterval,
         Math.max(
           self.config.goodMinInterval,
-          interval * self.config.goodMinFactor,
+          getTimeSinceLastReview.call(self, card) * self.config.goodMinFactor,
           (
-            interval *
+            getTimeSinceLastReview.call(self, card) *
             self.config.goodFactor *
             newCardFactor.call(self, card, 'good')
           )
@@ -440,11 +441,13 @@ function defaultConfigParameters () {
     easyFactor: 1.5,
     easyMinInterval: '1 day',
     failFactor: 0.5,
+    failLearningMaxInterval: '5 minutes',
     failMaxInterval: '1 day',
     goodFactor: 1.0,
     goodMinFactor: 1.1,
     goodMinInterval: '5 minutes',
     hardFactor: 0.8,
+    hardLearningMaxInterval: '1 hour',
     hardMaxInterval: '1 week',
     learningThreshold: '1 week',
     matureThreshold: '21 days',

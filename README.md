@@ -280,37 +280,51 @@ the difference between 'percent correct' and percentCorrectTarget.
 #### Fail
 
 If the ease of a review is Fail, then the new interval is the previous
-interval multiplied by failFactor, with an upper bound of failMaxInterval.
+interval multiplied by failFactor, with an upper bound of
+failLearningMaxInterval if the previous interval was less than
+learningThreshold or failMaxInterval otherwise.
 
 #### Hard
 
 If the ease of a review is Hard, then the new interval is the previous
-interval multiplied by hardFactor, with an upper bound of hardMaxInterval.
+interval multiplied by hardFactor, with an upper bound of
+hardLearningMaxInterval if the previous interval was less than
+learningThreshold or hardMaxInterval otherwise.
 
 #### Good
 
-If the ease of a review is Good, then the new interval is the previous
-interval multiplied by the product of goodFactor and the card ease factor
-(the exponentially weighted moving average of response weights), with a
-minimum of goodMinFactor and a minimum interval of goodMinInterval.
+If the ease of a review is Good, then the new interval is the greater of
+ * goodMinInterval
+ * actual time since last review multiplied by goodMinFactor
+ * actual time since last review multiplied by the product of goodFactor
+   and the card factor
 
-Each ease has a weight (weightFail, weightHard, weightGood and weightEasy)
-and these are averaged by an exponentially weighted moving average with a
-decay factor of decayFactor. This card ease factor reflects how easy or
-difficult the card has been recently.
+The new interval is limited to the lesser of maxInterval or
+maxGoodInterval.
 
-If the adjusted interval of the card is less than learningThreshold then it
-is used to calculate the new interval but if the adjusted interval is more
-than learningThreshold then the average of the adjusted interval and the
-time since last review is used instead. This will make a difference when
-review of the card is delayed from its due date: after a break from
-studying, while clearing the backlog. The rationale is that if you were
-able to recall the card after a longer interval than the scheduled interval
-then the scheduled interval was too short and the longer, actual interval
-is more relevant to rescheduling the card. The implementation is a
-compromise: using the average of the scheduled and actual interval. If
-cards are being studied before they are due, this would cause the new
-interval to be shorter.
+The card factor is the exponentially weighted moving average of ease
+weights, with a decay factor of decayFactor and ease weights of weightFail,
+weightHard, weightGood and weightEasy. This reflects how easy or difficult
+the card has been recently.
+
+Time since last review is used to calculate the new interval, rather than
+the previously scheduled interval. This will typically be longer than the
+previously sechedule interval because it is unlikely that the card will be
+reviewed as soon as it is due.
+
+This makes most difference for learning cards or in the case of a backlog.
+
+For learning cards, assuming one is not studying all day, there will be
+breaks in study. If a card has an interval of one hour but one does not
+study again until the next day, then the scheduled interval is one hour but
+the actual time since last review might be closer to 24 hours. If the card
+remains good after 24 hours, despite being scheduled for review in one
+hour, then the longer, actual interval is indicative of ability to recall
+the card.
+
+In the case of a backlog, a card might not be reviewed until long after it
+was scheduled for review. Again, the longer actual interval is more
+indicative of ability to recall the card.
 
 #### Easy
 
@@ -410,3 +424,7 @@ multiplied by percentCorrectSensitivity.
 ### 2.0.3 - 20240314
  * Fix tests to handle reviewsPerNewCard parameter
  * Change intervalEasy to use actual interval
+
+### 2.1.0 - WIP
+ * Introduce failLearningMaxInterval and hardLearningMaxInterval
+ * Base interval for Good on actual interval

@@ -13,7 +13,7 @@ t.test('getTimeNextDue', t => {
 
     scheduler.review(
       {
-        id: 1,
+        id: 10,
         interval: 0,
         lapses: 0
       },
@@ -28,7 +28,7 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.cardid, 10, 'revlog for card ID 10');
     t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
     t.equal(revlog.interval, 300, 'interval is 300');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
@@ -46,7 +46,7 @@ t.test('getTimeNextDue', t => {
     scheduler.review(
       {
         id: 1,
-        interval: 500,
+        interval: 630,
         lapses: 0
       },
       20,
@@ -61,8 +61,8 @@ t.test('getTimeNextDue', t => {
     `)
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
-    t.equal(revlog.interval, 550, 'interval is 550');
+    t.equal(revlog.lastinterval, 600, 'lastinterval is 0');
+    t.equal(revlog.interval, 660, 'interval is 550');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.equal(scheduler.reviewsToNextNew, 6, 'reviews to next new card is 6');
     t.end();
@@ -78,7 +78,7 @@ t.test('getTimeNextDue', t => {
 
     scheduler.review(
       {
-        id: 1,
+        id: 2,
         interval: 60 * 60 * 24 * 90,
         lapses: 0
       },
@@ -93,8 +93,9 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
+    console.log('revlog: ', revlog);
+    t.equal(revlog.cardid, 2, 'revlog for card ID 2');
+    t.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.equal(scheduler.reviewsToNextNew, 6, 'reviews to next new card is 6');
     t.end();
@@ -287,6 +288,25 @@ function setup1 () {
       lapses integer not null
     )
   `).run();
+
+  db.prepare(`
+    insert into revlog (
+      id,
+      revdate,
+      cardid,
+      ease,
+      interval,
+      lastinterval,
+      factor,
+      viewtime,
+      studytime,
+      lapses
+    ) values
+      (@now - 1000 * 60 * 10, '2023-03-22', 1, 'good', 60 * 10, 60 * 8, 1.4, 10, 10, 0),
+      (@now - 1000 * 60 * 60 * 24 * 90, '2023-03-22', 2, 'good', 60 * 60 * 24 * 90, 60 * 60 * 24 * 60, 1.4, 10, 10, 0)
+  `).run({
+    now: Date.now()
+  });
   const srf = {
     getStatsNext24Hours: function () {
       return {
@@ -386,7 +406,17 @@ function setup2 () {
       ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
       ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
       ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
   `).run();
 
   db.prepare(`

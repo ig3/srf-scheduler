@@ -16,15 +16,127 @@ t.test('getIntervals', t => {
     t.end();
   });
 
-  t.test('passing a card', t => {
+  t.test('learned card - max interval', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 1,
-      interval: 300
+      interval: 60 * 60 * 24 * 365,
+      factor: 1.8
     });
-    t.equals(intervals.fail, 150, 'interval fail');
-    t.equals(intervals.hard, 240, 'interval hard');
-    t.equals(intervals.good, 330, 'interval good');
+    t.equals(intervals.fail, 3600, 'interval fail');
+    t.equals(intervals.hard, 86400, 'interval hard');
+    t.equals(intervals.good, 31536000, 'interval good');
+    t.equals(intervals.easy, 31536000, 'interval easy');
+    t.end();
+  });
+
+  t.test('learned card - max interval, delayed review', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 1,
+      interval: 60 * 60 * 24 * 365,
+      factor: 1.8
+    });
+    t.equals(intervals.fail, 3600, 'interval fail');
+    t.equals(intervals.hard, 86400, 'interval hard');
+    t.equals(intervals.good, 31536000, 'interval good');
+    t.equals(intervals.easy, 31536000, 'interval easy');
+    t.end();
+  });
+
+  t.test('learned card - 1 week interval', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 2,
+      interval: 60 * 60 * 24 * 7,
+      factor: 1.4
+    });
+    t.equals(intervals.fail, 3600, 'interval fail');
+    t.equals(intervals.hard, 86400, 'interval hard');
+    t.equals(intervals.good, 934718, 'interval good');
+    t.equals(intervals.easy, 1556755, 'interval easy');
+    t.end();
+  });
+
+  t.test('learned card - 1 week interval, delayed review', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 3,
+      interval: 60 * 60 * 24 * 7,
+      factor: 1.4
+    });
+    t.equals(intervals.fail, 3600, 'interval fail');
+    t.equals(intervals.hard, 86400, 'interval hard');
+    t.equals(intervals.good, 1335312, 'interval good');
+    t.equals(intervals.easy, 2223936, 'interval easy');
+    t.end();
+  });
+
+  t.test('learning card - 6 day interval', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 4,
+      interval: 60 * 60 * 24 * 6,
+      factor: 1.2
+    });
+    t.equals(intervals.fail, 300, 'interval fail');
+    t.equals(intervals.hard, 3600, 'interval hard');
+    t.equals(intervals.good, 692841, 'interval good');
+    t.equals(intervals.easy, 1157068, 'interval easy');
+    t.end();
+  });
+
+  t.test('learning card - 6 day interval, delayed review', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 5,
+      interval: 60 * 60 * 24 * 6,
+      factor: 1.2
+    });
+    t.equals(intervals.fail, 300, 'interval fail');
+    t.equals(intervals.hard, 3600, 'interval hard');
+    t.equals(intervals.good, 923788, 'interval good');
+    t.equals(intervals.easy, 1542758, 'interval easy');
+    t.end();
+  });
+
+  t.test('learning card - 6 minute interval', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 6,
+      interval: 60 * 6,
+      factor: 1.2
+    });
+    t.equals(intervals.fail, 180, 'interval fail');
+    t.equals(intervals.hard, 288, 'interval hard');
+    t.equals(intervals.good, 481, 'interval good');
+    t.equals(intervals.easy, 86400, 'interval easy');
+    t.end();
+  });
+
+  t.test('learning card - 6 minute interval, delayed review', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 7,
+      interval: 60 * 6,
+      factor: 1.2
+    });
+    t.equals(intervals.fail, 180, 'interval fail');
+    t.equals(intervals.hard, 288, 'interval hard');
+    t.equals(intervals.good, 641, 'interval good');
+    t.equals(intervals.easy, 86400, 'interval easy');
+    t.end();
+  });
+
+  t.test('new card', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 10,
+      interval: 0
+    });
+    t.equals(intervals.fail, 1, 'interval fail');
+    t.equals(intervals.hard, 1, 'interval hard');
+    t.equals(intervals.good, 300, 'interval good');
     t.equals(intervals.easy, 86400, 'interval easy');
     t.end();
   });
@@ -97,6 +209,31 @@ function setup1 () {
       lapses integer not null
     )
   `).run();
+
+  db.prepare(`
+    insert into revlog (
+      id,
+      revdate,
+      cardid,
+      ease,
+      interval,
+      lastinterval,
+      factor,
+      viewtime,
+      studytime,
+      lapses
+    ) values
+      (@now - 1000 * 60 * 60 * 24 * 365, '2023-03-22', 1, 'good', 60 * 60 * 24 * 365, 60 * 60 * 24 * 365, 1.8, 10, 10, 0),
+      (@now - 1000 * 60 * 60 * 24 * 7, '2024-03-22', 2, 'good', 60 * 60 * 24 * 7, 60 * 60 * 24 * 6, 1.8, 10, 10, 0),
+      (@now - 1000 * 60 * 60 * 24 * 10, '2024-03-22', 3, 'good', 60 * 60 * 24 * 7, 60 * 60 * 24 * 6, 1.8, 10, 10, 0),
+      (@now - 1000 * 60 * 60 * 24 * 6, '2024-03-22', 4, 'good', 60 * 60 * 24 * 6, 60 * 60 * 24 * 3, 1.4, 10, 10, 0),
+      (@now - 1000 * 60 * 60 * 24 * 8, '2024-03-22', 5, 'good', 60 * 60 * 24 * 6, 60 * 60 * 24 * 3, 1.4, 10, 10, 0),
+      (@now - 1000 * 60 * 6, '2024-03-22', 6, 'good', 60 * 6, 60 * 3, 1.1, 10, 10, 0),
+      (@now - 1000 * 60 * 8, '2024-03-22', 7, 'good', 60 * 6, 60 * 3, 1.1, 10, 10, 0),
+      (@now - 5000, '2024-03-22', 10, 'good', 60 * 60 * 7 * 24 + 5, 60, 1.8, 10, 10, 0)
+  `).run({
+    now: Date.now()
+  });
   const srf = {
     getStatsNext24Hours: function () {
       return {
@@ -124,15 +261,20 @@ function setup1 () {
 
   const config = {
     decayFactor: 0.95,
+    easyMinInterval: 60 * 60 * 24,
+    easyFactor: 1.8,
     failFactor: 0.5,
+    failLearningMaxInterval: 60 * 5,
     failMaxInterval: 60 * 60,
     goodFactor: 1.1,
     goodMinFactor: 1.1,
     goodMinInterval: 60 * 5,
+    hardLearningMaxInterval: 60 * 60,
     hardMaxInterval: 60 * 60 * 24,
     learningThreshold: 60 * 60 * 24 * 7,
     matureThreshold: 60 * 60 * 24 * 21,
     maxGoodInterval: 60 * 60 * 24 * 365,
+    maxEasyInterval: 60 * 60 * 24 * 365,
     maxInterval: 60 * 60 * 24 * 365,
     maxNewCardsPerDay: 20,
     maxViewTime: 60 * 2,
