@@ -12,7 +12,6 @@ function review (card, viewTime, studyTime, ease) {
   const self = this;
 
   if (card.interval === 0) {
-    self.reviewsPerNewCard =
     self.reviewsToNextNew =
       getReviewsToNextNew.call(self);
   } else if (self.reviewsToNextNew > 0) {
@@ -414,7 +413,7 @@ function getStatsNext24Hours () {
   return ({
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard),
-    minReviews: self.reviewsPerNewCard,
+    minReviews: getReviewsToNextNew.call(self),
     reviewsToNextNew: self.reviewsToNextNew
   });
 }
@@ -480,7 +479,6 @@ function defaultConfigParameters () {
 }
 
 function shutdown () {
-  this.srf.setParam('reviewsPerNewCard', this.reviewsPerNewCard);
   this.srf.setParam('reviewsToNextNew', this.reviewsToNextNew);
 }
 
@@ -503,8 +501,6 @@ module.exports = function (opts = {}) {
   instance.db = opts.db;
   instance.srf = opts.srf;
   instance.config = opts.config;
-  instance.reviewsPerNewCard =
-    Math.floor(instance.srf.getParam('reviewsPerNewCard') || 0);
   instance.reviewsToNextNew =
     Math.floor(instance.srf.getParam('reviewsToNextNew') || 0);
 

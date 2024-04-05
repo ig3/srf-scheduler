@@ -344,13 +344,29 @@ last review) multiplied by the easyFactor and the card factor, with a
 minimum of easyMinInterval and maximum of the lower of maxEasyInterval and
 maxInteral.
 
-#### Percent Correct
+### Percent Correct
 
 Whenever a card is reviewed with a new interval greater than
 learningThreshold, then the intervals and due dates of all cards with
 interval between learningThreshold and maxInterval are adjusted according
 to the difference between 'percent correct' and percentCorrectTarget,
 multiplied by percentCorrectSensitivity.
+
+### Reviews per New Card
+
+New cards are normally shown interspersed with review cards. When a new
+card is presented, the number of reviews before the next new card is
+calculated. This is reduced with each review. When it reaches zero, a new
+card will be presented as long as average study time is not too high.
+
+The number of reviews before the next new card is the number of cards due
+for review in the next 24 hours divided by the recent average number of new
+cars per day, adjusted up or down according to the ratio of average study
+time to target study time. If average study time is less than the target
+then the reviews before the next new card is reduced and if it is more than
+the target then the reviews before the next new card is increased. The
+sensitivity to the difference between average study time and target study
+time is config.studyTimeErrorSensitivity.
 
 ## Changes
 
@@ -438,3 +454,7 @@ multiplied by percentCorrectSensitivity.
 ### 2.1.0 - 20240322
  * Introduce failLearningMaxInterval and hardLearningMaxInterval
  * Base interval for Good on actual interval
+
+### 2.1.1 - WIP
+ * Make getReviewsToNextNew a bit more aggressive
+ * Get new value for minReviews with each call to getStatsNext24Hours
