@@ -15,7 +15,11 @@ function review (card, viewTime, studyTime, ease) {
     self.reviewsToNextNew =
       getReviewsToNextNew.call(self);
   } else if (self.reviewsToNextNew > 0) {
-    self.reviewsToNextNew--;
+    self.reviewsToNextNew = Math.min(
+      self.reviewsToNextNew - 1,
+      getReviewsToNextNew.call(self)
+    );
+    this.srf.setParam('reviewsToNextNew', this.reviewsToNextNew);
   }
 
   viewTime = Math.floor(viewTime);

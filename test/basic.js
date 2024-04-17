@@ -9,6 +9,9 @@ t.test('load', t => {
         if (name === 'reviewsToNextNew') return 7;
         if (name === 'reviewsPerNewCard') return 14;
         throw new Error('Unsupported param: ' + name);
+      },
+      setParam: function (name, value) {
+        console.log('setPara: ', name, value);
       }
     }
   });
@@ -152,6 +155,9 @@ t.test('getNextCard', t => {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
+    },
+    setParam: function (name, value) {
+      console.log('setParam: ', name, value);
     }
   };
   const scheduler = require('..')({

@@ -361,7 +361,7 @@ card will be presented as long as average study time is not too high.
 
 The number of reviews before the next new card is the number of cards due
 for review in the next 24 hours divided by the recent average number of new
-cars per day, adjusted up or down according to the ratio of average study
+cards per day, adjusted up or down according to the ratio of average study
 time to target study time. If average study time is less than the target
 then the reviews before the next new card is reduced and if it is more than
 the target then the reviews before the next new card is increased. The
@@ -458,3 +458,4 @@ time is config.studyTimeErrorSensitivity.
 ### 2.1.1 - WIP
  * Make getReviewsToNextNew a bit more aggressive
  * Get new value for minReviews with each call to getStatsNext24Hours
+ * Save reviews to next new card to database at each review

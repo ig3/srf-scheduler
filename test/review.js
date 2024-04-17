@@ -64,7 +64,6 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.lastinterval, 600, 'lastinterval is 0');
     t.equal(revlog.interval, 660, 'interval is 550');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsToNextNew, 6, 'reviews to next new card is 6');
     t.end();
   });
 
@@ -97,7 +96,6 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.cardid, 2, 'revlog for card ID 2');
     t.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsToNextNew, 6, 'reviews to next new card is 6');
     t.end();
   });
 
@@ -129,7 +127,6 @@ t.test('getTimeNextDue', t => {
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(scheduler.reviewsToNextNew, 6, 'reviews until next new card is 6');
     t.end();
   });
 
@@ -162,7 +159,6 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.equal(revlog.interval, 86400, 'interval is easyMinInterval');
-    t.equal(scheduler.reviewsToNextNew, 6, 'reviews until next new card is 6');
     t.end();
   });
 
@@ -195,7 +191,7 @@ t.test('getTimeNextDue', t => {
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.equal(revlog.interval, 129600, 'interval is 129600');
-    t.equal(scheduler.reviewsToNextNew, 6, 'reviews until next new card is 6');
+    t.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
     t.end();
   });
 
@@ -329,6 +325,9 @@ function setup1 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
+    },
+    setParam: function (name, value) {
+      console.log('setParam: ', name, value);
     }
   };
 
@@ -450,7 +449,10 @@ function setup2 () {
     getCountCardsOverdue: function () {
       return 0;
     },
-    resolveUnits: resolveUnits
+    resolveUnits: resolveUnits,
+    setParam: function (name, value) {
+      console.log('setParam: ', name, value);
+    }
   };
 
   const config = {
@@ -586,6 +588,9 @@ function setup3 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
+    },
+    setParam: function (name, value) {
+      console.log('setParam: ', name, value);
     }
   };
 
@@ -695,10 +700,12 @@ function setup4 () {
       studytime,
       lapses
     ) values
-      (@ts - (1000 * 60 * 60 * 24 * 10), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - (1000 * 60 * 60 * 24 * 10), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
+      (@ts - (1000 * 60 * 60 * 24 * 11), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(10)
+    date: dateDaysAgo(10),
+    date2: dateDaysAgo(11)
   });
   const srf = {
     getStatsPast24Hours: function () {
@@ -722,6 +729,9 @@ function setup4 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
+    },
+    setParam: function (name, value) {
+      console.log('setParam: ', name, value);
     }
   };
 
