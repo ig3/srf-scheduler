@@ -459,3 +459,4 @@ time is config.studyTimeErrorSensitivity.
  * Make getReviewsToNextNew a bit more aggressive
  * Get new value for minReviews with each call to getStatsNext24Hours
  * Save reviews to next new card to database at each review
+ * Limit reviews per new card

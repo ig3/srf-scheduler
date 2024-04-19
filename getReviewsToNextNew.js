@@ -21,8 +21,10 @@ module.exports = function getReviewsToNextNew () {
   const error =
     (getAverageStudyTime.call(this) / this.config.targetStudyTime) - 1;
 
-  const newCardsPerDay =
-    getAverageNewCardsPerDay.call(this) || this.config.maxNewCardsPerDay;
+  const newCardsPerDay = Math.max(
+    1,
+    getAverageNewCardsPerDay.call(this)
+  );
 
   return Math.floor(
     getCardsToReview.call(this, 60 * 60 * 24) / newCardsPerDay *
