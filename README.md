@@ -62,9 +62,9 @@ Otherwise, getNextCard returns undefined.
 
 getNextDueCard returns a card if one is due, otherwise undefined.
 
-If overrideLimits is true then getNextDueCard returns the card with the
-earliest due date, regardless of whether this is before or after the
-current time.
+If overrideLimits is true then getNextDueCard one of the five cards with
+the earliest due dates, selected ramdomly, regardless of whether they are
+due before or after the current time.
 
 Otherwise, getNextDue selects a sort algorithm randomly, according to
 config.probabilityOldestDue: sort by interval or sort by due.
