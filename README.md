@@ -4,9 +4,13 @@ This is the default scheduler for
 [srf](https://www.npmjs.com/package/@ig3/srf) - spaced repetition
 flashcards.
 
-It's primary functions are to update a card after review, scheduling it for
-its next review and producing a revlog record of the review, and retrieving
-the next card for review: a due card or a new card.
+It's primary functions are:
+ * selecting a card for review
+ * re-scheduling a card after review
+
+It controls two aspects of study:
+ * average study time per day
+ * percentage of cards successfully recalled
 
 ## installation
 
@@ -14,103 +18,132 @@ the next card for review: a due card or a new card.
 $ npm install @ig3/srf-scheduler
 ```
 
-## API
+If you install [srf](https://www.npmjs.com/package/@ig3/srf), this
+scheduler will be installed as one of its dependencies. There should be no
+need to install this independently.
 
-### getCountCardsDueToday
+## Algorithms
 
-Returns the number of cards to be reviewed between now and the end of the
-current day in localtime, excluding deferred cards.
+### new cards
 
-### getIntervals(card)
+Average study time per day is controlled by adjusting the presentation of
+new cards. New cards are usually presented interleaved with review cards.
+If average study time is very low, they may be presented without
+intervening review cards. If average study time is high, new cards will not
+be presented.
 
-Returns an object with the new interval for each possible ease for the
-given card.
+New cards are presented if:
+ * average study time < configured target study time;
+ * new cards in the past 24 hours < configured max new cards per day; and
+ * there are no overdue cards
 
-### getNewCardMode()
+If average study time is less than configured minimum study time, then new
+cards are presented if there are no cards due, until the daily limit on new
+cards is reached.
 
-Returns 'go', 'slow' or 'stop'.
+For these controls, average study time is determined from:
+ * actual study time in the past 24 hours
+ * predicted study time in the next 24 hours
+ * actual average study time in the past 14 days of study
 
-Go if new cards will be presented when there are no cards due.
+The number of reviews between new cards is adjusted according to the ratio
+of average study time to target study time per day, the number of cards due
+in the next 24 hours and the recent average number of new cards per day.
 
-Slow if new cards will be presented, interleaved with due cards but not if
-there are no cards due.
+For this control, average study time is the actual average study time over
+the previous 14 days of study. This excludes the current day and days on
+which no reviews were done.
 
-Stop if new cards will not be presented.
+### review card selection
 
-### getNextCard(overrideLimits)
+Every card that has been viewed has a time when it is scheduled to be
+reviewed.
 
-Returns the next card to be studied or undefined.
+If there is more than one card past its scheduled review time, then one of
+two algorithms is used to select the next card for review:
+ * shortest interval first
+ * earliest due first
 
-If overrideLimits is true then getNextCard returns the next due card if
-there is a card due, otherwise the next new card.
+The algorithm is selected randomly, with probability of the earliest due
+cards being selected first determined by configuration parameter
+probabilityOldestDue.
 
-Otherwise, getNextCard returns the next new card if:
- * average study time in the past and next 24 hours is less than
-   config.targetStudyTime; and
- * total new cards studied in the past 24 hours is less than
-   config.maxNewCardsPerDay; and
- * there are no overdue cards; and
- * sufficient due cards have been reviewed since the last new card or there
-   is no due card and average study time is less than
-   config.minStudyTime
+For both algorithms, the first five cards are determined and one of these
+is selected at random. 
 
-Otherwise, getNextCard returns the next due card if there is a card due.
+### interval adjustments
 
-Otherwise, getNextCard returns undefined.
+Interval is the interval between card reviews. The interval of a card is
+updated each time it is reviewed, according to its 'ease' (Fail, Hard,
+Good or Easy). Interval (and due date) are also adjusted after any card
+with an interval greater than learningThreshold is reviewed, according to
+the difference between 'percent correct' and percentCorrectTarget.
 
-### getNextDue(overrideLimits)
+#### Fail
 
-getNextDueCard returns a card if one is due, otherwise undefined.
+If the ease of a review is Fail, then the new interval is the previous
+interval multiplied by failFactor, with an upper bound of
+failLearningMaxInterval if the previous interval was less than
+learningThreshold or failMaxInterval otherwise.
 
-If overrideLimits is true then getNextDueCard one of the five cards with
-the earliest due dates, selected ramdomly, regardless of whether they are
-due before or after the current time.
+#### Hard
 
-Otherwise, getNextDue selects a sort algorithm randomly, according to
-config.probabilityOldestDue: sort by interval or sort by due.
+If the ease of a review is Hard, then the new interval is the previous
+interval multiplied by hardFactor, with an upper bound of
+hardLearningMaxInterval if the previous interval was less than
+learningThreshold or hardMaxInterval otherwise.
 
-In either case, one of the first 5 cards, according to the sort algorithm,
-is selected at random.
+#### Good
 
-### getNextNew
+If the ease of a review is Good, then the new interval is the greater of
+ * goodMinInterval
+ * actual time since last review multiplied by goodMinFactor
+ * actual time since last review multiplied by the product of goodFactor
+   and the card factor
 
-getNextnew returns a new card if one is available, otherwise undefined.
+The new interval is limited to the lesser of maxInterval or
+maxGoodInterval.
 
-New cards (cards with interval = 0) are sorted by ord, then id.
+The card factor is the exponentially weighted moving average of ease
+weights, with a decay factor of decayFactor and ease weights of weightFail,
+weightHard, weightGood and weightEasy. This reflects how easy or difficult
+the card has been recently.
 
-New cards are ignored if a card from the same fieldset is due within
-config.minTimeBetweenRelatedCards or if a card from the same fieldset has
-been reviewed within config.minTimeBetweenRelatedCards.
+Time since last review is used to calculate the new interval, rather than
+the previously scheduled interval. This will typically be longer than the
+previously sechedule interval because it is unlikely that the card will be
+reviewed as soon as it is due.
 
-### getStatsNext24Hours
+This makes most difference for learning cards or in the case of a backlog.
 
-Returns an object with properties:
- * count
- * time
+For learning cards, assuming one is not studying all day, there will be
+breaks in study. If a card has an interval of one hour but one does not
+study again until the next day, then the scheduled interval is one hour but
+the actual time since last review might be closer to 24 hours. If the card
+remains good after 24 hours, despite being scheduled for review in one
+hour, then the longer, actual interval is indicative of ability to recall
+the card.
 
-Where count is the number of cards due in the next 24 hours and time is the
-estimated time (seconds) to study all the cards due in the next 24 hours.
+In the case of a backlog, a card might not be reviewed until long after it
+was scheduled for review. Again, the longer actual interval is more
+indicative of ability to recall the card.
 
-Count is the number of cards due within the next 24 hours, excluding
-deferred cards (multiple cards from the same fieldset due within
-minTimeBetweenRelatedCards) and including recent average number of new
-cards per day.
+#### Easy
 
-Time is an estimate of the time to review all these cards, based on recent
-performance.
+If the ease of a review is Easy, then the new interval is the actual interval
+(i.e. time since the last review, rather than the interval scheduled at the
+last review) multiplied by the easyFactor and the card factor, with a
+minimum of easyMinInterval and maximum of the lower of maxEasyInterval and
+maxInteral.
 
-### getTimeNextDue
+### Percent Correct
 
-Returns the time (seconds since the epoch) when the card with the earliest
-due time is due. This may be in the past or in the future, depending on
-current backlog.
+Whenever a card is reviewed with a new interval greater than
+learningThreshold, then the intervals and due dates of all cards with
+interval between learningThreshold and maxInterval are adjusted according
+to the difference between 'percent correct' and percentCorrectTarget,
+multiplied by percentCorrectSensitivity.
 
-### review(card, viewTime, studyTime, ease)
-
-Updates the given card, setting new interval and due, according to ease and
-creates a revlog record recording the review of the card.
-
-The new interval and due are calculated according to the ease.
 
 ## Configuration
 
@@ -277,96 +310,103 @@ factor by a process of moving average exponential decay.
 weightHard is the weight of an Hard response in calculating the card ease
 factor by a process of moving average exponential decay.
 
-## Algorithms
+## API
 
-### interval adjustments
+### getCountCardsDueToday
 
-Interval is the interval between card reviews. The interval of a card is
-adjusted each time it is reviewed, according to its 'ease' (Fail, Hard,
-Good or Easy). Interval (and due date) are also adjusted after any card
-with an interval greater than learningThreshold is reviewed, according to
-the difference between 'percent correct' and percentCorrectTarget.
+Returns the number of cards to be reviewed between now and the end of the
+current day in localtime, excluding deferred cards.
 
-#### Fail
+### getIntervals(card)
 
-If the ease of a review is Fail, then the new interval is the previous
-interval multiplied by failFactor, with an upper bound of
-failLearningMaxInterval if the previous interval was less than
-learningThreshold or failMaxInterval otherwise.
+Returns an object with the new interval for each possible ease for the
+given card.
 
-#### Hard
+### getNewCardMode()
 
-If the ease of a review is Hard, then the new interval is the previous
-interval multiplied by hardFactor, with an upper bound of
-hardLearningMaxInterval if the previous interval was less than
-learningThreshold or hardMaxInterval otherwise.
+Returns 'go', 'slow' or 'stop'.
 
-#### Good
+Go if new cards will be presented when there are no cards due.
 
-If the ease of a review is Good, then the new interval is the greater of
- * goodMinInterval
- * actual time since last review multiplied by goodMinFactor
- * actual time since last review multiplied by the product of goodFactor
-   and the card factor
+Slow if new cards will be presented, interleaved with due cards but not if
+there are no cards due.
 
-The new interval is limited to the lesser of maxInterval or
-maxGoodInterval.
+Stop if new cards will not be presented.
 
-The card factor is the exponentially weighted moving average of ease
-weights, with a decay factor of decayFactor and ease weights of weightFail,
-weightHard, weightGood and weightEasy. This reflects how easy or difficult
-the card has been recently.
+### getNextCard(overrideLimits)
 
-Time since last review is used to calculate the new interval, rather than
-the previously scheduled interval. This will typically be longer than the
-previously sechedule interval because it is unlikely that the card will be
-reviewed as soon as it is due.
+Returns the next card to be studied or undefined.
 
-This makes most difference for learning cards or in the case of a backlog.
+If overrideLimits is true then getNextCard returns the next due card if
+there is a card due, otherwise the next new card.
 
-For learning cards, assuming one is not studying all day, there will be
-breaks in study. If a card has an interval of one hour but one does not
-study again until the next day, then the scheduled interval is one hour but
-the actual time since last review might be closer to 24 hours. If the card
-remains good after 24 hours, despite being scheduled for review in one
-hour, then the longer, actual interval is indicative of ability to recall
-the card.
+Otherwise, getNextCard returns the next new card if:
+ * average study time in the past and next 24 hours is less than
+   config.targetStudyTime; and
+ * total new cards studied in the past 24 hours is less than
+   config.maxNewCardsPerDay; and
+ * there are no overdue cards; and
+ * sufficient due cards have been reviewed since the last new card or there
+   is no due card and average study time is less than
+   config.minStudyTime
 
-In the case of a backlog, a card might not be reviewed until long after it
-was scheduled for review. Again, the longer actual interval is more
-indicative of ability to recall the card.
+Otherwise, getNextCard returns the next due card if there is a card due.
 
-#### Easy
+Otherwise, getNextCard returns undefined.
 
-If the ease of a review is Easy, then the new interval is the actual interval
-(i.e. time since the last review, rather than the interval scheduled at the
-last review) multiplied by the easyFactor and the card factor, with a
-minimum of easyMinInterval and maximum of the lower of maxEasyInterval and
-maxInteral.
+### getNextDue(overrideLimits)
 
-### Percent Correct
+getNextDueCard returns a card if one is due, otherwise undefined.
 
-Whenever a card is reviewed with a new interval greater than
-learningThreshold, then the intervals and due dates of all cards with
-interval between learningThreshold and maxInterval are adjusted according
-to the difference between 'percent correct' and percentCorrectTarget,
-multiplied by percentCorrectSensitivity.
+If overrideLimits is true then getNextDueCard one of the five cards with
+the earliest due dates, selected ramdomly, regardless of whether they are
+due before or after the current time.
 
-### Reviews per New Card
+Otherwise, getNextDue selects a sort algorithm randomly, according to
+config.probabilityOldestDue: sort by interval or sort by due.
 
-New cards are normally shown interspersed with review cards. When a new
-card is presented, the number of reviews before the next new card is
-calculated. This is reduced with each review. When it reaches zero, a new
-card will be presented as long as average study time is not too high.
+In either case, one of the first 5 cards, according to the sort algorithm,
+is selected at random.
 
-The number of reviews before the next new card is the number of cards due
-for review in the next 24 hours divided by the recent average number of new
-cards per day, adjusted up or down according to the ratio of average study
-time to target study time. If average study time is less than the target
-then the reviews before the next new card is reduced and if it is more than
-the target then the reviews before the next new card is increased. The
-sensitivity to the difference between average study time and target study
-time is config.studyTimeErrorSensitivity.
+### getNextNew
+
+getNextnew returns a new card if one is available, otherwise undefined.
+
+New cards (cards with interval = 0) are sorted by ord, then id.
+
+New cards are ignored if a card from the same fieldset is due within
+config.minTimeBetweenRelatedCards or if a card from the same fieldset has
+been reviewed within config.minTimeBetweenRelatedCards.
+
+### getStatsNext24Hours
+
+Returns an object with properties:
+ * count
+ * time
+
+Where count is the number of cards due in the next 24 hours and time is the
+estimated time (seconds) to study all the cards due in the next 24 hours.
+
+Count is the number of cards due within the next 24 hours, excluding
+deferred cards (multiple cards from the same fieldset due within
+minTimeBetweenRelatedCards) and including recent average number of new
+cards per day.
+
+Time is an estimate of the time to review all these cards, based on recent
+performance.
+
+### getTimeNextDue
+
+Returns the time (seconds since the epoch) when the card with the earliest
+due time is due. This may be in the past or in the future, depending on
+current backlog.
+
+### review(card, viewTime, studyTime, ease)
+
+Updates the given card, setting new interval and due, according to ease and
+creates a revlog record recording the review of the card.
+
+The new interval and due are calculated according to the ease.
 
 ## Changes
 
