@@ -448,7 +448,7 @@ function defaultConfigParameters () {
     failMaxInterval: '1 day',
     goodFactor: 1.0,
     goodMinFactor: 1.1,
-    goodMinInterval: '5 minutes',
+    goodMinInterval: '2 minutes',
     hardFactor: 0.8,
     hardLearningMaxInterval: '1 hour',
     hardMaxInterval: '1 week',
