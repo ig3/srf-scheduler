@@ -301,7 +301,7 @@ function getNextNew () {
     select *
     from card
     where
-      interval = 0 and
+      interval <= 0 and
       fieldsetid not in (
         select fieldsetid from card where interval > 0 and due < ?
       ) and
