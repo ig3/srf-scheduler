@@ -39,8 +39,11 @@ module.exports = function adjustCards () {
       self.db.prepare(`
         update card
         set
-          interval = floor(interval + interval * @adjustment),
-          due = floor(due + interval * @adjustment)
+          interval = min(
+            @maxInterval,
+            floor(interval + interval * @adjustment)
+          ),
+          due = floor(due + min(@maxInterval, interval * @adjustment))
         where
           due > @now and
           interval > @minInterval and

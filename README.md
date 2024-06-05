@@ -501,3 +501,6 @@ The new interval and due are calculated according to the ease.
  * Save reviews to next new card to database at each review
  * Limit reviews per new card
  * Update dependencies
+
+### 2.1.2 - WIP
+ * Fix adjustCards to not set interval larger than maxInterval
