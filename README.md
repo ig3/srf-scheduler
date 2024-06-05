@@ -504,3 +504,4 @@ The new interval and due are calculated according to the ease.
 
 ### 2.1.2 - WIP
  * Fix adjustCards to not set interval larger than maxInterval
+ * Change test for reviewed cards from interval != 0 to interval > 0

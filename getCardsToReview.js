@@ -8,7 +8,7 @@ module.exports = function getCardsToReview (secs) {
       select count(distinct fieldsetid) as count
       from card
       where
-        interval != 0 and
+        interval > 0 and
         due < ?
     `)
     .get(Math.floor(Date.now() / 1000) + limit).count;
@@ -18,7 +18,7 @@ module.exports = function getCardsToReview (secs) {
         select count() as count
         from card
         where
-          interval != 0 and
+          interval > 0 and
           due > ? and
           due < ?
       `)

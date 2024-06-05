@@ -257,7 +257,7 @@ function getNextDue (overrideLimits = false) {
     cards = self.db.prepare(`
       select *
       from card
-      where interval != 0
+      where interval > 0
       order by due, templateid
       limit 5
     `).all();
@@ -265,7 +265,7 @@ function getNextDue (overrideLimits = false) {
     cards = self.db.prepare(`
       select *
       from card
-      where interval != 0 and due < ?
+      where interval > 0 and due < ?
       order by due, templateid
       limit 5
     `).all(now());
@@ -273,7 +273,7 @@ function getNextDue (overrideLimits = false) {
     cards = self.db.prepare(`
       select *
       from card
-      where interval != 0 and due < ?
+      where interval > 0 and due < ?
       order by interval, due, templateid
       limit 5
     `).all(now());
@@ -286,7 +286,7 @@ function getTimeNextDue () {
   const card = self.db.prepare(`
     select *
     from card
-    where interval != 0
+    where interval > 0
     order by due, templateid
     limit 1
   `).get();
@@ -303,7 +303,7 @@ function getNextNew () {
     where
       interval = 0 and
       fieldsetid not in (
-        select fieldsetid from card where interval != 0 and due < ?
+        select fieldsetid from card where interval > 0 and due < ?
       ) and
       fieldsetid not in (
         select card.fieldsetid from revlog join card on card.id = revlog.cardid where revlog.id > ?
@@ -399,7 +399,7 @@ function getStatsNext24Hours () {
       from card
       where
         due < ? and
-        interval != 0
+        interval > 0
     `)
     .get(t1).count;
   if (t2 > t1) {

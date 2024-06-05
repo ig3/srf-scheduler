@@ -18,7 +18,7 @@ module.exports = function deferRelated (card, due) {
     where
       fieldsetid = ? and
       id != ? and
-      interval != 0 and
+      interval > 0 and
       due < ?
   `)
   .run(
