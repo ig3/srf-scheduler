@@ -2,6 +2,11 @@
 
 const t = require('tape');
 
+t.test('eslint', t => {
+  const config = require('../eslint.config.js');
+  t.equal(typeof config, 'object', 'eslint config provides an object');
+});
+
 t.test('load', t => {
   const scheduler = require('..')({
     srf: {
