@@ -2,6 +2,6 @@
 
 const eslintConfigEntrain = require('@ig3/eslint-config-entrain');
 
-module.export = [
+module.exports = [
   ...eslintConfigEntrain
 ];
