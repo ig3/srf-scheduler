@@ -1,40 +1,36 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
-t.test('getNextNew', t => {
-  t.test('No cards', t => {
+t.test('getNextNew', async t => {
+  await t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextNew();
-    t.ok(!card, 'no card');
-    t.end();
+    assert(!card, 'no card');
   });
 
-  t.test('No cards due', t => {
+  await t.test('No cards due', t => {
     const scheduler = require('..')(setup2());
 
     const card = scheduler.getNextNew();
-    t.ok(!!card, 'new card');
-    t.equal(card.id, 1, 'new card');
-    t.end();
+    assert(!!card, 'new card');
+    assert.equal(card.id, 1, 'new card');
   });
 
-  t.test('One card due', t => {
+  await t.test('One card due', t => {
     const scheduler = require('..')(setup3());
 
     const card = scheduler.getNextNew();
-    t.ok(card, 'got a card');
-    t.equal(card.id, 3, 'card ID 3');
-    t.end();
+    assert(card, 'got a card');
+    assert.equal(card.id, 3, 'card ID 3');
   });
-
-  t.end();
 });
 
 function formatLocalDate (date) {
@@ -76,7 +72,7 @@ function getMultiplier (unit) {
     ['days', 3600 * 24],
     ['weeks', 3600 * 24 * 7],
     ['months', 3600 * 24 * 365 / 12],
-    ['years', 3600 * 24 * 365]
+    ['years', 3600 * 24 * 365],
   ];
   for (let i = 0; i < units.length; i++) {
     if (units[i][0].startsWith(unit)) return units[i][1];
@@ -85,7 +81,7 @@ function getMultiplier (unit) {
 }
 
 // Empty DB - no new cards and no due cards and no review logs
-// eslint-disable-next-line
+
 function setup1 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -122,14 +118,14 @@ function setup1 () {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -140,7 +136,7 @@ function setup1 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -169,13 +165,13 @@ function setup1 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -183,7 +179,7 @@ function setup1 () {
 //  new cards
 //  no due cards
 //  no review logs
-// eslint-disable-next-line
+
 function setup2 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -239,14 +235,14 @@ function setup2 () {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -257,7 +253,7 @@ function setup2 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -286,13 +282,13 @@ function setup2 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -369,20 +365,20 @@ function setup3 () {
       (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 10,
-        newCards: 1
+        newCards: 1,
       };
     },
     getStatsNext24Hours: function () {
       return {
         cards: 1,
-        time: 30
+        time: 30,
       };
     },
     getCountCardsOverdue: function () {
@@ -393,7 +389,7 @@ function setup3 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -422,12 +418,12 @@ function setup3 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }

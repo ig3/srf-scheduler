@@ -1,57 +1,50 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
-t.test('getNewCardMode', t => {
-  t.test('No cards, no revlog', t => {
+t.test('getNewCardMode', async t => {
+  await t.test('No cards, no revlog', t => {
     const scheduler = require('..')(setup1());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'go', 'Mode is go');
-    t.end();
+    assert.equal(mode, 'go', 'Mode is go');
   });
 
-  t.test('All unseen cards, no revlog', t => {
+  await t.test('All unseen cards, no revlog', t => {
     const scheduler = require('..')(setup2());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'go', 'Mode is go');
-    t.end();
+    assert.equal(mode, 'go', 'Mode is go');
   });
 
-  t.test('One due card', t => {
+  await t.test('One due card', t => {
     const scheduler = require('..')(setup3());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'go', 'Mode is go');
-    t.end();
+    assert.equal(mode, 'go', 'Mode is go');
   });
 
-  t.test('setup4', t => {
+  await t.test('setup4', t => {
     const scheduler = require('..')(setup4());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'go', 'Mode go');
-    t.end();
+    assert.equal(mode, 'go', 'Mode go');
   });
 
-  t.test('setup5', t => {
+  await t.test('setup5', t => {
     const scheduler = require('..')(setup5());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'slow', 'Mode slow');
-    t.end();
+    assert.equal(mode, 'slow', 'Mode slow');
   });
 
-  t.test('setup6', t => {
+  await t.test('setup6', t => {
     const scheduler = require('..')(setup6());
 
     const mode = scheduler.getNewCardMode();
-    t.equal(mode, 'stop', 'Mode stop');
-    t.end();
+    assert.equal(mode, 'stop', 'Mode stop');
   });
-
-  t.end();
 });
 
 function formatLocalDate (date) {
@@ -93,7 +86,7 @@ function getMultiplier (unit) {
     ['days', 3600 * 24],
     ['weeks', 3600 * 24 * 7],
     ['months', 3600 * 24 * 365 / 12],
-    ['years', 3600 * 24 * 365]
+    ['years', 3600 * 24 * 365],
   ];
   for (let i = 0; i < units.length; i++) {
     if (units[i][0].startsWith(unit)) return units[i][1];
@@ -102,7 +95,7 @@ function getMultiplier (unit) {
 }
 
 // Empty DB - no cards and no review logs
-// eslint-disable-next-line
+
 function setup1 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -142,7 +135,7 @@ function setup1 () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -156,7 +149,7 @@ function setup1 () {
     },
     getAverageStudyTime: function () {
       return 600;
-    }
+    },
   };
 
   const config = {
@@ -185,13 +178,13 @@ function setup1 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -199,7 +192,7 @@ function setup1 () {
 //  new cards
 //  no due cards
 //  no review logs
-// eslint-disable-next-line
+
 function setup2 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -256,7 +249,7 @@ function setup2 () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -270,7 +263,7 @@ function setup2 () {
     },
     getAverageStudyTime: function () {
       return 600;
-    }
+    },
   };
 
   const config = {
@@ -299,13 +292,13 @@ function setup2 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -382,14 +375,14 @@ function setup3 () {
       (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 10,
-        newCards: 1
+        newCards: 1,
       };
     },
     getCountCardsOverdue: function () {
@@ -403,7 +396,7 @@ function setup3 () {
     },
     getAverageStudyTime: function () {
       return 600;
-    }
+    },
   };
 
   const config = {
@@ -432,13 +425,13 @@ function setup3 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -514,14 +507,14 @@ function setup4 () {
       (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 8,
-        newCards: 1
+        newCards: 1,
       };
     },
     getCountCardsOverdue: function () {
@@ -535,7 +528,7 @@ function setup4 () {
     },
     getAverageStudyTime: function () {
       return 600;
-    }
+    },
   };
 
   const config = {
@@ -564,13 +557,13 @@ function setup4 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -743,14 +736,14 @@ function setup5 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 20,
         time: 2800,
-        newCards: 10
+        newCards: 10,
       };
     },
     getCountCardsOverdue: function () {
@@ -764,7 +757,7 @@ function setup5 () {
     },
     getAverageStudyTime: function () {
       return 600;
-    }
+    },
   };
 
   const config = {
@@ -793,13 +786,13 @@ function setup5 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -973,7 +966,7 @@ function setup6 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
 
   const config = {
@@ -1002,7 +995,7 @@ function setup6 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   const srf = {
@@ -1010,7 +1003,7 @@ function setup6 () {
       return {
         count: 120,
         time: 3600,
-        newCards: 10
+        newCards: 10,
       };
     },
     getCountCardsOverdue: function () {
@@ -1024,12 +1017,12 @@ function setup6 () {
     },
     getAverageStudyTime: function () {
       return 2800;
-    }
+    },
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }

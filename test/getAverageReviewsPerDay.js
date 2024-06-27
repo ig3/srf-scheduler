@@ -1,25 +1,23 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 const formatLocalDate = require('../formatLocalDate.js');
 
 t.test('getAverageReviewsPerDay', t => {
-  // eslint-disable-next-line
   const getAverageReviewsPerDay = require('../getAverageReviewsPerDay.js');
 
   const result1 = getAverageReviewsPerDay.call(setup1());
-  t.equal(result1, 0, '0 if no revlog entries');
+  assert.equal(result1, 0, '0 if no revlog entries');
 
   const result2 = getAverageReviewsPerDay.call(setup2());
-  t.equal(result2, 4, 'average 4 with some logs');
+  assert.equal(result2, 4, 'average 4 with some logs');
 
   const result3 = getAverageReviewsPerDay.call(setup3());
-  t.equal(result3, 4, 'study gaps are ignored');
+  assert.equal(result3, 4, 'study gaps are ignored');
 
   const result4 = getAverageReviewsPerDay.call(setup3(), 1);
-  t.equal(result4, 5, 'reviews older than days are ignored');
-
-  t.end();
+  assert.equal(result4, 5, 'reviews older than days are ignored');
 });
 
 function setup1 () {
@@ -29,7 +27,7 @@ function setup1 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -58,7 +56,7 @@ function setup2 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -110,7 +108,7 @@ function setup2 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
 
   return self;
@@ -123,7 +121,7 @@ function setup3 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -175,7 +173,7 @@ function setup3 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
 
   return self;

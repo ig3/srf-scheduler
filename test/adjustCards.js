@@ -1,9 +1,9 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
 t.test('adjustCards', t => {
-  // eslint-disable-next-line
   const adjustCards = require('../adjustCards.js');
   adjustCards.call(setup1());
   const s2 = setup2();
@@ -16,12 +16,10 @@ t.test('adjustCards', t => {
     select * from card
     limit 1
   `).get();
-  t.ok(after.due < before.due, 'due is reduced');
-  t.ok(after.interval < before.interval, 'interval is reduced');
-  t.end();
+  assert(after.due < before.due, 'due is reduced');
+  assert(after.interval < before.interval, 'interval is reduced');
 });
 
-// eslint-disable-next-line
 function setup1 () {
   const self = {};
 
@@ -29,7 +27,7 @@ function setup1 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -61,7 +59,7 @@ function setup2 () {
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
     percentCorrectTarget: 90,
-    percentCorrectSensitivity: 0.0001
+    percentCorrectSensitivity: 0.0001,
   };
 
   self.db = require('better-sqlite3')();
@@ -142,7 +140,7 @@ function setup2 () {
       (@ts - 5000, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    interval: 60 * 60 * 24 * 21 + 1
+    interval: 60 * 60 * 24 * 21 + 1,
   });
 
   return self;

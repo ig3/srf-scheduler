@@ -1,21 +1,22 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
-t.test('getTimeNextDue', t => {
-  t.test('New card', t => {
+t.test('review', async t => {
+  await t.test('New card', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.review(
       {
         id: 10,
         interval: 0,
-        lapses: 0
+        lapses: 0,
       },
       20,
       25,
@@ -28,26 +29,25 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 10, 'revlog for card ID 10');
-    t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
-    t.equal(revlog.interval, 300, 'interval is 300');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.end();
+    assert.equal(revlog.cardid, 10, 'revlog for card ID 10');
+    assert.equal(revlog.lastinterval, 0, 'lastinterval is 0');
+    assert.equal(revlog.interval, 300, 'interval is 300');
+    assert.equal(revlog.lapses, 0, 'lapses remains 0');
   });
 
-  t.test('Review card - good', t => {
+  await t.test('Review card - good', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.review(
       {
         id: 1,
         interval: 630,
-        lapses: 0
+        lapses: 0,
       },
       20,
       25,
@@ -60,26 +60,25 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lastinterval, 600, 'lastinterval is 0');
-    t.equal(revlog.interval, 660, 'interval is 550');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.end();
+    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    assert.equal(revlog.lastinterval, 600, 'lastinterval is 0');
+    assert.equal(revlog.interval, 660, 'interval is 550');
+    assert.equal(revlog.lapses, 0, 'lapses remains 0');
   });
 
-  t.test('Review card - good - long interval', t => {
+  await t.test('Review card - good - long interval', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.review(
       {
         id: 2,
         interval: 60 * 60 * 24 * 90,
-        lapses: 0
+        lapses: 0,
       },
       20,
       25,
@@ -92,19 +91,17 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    console.log('revlog: ', revlog);
-    t.equal(revlog.cardid, 2, 'revlog for card ID 2');
-    t.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.end();
+    assert.equal(revlog.cardid, 2, 'revlog for card ID 2');
+    assert.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
+    assert.equal(revlog.lapses, 0, 'lapses remains 0');
   });
 
-  t.test('Review card 1 again', t => {
+  await t.test('Review card 1 again', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.review(
@@ -112,7 +109,7 @@ t.test('getTimeNextDue', t => {
         id: 1,
         interval: 60 * 60 * 24 * 90,
         views: 1,
-        lapses: 0
+        lapses: 0,
       },
       20,
       25,
@@ -125,17 +122,16 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.end();
+    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    assert.equal(revlog.lapses, 0, 'lapses remains 0');
   });
 
-  t.test('Review card - easy', t => {
+  await t.test('Review card - easy', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.review(
@@ -143,7 +139,7 @@ t.test('getTimeNextDue', t => {
         id: 1,
         interval: 60 * 60 * 24 * 90,
         views: 1,
-        lapses: 0
+        lapses: 0,
       },
       20,
       25,
@@ -156,18 +152,17 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(revlog.interval, 86400, 'interval is easyMinInterval');
-    t.end();
+    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    assert.equal(revlog.lapses, 0, 'lapses remains 0');
+    assert.equal(revlog.interval, 86400, 'interval is easyMinInterval');
   });
 
-  t.test('Review card - easy, delayed', t => {
+  await t.test('Review card - easy, delayed', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.review(
@@ -175,7 +170,7 @@ t.test('getTimeNextDue', t => {
         id: 1,
         interval: 60 * 60 * 24 * 90,
         views: 1,
-        lapses: 0
+        lapses: 0,
       },
       20,
       25,
@@ -188,14 +183,11 @@ t.test('getTimeNextDue', t => {
       limit 1
     `)
     .get();
-    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
-    t.equal(revlog.interval, 129600, 'interval is 129600');
-    t.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
-    t.end();
+    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    assert.equal(revlog.lapses, 0, 'lapses remains 0');
+    assert.equal(revlog.interval, 129600, 'interval is 129600');
+    assert.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
   });
-
-  t.end();
 });
 
 function formatLocalDate (date) {
@@ -237,7 +229,7 @@ function getMultiplier (unit) {
     ['days', 3600 * 24],
     ['weeks', 3600 * 24 * 7],
     ['months', 3600 * 24 * 365 / 12],
-    ['years', 3600 * 24 * 365]
+    ['years', 3600 * 24 * 365],
   ];
   for (let i = 0; i < units.length; i++) {
     if (units[i][0].startsWith(unit)) return units[i][1];
@@ -301,20 +293,20 @@ function setup1 () {
       (@now - 1000 * 60 * 10, '2023-03-22', 1, 'good', 60 * 10, 60 * 8, 1.4, 10, 10, 0),
       (@now - 1000 * 60 * 60 * 24 * 90, '2023-03-22', 2, 'good', 60 * 60 * 24 * 90, 60 * 60 * 24 * 60, 1.4, 10, 10, 0)
   `).run({
-    now: Date.now()
+    now: Date.now(),
   });
   const srf = {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -327,8 +319,7 @@ function setup1 () {
       throw new Error('Unsupported param: ' + name);
     },
     setParam: function (name, value) {
-      console.log('setParam: ', name, value);
-    }
+    },
   };
 
   const config = {
@@ -356,13 +347,13 @@ function setup1 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -436,14 +427,14 @@ function setup2 () {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -451,8 +442,7 @@ function setup2 () {
     },
     resolveUnits: resolveUnits,
     setParam: function (name, value) {
-      console.log('setParam: ', name, value);
-    }
+    },
   };
 
   const config = {
@@ -480,13 +470,13 @@ function setup2 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -495,7 +485,7 @@ function setup2 () {
 //  Study time past 24 hours < config.minStudyTime
 //  Study time next 24 hours < conig.targetStudyTime
 //  New cards past 24 hours < config.maxNewCardsPerDay
-// eslint-disable-next-line
+
 function setup3 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -564,20 +554,20 @@ function setup3 () {
       (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 10,
-        newCards: 1
+        newCards: 1,
       };
     },
     getStatsNext24Hours: function () {
       return {
         cards: 1,
-        time: 30
+        time: 30,
       };
     },
     getCountCardsOverdue: function () {
@@ -590,8 +580,7 @@ function setup3 () {
       throw new Error('Unsupported param: ' + name);
     },
     setParam: function (name, value) {
-      console.log('setParam: ', name, value);
-    }
+    },
   };
 
   const config = {
@@ -619,13 +608,13 @@ function setup3 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -634,7 +623,7 @@ function setup3 () {
 //  Study time past 24 hours < config.minStudyTime
 //  Study time next 24 hours < conig.targetStudyTime
 //  New cards past 24 hours < config.maxNewCardsPerDay
-// eslint-disable-next-line
+
 function setup4 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -705,20 +694,20 @@ function setup4 () {
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(10),
-    date2: dateDaysAgo(11)
+    date2: dateDaysAgo(11),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 10,
-        newCards: 1
+        newCards: 1,
       };
     },
     getStatsNext24Hours: function () {
       return {
         cards: 1,
-        time: 30
+        time: 30,
       };
     },
     getCountCardsOverdue: function () {
@@ -731,8 +720,7 @@ function setup4 () {
       throw new Error('Unsupported param: ' + name);
     },
     setParam: function (name, value) {
-      console.log('setParam: ', name, value);
-    }
+    },
   };
 
   const config = {
@@ -762,12 +750,12 @@ function setup4 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }

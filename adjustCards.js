@@ -53,7 +53,7 @@ module.exports = function adjustCards () {
         adjustment: adjustment,
         minInterval: self.config.learningThreshold,
         maxInterval: self.config.maxInterval,
-        now: Math.floor(Date.now() / 1000)
+        now: Math.floor(Date.now() / 1000),
       });
     }
   }

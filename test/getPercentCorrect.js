@@ -1,21 +1,20 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
 t.test('getPercentCorrect', t => {
-  // eslint-disable-next-line
   const getPercentCorrect = require('../getPercentCorrect.js');
   const result1 = getPercentCorrect.call(setup1());
-  t.equal(result1, 0, 'no logs');
+  assert.equal(result1, 0, 'no logs');
   const result2 = getPercentCorrect.call(setup2());
-  t.equal(result2, 0, 'less than 10 logs');
+  assert.equal(result2, 0, 'less than 10 logs');
   const result3 = getPercentCorrect.call(setup3());
-  t.equal(Math.floor(result3), 72, '1 more than 10 logs');
+  assert.equal(Math.floor(result3), 72, '1 more than 10 logs');
   const result4 = getPercentCorrect.call(setup4());
-  t.equal(Math.floor(result4), 72, 'ignore too small lastinterval');
+  assert.equal(Math.floor(result4), 72, 'ignore too small lastinterval');
   const result5 = getPercentCorrect.call(setup5());
-  t.equal(Math.floor(result5), 0, 'Ignore too large lastinterval');
-  t.end();
+  assert.equal(Math.floor(result5), 0, 'Ignore too large lastinterval');
 });
 
 function setup1 () {
@@ -25,7 +24,7 @@ function setup1 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -54,7 +53,7 @@ function setup2 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -97,7 +96,7 @@ function setup2 () {
       (@ts - 5002, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    interval: 60 * 60 * 24 * 21 + 1
+    interval: 60 * 60 * 24 * 21 + 1,
   });
 
   return self;
@@ -110,7 +109,7 @@ function setup3 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -155,7 +154,7 @@ function setup3 () {
       (@ts - 5000, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    interval: 60 * 60 * 24 * 21 + 1
+    interval: 60 * 60 * 24 * 21 + 1,
   });
 
   return self;
@@ -168,7 +167,7 @@ function setup4 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -216,7 +215,7 @@ function setup4 () {
       (@ts - 4997, '2023-10-16', 1, 'fail', 60 * 5, @interval-2, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    interval: 60 * 60 * 24 * 21 + 1
+    interval: 60 * 60 * 24 * 21 + 1,
   });
 
   return self;
@@ -229,7 +228,7 @@ function setup5 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -274,7 +273,7 @@ function setup5 () {
       (@ts - 5000, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    interval: 60 * 60 * 24 * 365
+    interval: 60 * 60 * 24 * 365,
   });
 
   return self;

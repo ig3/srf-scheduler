@@ -1,25 +1,23 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 const formatLocalDate = require('../formatLocalDate.js');
 
 t.test('minReviews', t => {
-  // eslint-disable-next-line
   const minReviews = require('../minReviews.js');
 
   const result1 = minReviews.call(setup1());
-  t.equal(result1, 0, 'Initially, it is 0');
+  assert.equal(result1, 0, 'Initially, it is 0');
 
   const result2 = minReviews.call(setup2());
-  t.equal(result2, 6, 'With some reviewes');
+  assert.equal(result2, 6, 'With some reviewes');
 
   const result3 = minReviews.call(setup3());
-  t.equal(result3, 6, 'study gaps are ignored');
+  assert.equal(result3, 6, 'study gaps are ignored');
 
   const result4 = minReviews.call(setup4());
-  t.equal(result4, 2, '0 new cards per day');
-
-  t.end();
+  assert.equal(result4, 2, '0 new cards per day');
 });
 
 function setup1 () {
@@ -33,7 +31,7 @@ function setup1 () {
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20,
-    minTimeBetweenRelatedCards: 60 * 30
+    minTimeBetweenRelatedCards: 60 * 30,
   };
 
   self.reviewsSinceLastNewCard = 0;
@@ -85,7 +83,7 @@ function setup2 () {
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20,
-    minTimeBetweenRelatedCards: 60 * 30
+    minTimeBetweenRelatedCards: 60 * 30,
   };
 
   self.reviewsSinceLastNewCard = 0;
@@ -203,7 +201,7 @@ function setup2 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
 
   return self;
@@ -220,7 +218,7 @@ function setup3 () {
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20,
-    minTimeBetweenRelatedCards: 60 * 30
+    minTimeBetweenRelatedCards: 60 * 30,
   };
 
   self.reviewsSinceLastNewCard = 2;
@@ -338,7 +336,7 @@ function setup3 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
 
   return self;
@@ -355,7 +353,7 @@ function setup4 () {
     newCardRateFactor: 0.8,
     targetStudyTime: 60 * 30,
     maxNewCardsPerDay: 20,
-    minTimeBetweenRelatedCards: 60 * 30
+    minTimeBetweenRelatedCards: 60 * 30,
   };
 
   self.reviewsSinceLastNewCard = 2;
@@ -512,7 +510,7 @@ function setup4 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
 
   return self;

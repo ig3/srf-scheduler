@@ -1,149 +1,138 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
-t.test('getNextCard', t => {
-  t.test('overrideLimits with no cards', t => {
+t.test('getNextCard', async t => {
+  await t.test('overrideLimits with no cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard(true);
-    t.ok(!card, 'no card available');
-    t.end();
+    assert(!card, 'no card available');
   });
 
-  t.test('overrideLimits with card due now', t => {
+  await t.test('overrideLimits with card due now', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard(true);
-    t.ok(card, 'got a card');
-    t.ok(card.due < now(), 'card is already due');
-    t.ok(card.interval !== 0, 'card interval is not zero');
-    t.ok(card.id === 1, 'got card 1');
-    t.end();
+    assert(card, 'got a card');
+    assert(card.due < now(), 'card is already due');
+    assert(card.interval !== 0, 'card interval is not zero');
+    assert(card.id === 1, 'got card 1');
   });
 
-  t.test('overrideLimits with card due in the future', t => {
+  await t.test('overrideLimits with card due in the future', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard(true);
-    t.ok(card, 'got a card');
-    t.ok(card, 'got a card');
-    t.ok(card.due > now(), 'card is already due');
-    t.ok(card.interval !== 0, 'card interval is not zero');
-    t.ok(card.id === 1, 'got card 1');
-    t.end();
+    assert(card, 'got a card');
+    assert(card, 'got a card');
+    assert(card.due > now(), 'card is already due');
+    assert(card.interval !== 0, 'card interval is not zero');
+    assert(card.id === 1, 'got card 1');
   });
 
-  t.test('overrideLimits with no card due', t => {
+  await t.test('overrideLimits with no card due', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard(true);
-    t.ok(card, 'got a card');
-    t.ok(card.due === 0, 'card is new / not due');
-    t.ok(card.interval === 0, 'card interval is zero');
-    t.ok(card.id === 1, 'got card 1');
-    t.end();
+    assert(card, 'got a card');
+    assert(card.due === 0, 'card is new / not due');
+    assert(card.interval === 0, 'card interval is zero');
+    assert(card.id === 1, 'got card 1');
   });
 
-  t.test('No cards', t => {
+  await t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard();
-    t.ok(!card, 'no card');
-    t.end();
+    assert(!card, 'no card');
   });
 
-  t.test('First review', t => {
+  await t.test('First review', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard();
-    t.ok(card, 'got a card');
-    t.equal(card.id, 1, 'card ID 1');
-    t.equal(card.due, 0, 'new card - not due');
-    t.equal(card.interval, 0, 'new card - no interval');
-    t.end();
+    assert(card, 'got a card');
+    assert.equal(card.id, 1, 'card ID 1');
+    assert.equal(card.due, 0, 'new card - not due');
+    assert.equal(card.interval, 0, 'new card - no interval');
   });
 
-  t.test('Second review', t => {
+  await t.test('Second review', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard();
-    t.ok(card, 'got a card');
+    assert(card, 'got a card');
     // Card 2 is skipped because it is related to card 1, recently reviewed
-    t.equal(card.id, 3, 'card ID 3');
-    t.equal(card.due, 0, 'new card - not due');
-    t.equal(card.interval, 0, 'new card - no interval');
-    t.end();
+    assert.equal(card.id, 3, 'card ID 3');
+    assert.equal(card.due, 0, 'new card - not due');
+    assert.equal(card.interval, 0, 'new card - no interval');
   });
 
-  t.test('Past config.minStudyTime and no cards since last new card', t => {
+  await t.test('Past config.minStudyTime and no cards since last new card', t => {
     const setup = setup5();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const card = scheduler.getNextCard();
-    t.ok(!card, 'no card');
-    t.end();
+    assert(!card, 'no card');
   });
 
-  t.test('Past config.minStudyTime and many cards since last new card', t => {
+  await t.test('Past config.minStudyTime and many cards since last new card', t => {
     const setup = setup5();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     scheduler.reviewsToNextNew = 0;
 
     const card = scheduler.getNextCard();
-    console.log('card: ', card);
-    t.ok(card, 'got a  card');
-    t.equal(card.id, 33, 'card ID 33');
-    t.equal(card.due, 0, 'new card - not due');
-    t.equal(card.interval, 0, 'new card - no interval');
-    t.end();
+    assert(card, 'got a  card');
+    assert.equal(card.id, 33, 'card ID 33');
+    assert.equal(card.due, 0, 'new card - not due');
+    assert.equal(card.interval, 0, 'new card - no interval');
   });
-
-  t.end();
 });
 
 function formatLocalDate (date) {
@@ -185,7 +174,7 @@ function getMultiplier (unit) {
     ['days', 3600 * 24],
     ['weeks', 3600 * 24 * 7],
     ['months', 3600 * 24 * 365 / 12],
-    ['years', 3600 * 24 * 365]
+    ['years', 3600 * 24 * 365],
   ];
   for (let i = 0; i < units.length; i++) {
     if (units[i][0].startsWith(unit)) return units[i][1];
@@ -199,7 +188,7 @@ function now () {
 }
 
 // Empty DB - no new cards and no due cards and no review logs
-// eslint-disable-next-line
+
 function setup1 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -236,14 +225,14 @@ function setup1 () {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -257,7 +246,7 @@ function setup1 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -286,13 +275,13 @@ function setup1 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -300,7 +289,7 @@ function setup1 () {
 //  new cards
 //  no due cards
 //  no review logs
-// eslint-disable-next-line
+
 function setup2 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -356,14 +345,14 @@ function setup2 () {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -377,7 +366,7 @@ function setup2 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -406,13 +395,13 @@ function setup2 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -489,20 +478,20 @@ function setup3 () {
       (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 10,
-        newCards: 1
+        newCards: 1,
       };
     },
     getStatsNext24Hours: function () {
       return {
         cards: 1,
-        time: 30
+        time: 30,
       };
     },
     getCountCardsOverdue: function () {
@@ -513,7 +502,7 @@ function setup3 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -542,13 +531,13 @@ function setup3 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -625,20 +614,20 @@ function setup4 () {
       (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 1,
         time: 10,
-        newCards: 1
+        newCards: 1,
       };
     },
     getStatsNext24Hours: function () {
       return {
         cards: 1,
-        time: 30
+        time: 30,
       };
     },
     getCountCardsOverdue: function () {
@@ -652,7 +641,7 @@ function setup4 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -681,13 +670,13 @@ function setup4 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -861,14 +850,14 @@ function setup5 () {
     ts: Date.now(),
     d1: d1,
     d2: d2,
-    d3: d3
+    d3: d3,
   });
   const srf = {
     getStatsPast24Hours: function () {
       return {
         count: 20,
         time: 2800,
-        newCards: 10
+        newCards: 10,
       };
     },
     getCountCardsOverdue: function () {
@@ -882,7 +871,7 @@ function setup5 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -911,12 +900,12 @@ function setup5 () {
     weightGood: 1.5,
     weightHard: 1,
     hardFactor: 0.8,
-    newCardRateFactor: 0.8
+    newCardRateFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }

@@ -508,3 +508,4 @@ The new interval and due are calculated according to the ease.
  * Change test for new cards from interval = 0 to interval <= 0
  * Reduce minimum interval for Good to 2 minutes
  * Update dependencies
+ * remove tape and multi-tape

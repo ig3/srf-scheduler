@@ -1,11 +1,11 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
 t.test('eslint', t => {
   const config = require('../eslint.config.js');
-  t.equal(typeof config, 'object', 'eslint config provides an object');
-  t.end();
+  assert.equal(typeof config, 'object', 'eslint config provides an object');
 });
 
 t.test('load', t => {
@@ -17,21 +17,19 @@ t.test('load', t => {
         throw new Error('Unsupported param: ' + name);
       },
       setParam: function (name, value) {
-        console.log('setPara: ', name, value);
-      }
-    }
+      },
+    },
   });
-  t.ok(true, 'loaded');
+  assert(true, 'loaded');
   [
     'getNextCard',
     'review',
     'getIntervals',
     'getNextDue',
-    'getNextNew'
+    'getNextNew',
   ].forEach(method => {
-    t.ok(typeof scheduler[method] === 'function', 'method ' + method + ' exists');
+    assert(typeof scheduler[method] === 'function', 'method ' + method + ' exists');
   });
-  t.end();
 });
 
 t.test('getNextCard', t => {
@@ -103,7 +101,7 @@ t.test('getNextCard', t => {
       (@ts - 23 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(30)
+    date: dateDaysAgo(30),
   });
 
   function getMultiplier (unit) {
@@ -114,7 +112,7 @@ t.test('getNextCard', t => {
       ['days', 3600 * 24],
       ['weeks', 3600 * 24 * 7],
       ['months', 3600 * 24 * 365 / 12],
-      ['years', 3600 * 24 * 365]
+      ['years', 3600 * 24 * 365],
     ];
     for (let i = 0; i < units.length; i++) {
       if (units[i][0].startsWith(unit)) return units[i][1];
@@ -126,14 +124,14 @@ t.test('getNextCard', t => {
     getStatsNext24Hours: function () {
       return {
         cards: 5,
-        time: 15
+        time: 15,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 15,
         time: 15,
-        newCards: 5
+        newCards: 5,
       };
     },
     getCountCardsOverdue: function () {
@@ -163,8 +161,7 @@ t.test('getNextCard', t => {
       throw new Error('Unsupported param: ' + name);
     },
     setParam: function (name, value) {
-      console.log('setParam: ', name, value);
-    }
+    },
   };
   const scheduler = require('..')({
     db: db,
@@ -194,14 +191,14 @@ t.test('getNextCard', t => {
       weightFail: 0,
       weightGood: 1.5,
       weightHard: 1,
-      hardFactor: 0.8
-    }
+      hardFactor: 0.8,
+    },
   });
 
   let card;
   card = scheduler.getNextCard();
-  t.ok(card, 'got card');
-  t.equal(card.id, 1, 'got card 1');
+  assert(card, 'got card');
+  assert.equal(card.id, 1, 'got card 1');
 
   card = scheduler.getNextDue(true);
 
@@ -217,7 +214,7 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     },
     20,
     30,
@@ -236,7 +233,7 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     },
     20,
     30,
@@ -255,7 +252,7 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     },
     20,
     30,
@@ -274,7 +271,7 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     },
     20,
     30,
@@ -293,7 +290,7 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     },
     20,
     30,
@@ -313,12 +310,12 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     }
   );
 
   wait(1000);
-  t.throws(
+  assert.throws(
     () => {
       scheduler.review(
         {
@@ -332,7 +329,7 @@ t.test('getNextCard', t => {
           factor: 2,
           views: 1,
           lapses: 0,
-          ord: 3
+          ord: 3,
         },
         20,
         30,
@@ -356,7 +353,7 @@ t.test('getNextCard', t => {
       factor: 2,
       views: 1,
       lapses: 0,
-      ord: 3
+      ord: 3,
     },
     500,
     500,
@@ -379,9 +376,7 @@ t.test('getNextCard', t => {
   card = scheduler.getNextCard();
 
   const stats = scheduler.getStatsNext24Hours();
-  t.ok(stats, 'got stats');
-
-  t.end();
+  assert(stats, 'got stats');
 });
 
 function wait (ms) {

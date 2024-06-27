@@ -44,7 +44,7 @@ module.exports = function getPercentCorrect (on, window, minInterval, maxInterva
     minInterval: minInterval,
     maxInterval: maxInterval,
     from: (on - window) * 1000,
-    to: on * 1000
+    to: on * 1000,
   });
   return (
     (result && result.count > self.config.minPercentCorrectCount)

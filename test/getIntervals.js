@@ -1,147 +1,136 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
-t.test('getIntervals', t => {
-  t.test('No arguments', t => {
+t.test('getIntervals', async t => {
+  await t.test('No arguments', t => {
     const scheduler = require('..')(setup1());
 
-    t.throws(
+    assert.throws(
       () => {
         scheduler.getIntervals();
       },
       /Missing required argument/,
       'Throws with no arguments'
     );
-    t.end();
   });
 
-  t.test('learned card - max interval', t => {
+  await t.test('learned card - max interval', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 1,
       interval: 60 * 60 * 24 * 365,
-      factor: 1.8
+      factor: 1.8,
     });
-    t.equals(intervals.fail, 3600, 'interval fail');
-    t.equals(intervals.hard, 86400, 'interval hard');
-    t.equals(intervals.good, 31536000, 'interval good');
-    t.equals(intervals.easy, 31536000, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 3600, 'interval fail');
+    assert.equal(intervals.hard, 86400, 'interval hard');
+    assert.equal(intervals.good, 31536000, 'interval good');
+    assert.equal(intervals.easy, 31536000, 'interval easy');
   });
 
-  t.test('learned card - max interval, delayed review', t => {
+  await t.test('learned card - max interval, delayed review', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 1,
       interval: 60 * 60 * 24 * 365,
-      factor: 1.8
+      factor: 1.8,
     });
-    t.equals(intervals.fail, 3600, 'interval fail');
-    t.equals(intervals.hard, 86400, 'interval hard');
-    t.equals(intervals.good, 31536000, 'interval good');
-    t.equals(intervals.easy, 31536000, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 3600, 'interval fail');
+    assert.equal(intervals.hard, 86400, 'interval hard');
+    assert.equal(intervals.good, 31536000, 'interval good');
+    assert.equal(intervals.easy, 31536000, 'interval easy');
   });
 
-  t.test('learned card - 1 week interval', t => {
+  await t.test('learned card - 1 week interval', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 2,
       interval: 60 * 60 * 24 * 7,
-      factor: 1.4
+      factor: 1.4,
     });
-    t.equals(intervals.fail, 3600, 'interval fail');
-    t.equals(intervals.hard, 86400, 'interval hard');
-    t.equals(intervals.good, 934718, 'interval good');
-    t.equals(intervals.easy, 1556755, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 3600, 'interval fail');
+    assert.equal(intervals.hard, 86400, 'interval hard');
+    assert.equal(intervals.good, 934718, 'interval good');
+    assert.equal(intervals.easy, 1556755, 'interval easy');
   });
 
-  t.test('learned card - 1 week interval, delayed review', t => {
+  await t.test('learned card - 1 week interval, delayed review', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 3,
       interval: 60 * 60 * 24 * 7,
-      factor: 1.4
+      factor: 1.4,
     });
-    t.equals(intervals.fail, 3600, 'interval fail');
-    t.equals(intervals.hard, 86400, 'interval hard');
-    t.equals(intervals.good, 1335312, 'interval good');
-    t.equals(intervals.easy, 2223936, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 3600, 'interval fail');
+    assert.equal(intervals.hard, 86400, 'interval hard');
+    assert.equal(intervals.good, 1335312, 'interval good');
+    assert.equal(intervals.easy, 2223936, 'interval easy');
   });
 
-  t.test('learning card - 6 day interval', t => {
+  await t.test('learning card - 6 day interval', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 4,
       interval: 60 * 60 * 24 * 6,
-      factor: 1.2
+      factor: 1.2,
     });
-    t.equals(intervals.fail, 300, 'interval fail');
-    t.equals(intervals.hard, 3600, 'interval hard');
-    t.equals(intervals.good, 692841, 'interval good');
-    t.equals(intervals.easy, 1157068, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 300, 'interval fail');
+    assert.equal(intervals.hard, 3600, 'interval hard');
+    assert.equal(intervals.good, 692841, 'interval good');
+    assert.equal(intervals.easy, 1157068, 'interval easy');
   });
 
-  t.test('learning card - 6 day interval, delayed review', t => {
+  await t.test('learning card - 6 day interval, delayed review', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 5,
       interval: 60 * 60 * 24 * 6,
-      factor: 1.2
+      factor: 1.2,
     });
-    t.equals(intervals.fail, 300, 'interval fail');
-    t.equals(intervals.hard, 3600, 'interval hard');
-    t.equals(intervals.good, 923788, 'interval good');
-    t.equals(intervals.easy, 1542758, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 300, 'interval fail');
+    assert.equal(intervals.hard, 3600, 'interval hard');
+    assert.equal(intervals.good, 923788, 'interval good');
+    assert.equal(intervals.easy, 1542758, 'interval easy');
   });
 
-  t.test('learning card - 6 minute interval', t => {
+  await t.test('learning card - 6 minute interval', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 6,
       interval: 60 * 6,
-      factor: 1.2
+      factor: 1.2,
     });
-    t.equals(intervals.fail, 180, 'interval fail');
-    t.equals(intervals.hard, 288, 'interval hard');
-    t.equals(intervals.good, 481, 'interval good');
-    t.equals(intervals.easy, 86400, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 180, 'interval fail');
+    assert.equal(intervals.hard, 288, 'interval hard');
+    assert.equal(intervals.good, 481, 'interval good');
+    assert.equal(intervals.easy, 86400, 'interval easy');
   });
 
-  t.test('learning card - 6 minute interval, delayed review', t => {
+  await t.test('learning card - 6 minute interval, delayed review', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 7,
       interval: 60 * 6,
-      factor: 1.2
+      factor: 1.2,
     });
-    t.equals(intervals.fail, 180, 'interval fail');
-    t.equals(intervals.hard, 288, 'interval hard');
-    t.equals(intervals.good, 641, 'interval good');
-    t.equals(intervals.easy, 86400, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 180, 'interval fail');
+    assert.equal(intervals.hard, 288, 'interval hard');
+    assert.equal(intervals.good, 641, 'interval good');
+    assert.equal(intervals.easy, 86400, 'interval easy');
   });
 
-  t.test('new card', t => {
+  await t.test('new card', t => {
     const scheduler = require('..')(setup1());
     const intervals = scheduler.getIntervals({
       id: 10,
-      interval: 0
+      interval: 0,
     });
-    t.equals(intervals.fail, 1, 'interval fail');
-    t.equals(intervals.hard, 1, 'interval hard');
-    t.equals(intervals.good, 300, 'interval good');
-    t.equals(intervals.easy, 86400, 'interval easy');
-    t.end();
+    assert.equal(intervals.fail, 1, 'interval fail');
+    assert.equal(intervals.hard, 1, 'interval hard');
+    assert.equal(intervals.good, 300, 'interval good');
+    assert.equal(intervals.easy, 86400, 'interval easy');
   });
-
-  t.end();
 });
 
 function resolveUnits (value) {
@@ -168,7 +157,7 @@ function getMultiplier (unit) {
     ['days', 3600 * 24],
     ['weeks', 3600 * 24 * 7],
     ['months', 3600 * 24 * 365 / 12],
-    ['years', 3600 * 24 * 365]
+    ['years', 3600 * 24 * 365],
   ];
   for (let i = 0; i < units.length; i++) {
     if (units[i][0].startsWith(unit)) return units[i][1];
@@ -232,20 +221,20 @@ function setup1 () {
       (@now - 1000 * 60 * 8, '2024-03-22', 7, 'good', 60 * 6, 60 * 3, 1.1, 10, 10, 0),
       (@now - 5000, '2024-03-22', 10, 'good', 60 * 60 * 7 * 24 + 5, 60, 1.8, 10, 10, 0)
   `).run({
-    now: Date.now()
+    now: Date.now(),
   });
   const srf = {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -256,7 +245,7 @@ function setup1 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -289,12 +278,12 @@ function setup1 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }

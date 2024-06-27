@@ -1,21 +1,19 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
 t.test('getCardsToReview', t => {
-  // eslint-disable-next-line
   const getCardsToReview = require('../getCardsToReview.js');
 
   const limit = 60 * 60 * 12;
 
   const r1 = getCardsToReview.call(setup1(), limit);
-  t.equal(r1, 0, 'No records to review');
+  assert.equal(r1, 0, 'No records to review');
 
   const s2 = setup2();
   const r2 = getCardsToReview.call(s2, limit);
-  t.equal(r2, 2, 'Two records to review');
-
-  t.end();
+  assert.equal(r2, 2, 'Two records to review');
 });
 
 function setup1 () {
@@ -26,7 +24,7 @@ function setup1 () {
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
-    minTimeBetweenRelatedCards: 60 * 60
+    minTimeBetweenRelatedCards: 60 * 60,
   };
 
   self.db = require('better-sqlite3')();
@@ -61,7 +59,7 @@ function setup2 () {
     minPercentCorrectCount: 10,
     percentCorrectTarget: 90,
     percentCorrectSensitivity: 0.0001,
-    minTimeBetweenRelatedCards: 60 * 60
+    minTimeBetweenRelatedCards: 60 * 60,
   };
 
   self.db = require('better-sqlite3')();

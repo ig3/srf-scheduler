@@ -1,51 +1,47 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
-t.test('getStatsNext24Hours', t => {
-  t.test('No cards', t => {
+t.test('getStatsNext24Hours', async t => {
+  await t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 0, '0 count');
-    t.equal(stats.time, 0, '0 time');
-    t.end();
+    assert.equal(stats.count, 0, '0 count');
+    assert.equal(stats.time, 0, '0 time');
   });
 
-  t.test('2 cards due', t => {
+  await t.test('2 cards due', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 1, 'time');
-    t.end();
+    assert.equal(stats.count, 2, 'count');
+    assert.equal(stats.time, 1, 'time');
   });
 
-  t.test('2 cards due + 3 new cards', t => {
+  await t.test('2 cards due + 3 new cards', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
       srf: setup.srf,
-      config: setup.config
+      config: setup.config,
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 60, 'time');
-    t.end();
+    assert.equal(stats.count, 2, 'count');
+    assert.equal(stats.time, 60, 'time');
   });
-
-  t.end();
 });
 
 function formatLocalDate (date) {
@@ -87,7 +83,7 @@ function getMultiplier (unit) {
     ['days', 3600 * 24],
     ['weeks', 3600 * 24 * 7],
     ['months', 3600 * 24 * 365 / 12],
-    ['years', 3600 * 24 * 365]
+    ['years', 3600 * 24 * 365],
   ];
   for (let i = 0; i < units.length; i++) {
     if (units[i][0].startsWith(unit)) return units[i][1];
@@ -102,7 +98,7 @@ function now () {
 }
 
 // Empty DB - no new cards and no due cards and no review logs
-// eslint-disable-next-line
+
 function setup1 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -139,14 +135,14 @@ function setup1 () {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -157,7 +153,7 @@ function setup1 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -185,13 +181,13 @@ function setup1 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -199,7 +195,7 @@ function setup1 () {
 //  new cards
 //  no due cards
 //  no review logs
-// eslint-disable-next-line
+
 function setup2 () {
   const db = require('better-sqlite3')();
   db.prepare(`
@@ -268,21 +264,21 @@ function setup2 () {
       (@ts - 60 * 60 * 24 * 1, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(1)
+    date: dateDaysAgo(1),
   });
 
   const srf = {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -293,7 +289,7 @@ function setup2 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -321,13 +317,13 @@ function setup2 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }
 
@@ -403,7 +399,7 @@ function setup3 () {
       (@ts - 60 * 60 * 24 * 1 + 2, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(1)
+    date: dateDaysAgo(1),
   });
 
   db.prepare(`
@@ -422,21 +418,21 @@ function setup3 () {
       (@ts - 60 * 60 * 24 * 1 + 5, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    date: dateDaysAgo(0)
+    date: dateDaysAgo(0),
   });
 
   const srf = {
     getStatsNext24Hours: function () {
       return {
         cards: 0,
-        time: 0
+        time: 0,
       };
     },
     getStatsPast24Hours: function () {
       return {
         count: 0,
         time: 0,
-        newCards: 0
+        newCards: 0,
       };
     },
     getCountCardsOverdue: function () {
@@ -447,7 +443,7 @@ function setup3 () {
       if (name === 'reviewsToNextNew') return 7;
       if (name === 'reviewsPerNewCard') return 14;
       throw new Error('Unsupported param: ' + name);
-    }
+    },
   };
 
   const config = {
@@ -475,12 +471,12 @@ function setup3 () {
     weightFail: 0,
     weightGood: 1.5,
     weightHard: 1,
-    hardFactor: 0.8
+    hardFactor: 0.8,
   };
 
   return {
     db: db,
     srf: srf,
-    config: config
+    config: config,
   };
 }

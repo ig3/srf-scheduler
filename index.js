@@ -117,7 +117,7 @@ function newCardFactor (card, ease) {
     fail: self.config.weightFail,
     hard: self.config.weightHard,
     good: self.config.weightGood,
-    easy: self.config.weightEasy
+    easy: self.config.weightEasy,
   };
   return (
     (
@@ -145,7 +145,7 @@ function getIntervals (card) {
     fail: intervalFail.call(self, card),
     hard: intervalHard.call(self, card),
     good: intervalGood.call(self, card),
-    easy: intervalEasy.call(self, card)
+    easy: intervalEasy.call(self, card),
   };
 }
 
@@ -418,7 +418,7 @@ function getStatsNext24Hours () {
     count: Math.floor(cards),
     time: Math.floor(cards * timePerCard),
     minReviews: getReviewsToNextNew.call(self),
-    reviewsToNextNew: self.reviewsToNextNew
+    reviewsToNextNew: self.reviewsToNextNew,
   });
 }
 
@@ -472,7 +472,7 @@ function defaultConfigParameters () {
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,
-    weightHard: 1
+    weightHard: 1,
   };
 
   Object.keys(defaults).forEach(key => {
@@ -496,7 +496,7 @@ const api = {
   getStatsNext24Hours,
   getTimeNextDue,
   review,
-  shutdown
+  shutdown,
 };
 
 module.exports = function (opts = {}) {

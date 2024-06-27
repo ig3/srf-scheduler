@@ -1,6 +1,7 @@
 'use strict';
 
-const t = require('tape');
+const t = require('node:test');
+const assert = require('node:assert/strict');
 
 t.test('deferRelated', t => {
   const deferRelated = require('../deferRelated.js');
@@ -11,18 +12,17 @@ t.test('deferRelated', t => {
   `).all();
   const card = {
     id: 1,
-    fieldsetid: 1
+    fieldsetid: 1,
   };
   const due = Math.floor(Date.now() / 1000) + 60 * 60;
   deferRelated.call(s2, card, due);
   const after = s2.db.prepare(`
     select * from card
   `).all();
-  t.equal(after[0].due, before[0].due, 'due is not changed on card 1');
-  t.equal(after[1].due, due, 'due is set on card 2');
-  t.equal(after[2].due, before[2].due, 'due is not changed on card 3');
-  t.equal(after[3].due, before[3].due, 'due is not changed on card 4');
-  t.end();
+  assert.equal(after[0].due, before[0].due, 'due is not changed on card 1');
+  assert.equal(after[1].due, due, 'due is set on card 2');
+  assert.equal(after[2].due, before[2].due, 'due is not changed on card 3');
+  assert.equal(after[3].due, before[3].due, 'due is not changed on card 4');
 });
 
 function setup1 () {
@@ -32,7 +32,7 @@ function setup1 () {
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
-    minPercentCorrectCount: 10
+    minPercentCorrectCount: 10,
   };
 
   self.db = require('better-sqlite3')();
@@ -65,7 +65,7 @@ function setup2 () {
     maxInterval: 60 * 60 * 24 * 365,
     minPercentCorrectCount: 10,
     percentCorrectTarget: 90,
-    percentCorrectSensitivity: 0.0001
+    percentCorrectSensitivity: 0.0001,
   };
 
   self.db = require('better-sqlite3')();
@@ -146,7 +146,7 @@ function setup2 () {
       (@ts - 5000, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0)
   `).run({
     ts: Date.now(),
-    interval: 60 * 60 * 24 * 21 + 1
+    interval: 60 * 60 * 24 * 21 + 1,
   });
 
   return self;
