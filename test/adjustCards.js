@@ -1,7 +1,6 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
 t.test('adjustCards', t => {
   const adjustCards = require('../adjustCards.js');
@@ -16,8 +15,9 @@ t.test('adjustCards', t => {
     select * from card
     limit 1
   `).get();
-  assert(after.due < before.due, 'due is reduced');
-  assert(after.interval < before.interval, 'interval is reduced');
+  t.ok(after.due < before.due, 'due is reduced');
+  t.ok(after.interval < before.interval, 'interval is reduced');
+  t.end();
 });
 
 function setup1 () {

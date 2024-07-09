@@ -1,23 +1,23 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 const formatLocalDate = require('../formatLocalDate.js');
 
 t.test('getAverageStudyTime', t => {
   const getAverageStudyTime = require('../getAverageStudyTime.js');
 
   const result1 = getAverageStudyTime.call(setup1());
-  assert.equal(result1, 0, '0 if no revlog entries');
+  t.equal(result1, 0, '0 if no revlog entries');
 
   const result2 = getAverageStudyTime.call(setup2());
-  assert.equal(result2, 40, 'average 4 with some logs');
+  t.equal(result2, 40, 'average 4 with some logs');
 
   const result3 = getAverageStudyTime.call(setup3());
-  assert.equal(result3, 40, 'study gaps are ignored');
+  t.equal(result3, 40, 'study gaps are ignored');
 
   const result4 = getAverageStudyTime.call(setup3(), 1);
-  assert.equal(result4, 50, 'reviews older than days are ignored');
+  t.equal(result4, 50, 'reviews older than days are ignored');
+  t.end();
 });
 
 function setup1 () {

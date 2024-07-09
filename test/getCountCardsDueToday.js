@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('getCountCardsDueToday', async t => {
-  await t.test('No cards', t => {
+t.test('getCountCardsDueToday', t => {
+  t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -13,10 +12,11 @@ t.test('getCountCardsDueToday', async t => {
     });
 
     const count = scheduler.getCountCardsDueToday();
-    assert.equal(count, 0, 'returns 0');
+    t.equal(count, 0, 'returns 0');
+    t.end();
   });
 
-  await t.test('No cards reviewed', t => {
+  t.test('No cards reviewed', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
@@ -25,10 +25,11 @@ t.test('getCountCardsDueToday', async t => {
     });
 
     const count = scheduler.getCountCardsDueToday();
-    assert.equal(count, 0, 'returns 0');
+    t.equal(count, 0, 'returns 0');
+    t.end();
   });
 
-  await t.test('One card due now', t => {
+  t.test('One card due now', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
@@ -37,10 +38,11 @@ t.test('getCountCardsDueToday', async t => {
     });
 
     const count = scheduler.getCountCardsDueToday();
-    assert.equal(count, 1, 'returns 1');
+    t.equal(count, 1, 'returns 1');
+    t.end();
   });
 
-  await t.test('One card due in the future', t => {
+  t.test('One card due in the future', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
@@ -49,10 +51,11 @@ t.test('getCountCardsDueToday', async t => {
     });
 
     const count = scheduler.getCountCardsDueToday();
-    assert.equal(count, 1, 'returns 1');
+    t.equal(count, 1, 'returns 1');
+    t.end();
   });
 
-  await t.test('One card due far in the future', t => {
+  t.test('One card due far in the future', t => {
     const setup = setup5();
     const scheduler = require('..')({
       db: setup.db,
@@ -61,8 +64,10 @@ t.test('getCountCardsDueToday', async t => {
     });
 
     const count = scheduler.getCountCardsDueToday();
-    assert.equal(count, 0, 'returns 0');
+    t.equal(count, 0, 'returns 0');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

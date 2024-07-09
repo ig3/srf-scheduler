@@ -1,23 +1,23 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 const formatLocalDate = require('../formatLocalDate.js');
 
 t.test('minReviews', t => {
   const minReviews = require('../minReviews.js');
 
   const result1 = minReviews.call(setup1());
-  assert.equal(result1, 0, 'Initially, it is 0');
+  t.equal(result1, 0, 'Initially, it is 0');
 
   const result2 = minReviews.call(setup2());
-  assert.equal(result2, 6, 'With some reviewes');
+  t.equal(result2, 6, 'With some reviewes');
 
   const result3 = minReviews.call(setup3());
-  assert.equal(result3, 6, 'study gaps are ignored');
+  t.equal(result3, 6, 'study gaps are ignored');
 
   const result4 = minReviews.call(setup4());
-  assert.equal(result4, 2, '0 new cards per day');
+  t.equal(result4, 2, '0 new cards per day');
+  t.end();
 });
 
 function setup1 () {

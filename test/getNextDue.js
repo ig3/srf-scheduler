@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('getNextDue', async t => {
-  await t.test('overrideLimits with no cards', t => {
+t.test('getNextDue', t => {
+  t.test('overrideLimits with no cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -13,10 +12,11 @@ t.test('getNextDue', async t => {
     });
 
     const card = scheduler.getNextDue(true);
-    assert(!card, 'no card available');
+    t.ok(!card, 'no card available');
+    t.end();
   });
 
-  await t.test('overrideLimits with card due now', t => {
+  t.test('overrideLimits with card due now', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
@@ -25,13 +25,14 @@ t.test('getNextDue', async t => {
     });
 
     const card = scheduler.getNextDue(true);
-    assert(!!card, 'got a card');
-    assert.equal(card.id, 1, 'got card 1');
-    assert(card.due < now(), 'card is already due');
-    assert.notEqual(card.interval, 0, 'card interval is not zero');
+    t.ok(!!card, 'got a card');
+    t.equal(card.id, 1, 'got card 1');
+    t.ok(card.due < now(), 'card is already due');
+    t.notEqual(card.interval, 0, 'card interval is not zero');
+    t.end();
   });
 
-  await t.test('overrideLimits with card due in the future', t => {
+  t.test('overrideLimits with card due in the future', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
@@ -40,22 +41,24 @@ t.test('getNextDue', async t => {
     });
 
     const card = scheduler.getNextDue(true);
-    assert(card, 'got a card');
-    assert(card, 'got a card');
-    assert(card.due > now(), 'card is already due');
-    assert(card.interval !== 0, 'card interval is not zero');
-    assert(card.id === 1, 'got card 1');
+    t.ok(card, 'got a card');
+    t.ok(card, 'got a card');
+    t.ok(card.due > now(), 'card is already due');
+    t.ok(card.interval !== 0, 'card interval is not zero');
+    t.ok(card.id === 1, 'got card 1');
+    t.end();
   });
 
-  await t.test('overrideLimits with no card due', t => {
+  t.test('overrideLimits with no card due', t => {
     const scheduler = require('..')(setup4());
 
     const card = scheduler.getNextDue(true);
-    assert(!!card, 'got a card');
-    assert.equal(card.id, 1, 'got card 1');
+    t.ok(!!card, 'got a card');
+    t.equal(card.id, 1, 'got card 1');
+    t.end();
   });
 
-  await t.test('No cards', t => {
+  t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -64,23 +67,27 @@ t.test('getNextDue', async t => {
     });
 
     const card = scheduler.getNextDue();
-    assert(!card, 'no card');
+    t.ok(!card, 'no card');
+    t.end();
   });
 
-  await t.test('No cards due', t => {
+  t.test('No cards due', t => {
     const scheduler = require('..')(setup2());
 
     const card = scheduler.getNextDue();
-    assert(!card, 'no card');
+    t.ok(!card, 'no card');
+    t.end();
   });
 
-  await t.test('One card due', t => {
+  t.test('One card due', t => {
     const scheduler = require('..')(setup3());
 
     const card = scheduler.getNextDue();
-    assert(card, 'got a card');
-    assert.equal(card.id, 1, 'card ID 3');
+    t.ok(card, 'got a card');
+    t.equal(card.id, 1, 'card ID 3');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

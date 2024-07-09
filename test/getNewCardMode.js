@@ -1,50 +1,56 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('getNewCardMode', async t => {
-  await t.test('No cards, no revlog', t => {
+t.test('getNewCardMode', t => {
+  t.test('No cards, no revlog', t => {
     const scheduler = require('..')(setup1());
 
     const mode = scheduler.getNewCardMode();
-    assert.equal(mode, 'go', 'Mode is go');
+    t.equal(mode, 'go', 'Mode is go');
+    t.end();
   });
 
-  await t.test('All unseen cards, no revlog', t => {
+  t.test('All unseen cards, no revlog', t => {
     const scheduler = require('..')(setup2());
 
     const mode = scheduler.getNewCardMode();
-    assert.equal(mode, 'go', 'Mode is go');
+    t.equal(mode, 'go', 'Mode is go');
+    t.end();
   });
 
-  await t.test('One due card', t => {
+  t.test('One due card', t => {
     const scheduler = require('..')(setup3());
 
     const mode = scheduler.getNewCardMode();
-    assert.equal(mode, 'go', 'Mode is go');
+    t.equal(mode, 'go', 'Mode is go');
+    t.end();
   });
 
-  await t.test('setup4', t => {
+  t.test('setup4', t => {
     const scheduler = require('..')(setup4());
 
     const mode = scheduler.getNewCardMode();
-    assert.equal(mode, 'go', 'Mode go');
+    t.equal(mode, 'go', 'Mode go');
+    t.end();
   });
 
-  await t.test('setup5', t => {
+  t.test('setup5', t => {
     const scheduler = require('..')(setup5());
 
     const mode = scheduler.getNewCardMode();
-    assert.equal(mode, 'slow', 'Mode slow');
+    t.equal(mode, 'slow', 'Mode slow');
+    t.end();
   });
 
-  await t.test('setup6', t => {
+  t.test('setup6', t => {
     const scheduler = require('..')(setup6());
 
     const mode = scheduler.getNewCardMode();
-    assert.equal(mode, 'stop', 'Mode stop');
+    t.equal(mode, 'stop', 'Mode stop');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

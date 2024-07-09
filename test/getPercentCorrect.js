@@ -1,20 +1,20 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
 t.test('getPercentCorrect', t => {
   const getPercentCorrect = require('../getPercentCorrect.js');
   const result1 = getPercentCorrect.call(setup1());
-  assert.equal(result1, 0, 'no logs');
+  t.equal(result1, 0, 'no logs');
   const result2 = getPercentCorrect.call(setup2());
-  assert.equal(result2, 0, 'less than 10 logs');
+  t.equal(result2, 0, 'less than 10 logs');
   const result3 = getPercentCorrect.call(setup3());
-  assert.equal(Math.floor(result3), 72, '1 more than 10 logs');
+  t.equal(Math.floor(result3), 72, '1 more than 10 logs');
   const result4 = getPercentCorrect.call(setup4());
-  assert.equal(Math.floor(result4), 72, 'ignore too small lastinterval');
+  t.equal(Math.floor(result4), 72, 'ignore too small lastinterval');
   const result5 = getPercentCorrect.call(setup5());
-  assert.equal(Math.floor(result5), 0, 'Ignore too large lastinterval');
+  t.equal(Math.floor(result5), 0, 'Ignore too large lastinterval');
+  t.end();
 });
 
 function setup1 () {

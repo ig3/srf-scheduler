@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('review', async t => {
-  await t.test('New card', t => {
+t.test('review', t => {
+  t.test('New card', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -29,13 +28,14 @@ t.test('review', async t => {
       limit 1
     `)
     .get();
-    assert.equal(revlog.cardid, 10, 'revlog for card ID 10');
-    assert.equal(revlog.lastinterval, 0, 'lastinterval is 0');
-    assert.equal(revlog.interval, 300, 'interval is 300');
-    assert.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.cardid, 10, 'revlog for card ID 10');
+    t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
+    t.equal(revlog.interval, 300, 'interval is 300');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.end();
   });
 
-  await t.test('Review card - good', t => {
+  t.test('Review card - good', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -60,13 +60,14 @@ t.test('review', async t => {
       limit 1
     `)
     .get();
-    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    assert.equal(revlog.lastinterval, 600, 'lastinterval is 0');
-    assert.equal(revlog.interval, 660, 'interval is 550');
-    assert.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.lastinterval, 600, 'lastinterval is 0');
+    t.equal(revlog.interval, 660, 'interval is 550');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.end();
   });
 
-  await t.test('Review card - good - long interval', t => {
+  t.test('Review card - good - long interval', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -91,12 +92,13 @@ t.test('review', async t => {
       limit 1
     `)
     .get();
-    assert.equal(revlog.cardid, 2, 'revlog for card ID 2');
-    assert.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
-    assert.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.cardid, 2, 'revlog for card ID 2');
+    t.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.end();
   });
 
-  await t.test('Review card 1 again', t => {
+  t.test('Review card 1 again', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
@@ -122,11 +124,12 @@ t.test('review', async t => {
       limit 1
     `)
     .get();
-    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    assert.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.end();
   });
 
-  await t.test('Review card - easy', t => {
+  t.test('Review card - easy', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
@@ -152,12 +155,13 @@ t.test('review', async t => {
       limit 1
     `)
     .get();
-    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    assert.equal(revlog.lapses, 0, 'lapses remains 0');
-    assert.equal(revlog.interval, 86400, 'interval is easyMinInterval');
+    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.interval, 86400, 'interval is easyMinInterval');
+    t.end();
   });
 
-  await t.test('Review card - easy, delayed', t => {
+  t.test('Review card - easy, delayed', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
@@ -183,11 +187,13 @@ t.test('review', async t => {
       limit 1
     `)
     .get();
-    assert.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    assert.equal(revlog.lapses, 0, 'lapses remains 0');
-    assert.equal(revlog.interval, 129600, 'interval is 129600');
-    assert.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
+    t.equal(revlog.cardid, 1, 'revlog for card ID 1');
+    t.equal(revlog.lapses, 0, 'lapses remains 0');
+    t.equal(revlog.interval, 129600, 'interval is 129600');
+    t.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

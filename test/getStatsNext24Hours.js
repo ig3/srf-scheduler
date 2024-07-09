@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('getStatsNext24Hours', async t => {
-  await t.test('No cards', t => {
+t.test('getStatsNext24Hours', t => {
+  t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -13,11 +12,12 @@ t.test('getStatsNext24Hours', async t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    assert.equal(stats.count, 0, '0 count');
-    assert.equal(stats.time, 0, '0 time');
+    t.equal(stats.count, 0, '0 count');
+    t.equal(stats.time, 0, '0 time');
+    t.end();
   });
 
-  await t.test('2 cards due', t => {
+  t.test('2 cards due', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
@@ -26,11 +26,12 @@ t.test('getStatsNext24Hours', async t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    assert.equal(stats.count, 2, 'count');
-    assert.equal(stats.time, 1, 'time');
+    t.equal(stats.count, 2, 'count');
+    t.equal(stats.time, 1, 'time');
+    t.end();
   });
 
-  await t.test('2 cards due + 3 new cards', t => {
+  t.test('2 cards due + 3 new cards', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
@@ -39,9 +40,11 @@ t.test('getStatsNext24Hours', async t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    assert.equal(stats.count, 2, 'count');
-    assert.equal(stats.time, 60, 'time');
+    t.equal(stats.count, 2, 'count');
+    t.equal(stats.time, 60, 'time');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

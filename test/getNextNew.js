@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('getNextNew', async t => {
-  await t.test('No cards', t => {
+t.test('getNextNew', t => {
+  t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -13,24 +12,28 @@ t.test('getNextNew', async t => {
     });
 
     const card = scheduler.getNextNew();
-    assert(!card, 'no card');
+    t.ok(!card, 'no card');
+    t.end();
   });
 
-  await t.test('No cards due', t => {
+  t.test('No cards due', t => {
     const scheduler = require('..')(setup2());
 
     const card = scheduler.getNextNew();
-    assert(!!card, 'new card');
-    assert.equal(card.id, 1, 'new card');
+    t.ok(!!card, 'new card');
+    t.equal(card.id, 1, 'new card');
+    t.end();
   });
 
-  await t.test('One card due', t => {
+  t.test('One card due', t => {
     const scheduler = require('..')(setup3());
 
     const card = scheduler.getNextNew();
-    assert(card, 'got a card');
-    assert.equal(card.id, 3, 'card ID 3');
+    t.ok(card, 'got a card');
+    t.equal(card.id, 3, 'card ID 3');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

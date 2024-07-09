@@ -1,7 +1,6 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
 t.test('getCardsToReview', t => {
   const getCardsToReview = require('../getCardsToReview.js');
@@ -9,11 +8,12 @@ t.test('getCardsToReview', t => {
   const limit = 60 * 60 * 12;
 
   const r1 = getCardsToReview.call(setup1(), limit);
-  assert.equal(r1, 0, 'No records to review');
+  t.equal(r1, 0, 'No records to review');
 
   const s2 = setup2();
   const r2 = getCardsToReview.call(s2, limit);
-  assert.equal(r2, 2, 'Two records to review');
+  t.equal(r2, 2, 'Two records to review');
+  t.end();
 });
 
 function setup1 () {

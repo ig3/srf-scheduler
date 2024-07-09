@@ -1,7 +1,6 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
 t.test('deferRelated', t => {
   const deferRelated = require('../deferRelated.js');
@@ -19,10 +18,11 @@ t.test('deferRelated', t => {
   const after = s2.db.prepare(`
     select * from card
   `).all();
-  assert.equal(after[0].due, before[0].due, 'due is not changed on card 1');
-  assert.equal(after[1].due, due, 'due is set on card 2');
-  assert.equal(after[2].due, before[2].due, 'due is not changed on card 3');
-  assert.equal(after[3].due, before[3].due, 'due is not changed on card 4');
+  t.equal(after[0].due, before[0].due, 'due is not changed on card 1');
+  t.equal(after[1].due, due, 'due is set on card 2');
+  t.equal(after[2].due, before[2].due, 'due is not changed on card 3');
+  t.equal(after[3].due, before[3].due, 'due is not changed on card 4');
+  t.end();
 });
 
 function setup1 () {

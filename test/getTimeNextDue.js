@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
-t.test('getTimeNextDue', async t => {
-  await t.test('No cards', t => {
+t.test('getTimeNextDue', t => {
+  t.test('No cards', t => {
     const setup = setup1();
     const scheduler = require('..')({
       db: setup.db,
@@ -13,10 +12,11 @@ t.test('getTimeNextDue', async t => {
     });
 
     const time = scheduler.getTimeNextDue();
-    assert.equal(time, undefined, 'returns undefined');
+    t.equal(time, undefined, 'returns undefined');
+    t.end();
   });
 
-  await t.test('No cards reviewed', t => {
+  t.test('No cards reviewed', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
@@ -25,10 +25,11 @@ t.test('getTimeNextDue', async t => {
     });
 
     const time = scheduler.getTimeNextDue();
-    assert.equal(time, undefined, 'returns undefined');
+    t.equal(time, undefined, 'returns undefined');
+    t.end();
   });
 
-  await t.test('card due in the past', t => {
+  t.test('card due in the past', t => {
     const setup = setup3();
     const scheduler = require('..')({
       db: setup.db,
@@ -37,11 +38,12 @@ t.test('getTimeNextDue', async t => {
     });
 
     const time = scheduler.getTimeNextDue();
-    assert.notEqual(time, undefined, 'returns undefined');
-    assert(time < now(), 'due in the past');
+    t.notEqual(time, undefined, 'returns undefined');
+    t.ok(time < now(), 'due in the past');
+    t.end();
   });
 
-  await t.test('Card due in the future', t => {
+  t.test('Card due in the future', t => {
     const setup = setup4();
     const scheduler = require('..')({
       db: setup.db,
@@ -50,9 +52,11 @@ t.test('getTimeNextDue', async t => {
     });
 
     const time = scheduler.getTimeNextDue();
-    assert.notEqual(time, undefined, 'returns undefined');
-    assert(time > now(), 'due in the future');
+    t.notEqual(time, undefined, 'returns undefined');
+    t.ok(time > now(), 'due in the future');
+    t.end();
   });
+  t.end();
 });
 
 function formatLocalDate (date) {

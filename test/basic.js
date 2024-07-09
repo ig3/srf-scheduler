@@ -1,11 +1,11 @@
 'use strict';
 
-const t = require('node:test');
-const assert = require('node:assert/strict');
+const t = require('tape');
 
 t.test('eslint', t => {
   const config = require('../eslint.config.js');
-  assert.equal(typeof config, 'object', 'eslint config provides an object');
+  t.equal(typeof config, 'object', 'eslint config provides an object');
+  t.end();
 });
 
 t.test('load', t => {
@@ -20,7 +20,7 @@ t.test('load', t => {
       },
     },
   });
-  assert(true, 'loaded');
+  t.ok(true, 'loaded');
   [
     'getNextCard',
     'review',
@@ -28,8 +28,9 @@ t.test('load', t => {
     'getNextDue',
     'getNextNew',
   ].forEach(method => {
-    assert(typeof scheduler[method] === 'function', 'method ' + method + ' exists');
+    t.ok(typeof scheduler[method] === 'function', 'method ' + method + ' exists');
   });
+  t.end();
 });
 
 t.test('getNextCard', t => {
@@ -197,8 +198,8 @@ t.test('getNextCard', t => {
 
   let card;
   card = scheduler.getNextCard();
-  assert(card, 'got card');
-  assert.equal(card.id, 1, 'got card 1');
+  t.ok(card, 'got card');
+  t.equal(card.id, 1, 'got card 1');
 
   card = scheduler.getNextDue(true);
 
@@ -315,7 +316,7 @@ t.test('getNextCard', t => {
   );
 
   wait(1000);
-  assert.throws(
+  t.throws(
     () => {
       scheduler.review(
         {
@@ -376,7 +377,8 @@ t.test('getNextCard', t => {
   card = scheduler.getNextCard();
 
   const stats = scheduler.getStatsNext24Hours();
-  assert(stats, 'got stats');
+  t.ok(stats, 'got stats');
+  t.end();
 });
 
 function wait (ms) {
