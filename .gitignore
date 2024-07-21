@@ -13,3 +13,4 @@ media/
 *.srf
 config
 coverage/
+*.tgz

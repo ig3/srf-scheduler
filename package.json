@@ -2,7 +2,15 @@
   "name": "@ig3/srf-scheduler",
   "version": "2.1.1",
   "description": "",
+  "author": "Ian Goodacre",
+  "keywords": [
+    "srf",
+    "scheduler"
+  ],
   "main": "index.js",
+  "files": [
+    "*.js"
+  ],
   "scripts": {
     "test": "eslint . && c8 --all multi-tape test/*.js"
   },
@@ -10,8 +18,6 @@
     "type": "git",
     "url": "git@github.com:ig3/srf-scheduler.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@ig3/eslint-config-entrain": "^4.0.1",
