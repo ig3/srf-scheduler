@@ -1,6 +1,6 @@
 'use strict';
 
-const t = require('tape');
+const t = require('@ig3/test');
 
 t.test('getNextDue', t => {
   t.test('overrideLimits with no cards', t => {
@@ -28,7 +28,7 @@ t.test('getNextDue', t => {
     t.ok(!!card, 'got a card');
     t.equal(card.id, 1, 'got card 1');
     t.ok(card.due < now(), 'card is already due');
-    t.notEqual(card.interval, 0, 'card interval is not zero');
+    t.ok(card.interval > 0, 'card interval is not zero');
     t.end();
   });
 

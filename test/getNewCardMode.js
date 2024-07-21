@@ -1,6 +1,6 @@
 'use strict';
 
-const t = require('tape');
+const t = require('@ig3/test');
 
 t.test('getNewCardMode', t => {
   t.test('No cards, no revlog', t => {

@@ -1,6 +1,6 @@
 'use strict';
 
-const t = require('tape');
+const t = require('@ig3/test');
 
 t.test('getStatsNext24Hours', t => {
   t.test('No cards', t => {

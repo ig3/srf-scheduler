@@ -15,9 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "@ig3/eslint-config-entrain": "^4.0.1",
+    "@ig3/test": "^0.0.9",
     "better-sqlite3": "^11.0.0",
     "c8": "^10.1.2",
-    "multi-tape": "^1.7.1",
-    "tape": "^5.8.1"
+    "multi-tape": "^1.7.1"
   }
 }

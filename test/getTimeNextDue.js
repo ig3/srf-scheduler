@@ -1,6 +1,6 @@
 'use strict';
 
-const t = require('tape');
+const t = require('@ig3/test');
 
 t.test('getTimeNextDue', t => {
   t.test('No cards', t => {
@@ -38,7 +38,7 @@ t.test('getTimeNextDue', t => {
     });
 
     const time = scheduler.getTimeNextDue();
-    t.notEqual(time, undefined, 'returns undefined');
+    t.ok(time !== undefined, 'does not return undefined');
     t.ok(time < now(), 'due in the past');
     t.end();
   });
@@ -52,7 +52,7 @@ t.test('getTimeNextDue', t => {
     });
 
     const time = scheduler.getTimeNextDue();
-    t.notEqual(time, undefined, 'returns undefined');
+    t.ok(time !== undefined, 'does not return undefined');
     t.ok(time > now(), 'due in the future');
     t.end();
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-const t = require('tape');
+const t = require('@ig3/test');
 const formatLocalDate = require('../formatLocalDate.js');
 
 t.test('getAverageNewCardsPerDay', t => {
