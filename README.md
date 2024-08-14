@@ -502,9 +502,10 @@ The new interval and due are calculated according to the ease.
  * Limit reviews per new card
  * Update dependencies
 
-### 2.1.2 - WIP
+### 2.1.2 - 20240814
  * Fix adjustCards to not set interval larger than maxInterval
  * Change test for reviewed cards from interval != 0 to interval > 0
  * Change test for new cards from interval = 0 to interval <= 0
  * Reduce minimum interval for Good to 2 minutes
  * Update dependencies
+ * Replace tape with @ig3/test
