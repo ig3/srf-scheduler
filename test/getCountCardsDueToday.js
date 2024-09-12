@@ -131,7 +131,6 @@ function setup1 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -146,8 +145,7 @@ function setup1 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
   const srf = {
@@ -227,7 +225,6 @@ function setup2 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -242,13 +239,12 @@ function setup2 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -261,8 +257,7 @@ function setup2 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
   const srf = {
@@ -343,7 +338,6 @@ function setup3 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -358,13 +352,12 @@ function setup3 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -377,8 +370,7 @@ function setup3 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -392,10 +384,9 @@ function setup3 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
@@ -478,7 +469,6 @@ function setup4 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -493,13 +483,12 @@ function setup4 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -512,8 +501,7 @@ function setup4 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -527,10 +515,9 @@ function setup4 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
@@ -613,7 +600,6 @@ function setup5 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -628,13 +614,12 @@ function setup5 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+60*60*24*2, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+60*60*24*2, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -647,8 +632,7 @@ function setup5 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -662,10 +646,9 @@ function setup5 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),

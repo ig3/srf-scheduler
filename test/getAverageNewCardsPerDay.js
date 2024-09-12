@@ -41,8 +41,7 @@ function setup1 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -70,8 +69,7 @@ function setup2 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -92,18 +90,17 @@ function setup2 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5009, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 10, 0),
-      (@ts - 5008, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5007, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5006, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10, 0),
-      (@ts - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10, 0),
-      (@ts - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5009, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 10),
+      (@ts - 5008, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5007, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5006, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10),
+      (@ts - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10),
+      (@ts - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     d1: d1,
@@ -135,8 +132,7 @@ function setup3 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -157,18 +153,17 @@ function setup3 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5009, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 10, 0),
-      (@ts - 5008, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5007, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5006, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10, 0),
-      (@ts - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10, 0),
-      (@ts - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5009, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 10),
+      (@ts - 5008, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5007, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5006, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10),
+      (@ts - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10),
+      (@ts - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     d1: d1,

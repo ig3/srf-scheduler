@@ -40,7 +40,6 @@ function setup1 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -75,7 +74,6 @@ function setup2 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -90,13 +88,12 @@ function setup2 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 60 * 60 * 24 * 7 + 1, 0, UNIXEPOCH()+5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 500, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 1800, 500, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 60 * 60 * 24 * 7 + 1, 0, UNIXEPOCH()+5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 500, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 1800, 500, UNIXEPOCH()+10, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   return self;

@@ -15,7 +15,6 @@ t.test('review', t => {
       {
         id: 10,
         interval: 0,
-        lapses: 0,
       },
       20,
       25,
@@ -31,7 +30,6 @@ t.test('review', t => {
     t.equal(revlog.cardid, 10, 'revlog for card ID 10');
     t.equal(revlog.lastinterval, 0, 'lastinterval is 0');
     t.equal(revlog.interval, 300, 'interval is 300');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.end();
   });
 
@@ -47,7 +45,6 @@ t.test('review', t => {
       {
         id: 1,
         interval: 630,
-        lapses: 0,
       },
       20,
       25,
@@ -63,7 +60,6 @@ t.test('review', t => {
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.lastinterval, 600, 'lastinterval is 0');
     t.equal(revlog.interval, 660, 'interval is 550');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.end();
   });
 
@@ -79,7 +75,6 @@ t.test('review', t => {
       {
         id: 2,
         interval: 60 * 60 * 24 * 90,
-        lapses: 0,
       },
       20,
       25,
@@ -94,7 +89,6 @@ t.test('review', t => {
     .get();
     t.equal(revlog.cardid, 2, 'revlog for card ID 2');
     t.equal(revlog.lastinterval, 7776000, 'lastinterval is 7776000');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.end();
   });
 
@@ -111,7 +105,6 @@ t.test('review', t => {
         id: 1,
         interval: 60 * 60 * 24 * 90,
         views: 1,
-        lapses: 0,
       },
       20,
       25,
@@ -125,7 +118,6 @@ t.test('review', t => {
     `)
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.end();
   });
 
@@ -142,7 +134,6 @@ t.test('review', t => {
         id: 1,
         interval: 60 * 60 * 24 * 90,
         views: 1,
-        lapses: 0,
       },
       20,
       25,
@@ -156,7 +147,6 @@ t.test('review', t => {
     `)
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.equal(revlog.interval, 86400, 'interval is easyMinInterval');
     t.end();
   });
@@ -174,7 +164,6 @@ t.test('review', t => {
         id: 1,
         interval: 60 * 60 * 24 * 90,
         views: 1,
-        lapses: 0,
       },
       20,
       25,
@@ -188,7 +177,6 @@ t.test('review', t => {
     `)
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
-    t.equal(revlog.lapses, 0, 'lapses remains 0');
     t.equal(revlog.interval, 129600, 'interval is 129600');
     t.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
     t.end();
@@ -263,7 +251,6 @@ function setup1 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -278,8 +265,7 @@ function setup1 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -293,11 +279,10 @@ function setup1 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@now - 1000 * 60 * 10, '2023-03-22', 1, 'good', 60 * 10, 60 * 8, 1.4, 10, 10, 0),
-      (@now - 1000 * 60 * 60 * 24 * 90, '2023-03-22', 2, 'good', 60 * 60 * 24 * 90, 60 * 60 * 24 * 60, 1.4, 10, 10, 0)
+      (@now - 1000 * 60 * 10, '2023-03-22', 1, 'good', 60 * 10, 60 * 8, 1.4, 10, 10),
+      (@now - 1000 * 60 * 60 * 24 * 90, '2023-03-22', 2, 'good', 60 * 60 * 24 * 90, 60 * 60 * 24 * 60, 1.4, 10, 10)
   `).run({
     now: Date.now(),
   });
@@ -381,7 +366,6 @@ function setup2 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -396,23 +380,22 @@ function setup2 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 3, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 3, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 4, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 4, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 5, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 5, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 6, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 6, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 7, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 7, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -425,8 +408,7 @@ function setup2 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
   const srf = {
@@ -505,7 +487,6 @@ function setup3 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -520,13 +501,12 @@ function setup3 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -539,8 +519,7 @@ function setup3 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -554,10 +533,9 @@ function setup3 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
@@ -643,7 +621,6 @@ function setup4 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -658,13 +635,12 @@ function setup4 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -677,8 +653,7 @@ function setup4 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -692,11 +667,10 @@ function setup4 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - (1000 * 60 * 60 * 24 * 10), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0),
-      (@ts - (1000 * 60 * 60 * 24 * 11), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600, 0)
+      (@ts - (1000 * 60 * 60 * 24 * 10), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - (1000 * 60 * 60 * 24 * 11), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(10),

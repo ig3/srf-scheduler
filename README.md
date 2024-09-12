@@ -509,3 +509,6 @@ The new interval and due are calculated according to the ease.
  * Reduce minimum interval for Good to 2 minutes
  * Update dependencies
  * Replace tape with @ig3/test
+
+### 2.1.3 - 20240912
+ * Remove lapses

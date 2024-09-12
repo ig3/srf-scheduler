@@ -46,7 +46,6 @@ t.test('getNextCard', t => {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -60,13 +59,12 @@ t.test('getNextCard', t => {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -79,8 +77,7 @@ t.test('getNextCard', t => {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
   db.prepare(`
@@ -93,13 +90,12 @@ t.test('getNextCard', t => {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 30 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, 0),
-      (@ts - 25 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, 0),
-      (@ts - 24 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, 0),
-      (@ts - 23 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, 0)
+      (@ts - 30 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30),
+      (@ts - 25 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30),
+      (@ts - 24 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30),
+      (@ts - 23 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(30),
@@ -214,7 +210,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     },
     20,
@@ -233,7 +228,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     },
     20,
@@ -252,7 +246,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     },
     20,
@@ -271,7 +264,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     },
     20,
@@ -290,7 +282,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     },
     20,
@@ -310,7 +301,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     }
   );
@@ -329,7 +319,6 @@ t.test('getNextCard', t => {
           due: 0,
           factor: 2,
           views: 1,
-          lapses: 0,
           ord: 3,
         },
         20,
@@ -353,7 +342,6 @@ t.test('getNextCard', t => {
       due: 0,
       factor: 2,
       views: 1,
-      lapses: 0,
       ord: 3,
     },
     500,

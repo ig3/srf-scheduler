@@ -115,7 +115,6 @@ function setup1 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -130,8 +129,7 @@ function setup1 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -212,7 +210,6 @@ function setup2 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -227,13 +224,12 @@ function setup2 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -246,8 +242,7 @@ function setup2 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
   const srf = {
@@ -326,7 +321,6 @@ function setup3 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -341,13 +335,12 @@ function setup3 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()-5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -360,8 +353,7 @@ function setup3 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -375,10 +367,9 @@ function setup3 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
@@ -458,7 +449,6 @@ function setup4 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -473,13 +463,12 @@ function setup4 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 5, 0, UNIXEPOCH()+5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -492,8 +481,7 @@ function setup4 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -507,10 +495,9 @@ function setup4 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, 0)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
@@ -591,7 +578,6 @@ function setup5 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -606,43 +592,42 @@ function setup5 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 17, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 17, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 17, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 17, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -655,8 +640,7 @@ function setup5 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -677,66 +661,65 @@ function setup5 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 5009, @d1, 9, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 5008, @d1, 8, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 5007, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5006, @d1, 6, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 5005, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5004, @d1, 4, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5003, @d1, 3, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 5002, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5001, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5000, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4999, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4998, @d1, 8, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4997, @d1, 7, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4996, @d1, 6, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4995, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4994, @d1, 4, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4993, @d1, 3, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4992, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4991, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4990, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4989, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4988, @d1, 8, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4987, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
+      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 5009, @d1, 9, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 5008, @d1, 8, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 5007, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5006, @d1, 6, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 5005, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5004, @d1, 4, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5003, @d1, 3, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 5002, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5001, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5000, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4999, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4998, @d1, 8, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4997, @d1, 7, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4996, @d1, 6, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4995, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4994, @d1, 4, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4993, @d1, 3, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4992, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4991, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4990, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4989, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4988, @d1, 8, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4987, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30),
 
-      (@ts - 3999, @d2, 9, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 3998, @d2, 8, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3997, @d2, 7, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 3996, @d2, 6, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3995, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3994, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3993, @d2, 3, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3992, @d2, 2, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3991, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3990, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3989, @d2, 9, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3988, @d2, 8, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3987, @d2, 7, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3986, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3985, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3984, @d2, 4, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3983, @d2, 3, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3982, @d2, 2, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3981, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3980, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3979, @d2, 9, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3978, @d2, 8, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3977, @d2, 7, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3976, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3975, @d2, 5, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3974, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3973, @d2, 3, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3972, @d2, 2, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3971, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3970, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
+      (@ts - 3999, @d2, 9, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 3998, @d2, 8, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3997, @d2, 7, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 3996, @d2, 6, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3995, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3994, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3993, @d2, 3, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3992, @d2, 2, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3991, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3990, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3989, @d2, 9, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3988, @d2, 8, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3987, @d2, 7, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3986, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3985, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3984, @d2, 4, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3983, @d2, 3, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3982, @d2, 2, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3981, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3980, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3979, @d2, 9, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3978, @d2, 8, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3977, @d2, 7, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3976, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3975, @d2, 5, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3974, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3973, @d2, 3, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3972, @d2, 2, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3971, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3970, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30),
 
-      (@ts - 2989, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 30, 0)
+      (@ts - 2989, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 30)
 
   `).run({
     ts: Date.now(),
@@ -821,7 +804,6 @@ function setup6 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -836,43 +818,42 @@ function setup6 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0, 0),
-      ( 17, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 17, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 2, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 3, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 3, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 4, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 4, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 5, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 5, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 6, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 6, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 7, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 7, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 8, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 8, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 9, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 9, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 10, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 10, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 11, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 11, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 12, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 12, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 13, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 13, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 14, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 14, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 15, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 15, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 16, 1, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 16, 2, UNIXEPOCH(), 5, 0, UNIXEPOCH()+10, 2, 0, 0),
+      ( 17, 1, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 17, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   db.prepare(`
@@ -885,8 +866,7 @@ function setup6 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -907,66 +887,65 @@ function setup6 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 5009, @d1, 9, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 5008, @d1, 8, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 5007, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5006, @d1, 6, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 5005, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5004, @d1, 4, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5003, @d1, 3, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 5002, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5001, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 5000, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4999, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4998, @d1, 8, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4997, @d1, 7, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4996, @d1, 6, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4995, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4994, @d1, 4, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4993, @d1, 3, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4992, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4991, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4990, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4989, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 4988, @d1, 8, 'good', 60 * 5, 30, 1.8, 10, 30, 0),
-      (@ts - 4987, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
+      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 5009, @d1, 9, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 5008, @d1, 8, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 5007, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5006, @d1, 6, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 5005, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5004, @d1, 4, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5003, @d1, 3, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 5002, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5001, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 5000, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4999, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4998, @d1, 8, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4997, @d1, 7, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4996, @d1, 6, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4995, @d1, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4994, @d1, 4, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4993, @d1, 3, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4992, @d1, 2, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4991, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4990, @d1, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4989, @d1, 9, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 4988, @d1, 8, 'good', 60 * 5, 30, 1.8, 10, 30),
+      (@ts - 4987, @d1, 7, 'good', 60 * 5, 60, 1.8, 10, 30),
 
-      (@ts - 3999, @d2, 9, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 3998, @d2, 8, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3997, @d2, 7, 'good', 60 * 5, 0, 1.8, 10, 30, 0),
-      (@ts - 3996, @d2, 6, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3995, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3994, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3993, @d2, 3, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3992, @d2, 2, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3991, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3990, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3989, @d2, 9, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3988, @d2, 8, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3987, @d2, 7, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3986, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3985, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3984, @d2, 4, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3983, @d2, 3, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3982, @d2, 2, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3981, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3980, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3979, @d2, 9, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3978, @d2, 8, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3977, @d2, 7, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3976, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3975, @d2, 5, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3974, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3973, @d2, 3, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
-      (@ts - 3972, @d2, 2, 'good', 60 * 5, 500, 1.8, 10, 30, 0),
-      (@ts - 3971, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30, 0),
-      (@ts - 3970, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30, 0),
+      (@ts - 3999, @d2, 9, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 3998, @d2, 8, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3997, @d2, 7, 'good', 60 * 5, 0, 1.8, 10, 30),
+      (@ts - 3996, @d2, 6, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3995, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3994, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3993, @d2, 3, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3992, @d2, 2, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3991, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3990, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3989, @d2, 9, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3988, @d2, 8, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3987, @d2, 7, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3986, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3985, @d2, 5, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3984, @d2, 4, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3983, @d2, 3, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3982, @d2, 2, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3981, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3980, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3979, @d2, 9, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3978, @d2, 8, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3977, @d2, 7, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3976, @d2, 6, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3975, @d2, 5, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3974, @d2, 4, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3973, @d2, 3, 'good', 60 * 5, 1000000, 1.8, 10, 30),
+      (@ts - 3972, @d2, 2, 'good', 60 * 5, 500, 1.8, 10, 30),
+      (@ts - 3971, @d2, 1, 'good', 60 * 5, 60, 1.8, 10, 30),
+      (@ts - 3970, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 30),
 
-      (@ts - 2989, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 30, 0)
+      (@ts - 2989, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 30)
 
   `).run({
     ts: Date.now(),

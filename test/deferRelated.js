@@ -47,7 +47,6 @@ function setup1 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -81,7 +80,6 @@ function setup2 () {
       due integer not null,
       factor integer not null,
       views integer not null,
-      lapses integer not null,
       ord integer not null
     )
   `).run();
@@ -96,13 +94,12 @@ function setup2 () {
       due,
       factor,
       views,
-      lapses,
       ord
     ) values
-      ( 1, 1, UNIXEPOCH()-10, 60 * 60 * 24 * 7 + 1, 0, UNIXEPOCH()+5, 2, 0, 0, 0),
-      ( 1, 2, UNIXEPOCH(), 500, 0, UNIXEPOCH()+6, 2, 0, 0, 0),
-      ( 1, 3, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0),
-      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0, 0)
+      ( 1, 1, UNIXEPOCH()-10, 60 * 60 * 24 * 7 + 1, 0, UNIXEPOCH()+5, 2, 0, 0),
+      ( 1, 2, UNIXEPOCH(), 500, 0, UNIXEPOCH()+6, 2, 0, 0),
+      ( 1, 3, UNIXEPOCH(), 0, 0, 0, 2, 0, 0),
+      ( 2, 2, UNIXEPOCH(), 0, 0, 0, 2, 0, 0)
   `).run();
 
   self.db.prepare(`
@@ -115,8 +112,7 @@ function setup2 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null,
-      lapses integer not null
+      studytime integer not null
     )
   `).run();
 
@@ -130,20 +126,19 @@ function setup2 () {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
+      studytime
     ) values
-      (@ts - 5010, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5009, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5008, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5007, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5006, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5005, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5004, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5003, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5002, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5001, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0),
-      (@ts - 5000, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10, 0)
+      (@ts - 5010, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5009, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5008, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5007, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5006, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5005, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5004, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5003, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5002, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5001, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5000, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     interval: 60 * 60 * 24 * 21 + 1,

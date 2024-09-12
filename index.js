@@ -36,10 +36,6 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
   const factor = newCardFactor.call(self, card, ease);
   const due = Math.floor(now() + newInterval);
   const lastInterval = getLastInterval.call(self, card.id);
-  const lapsed =
-    newInterval < self.config.matureThreshold &&
-    lastInterval > self.config.matureThreshold;
-  const lapses = card.lapses + (lapsed ? 1 : 0);
 
   self.db.prepare(`
     update card
@@ -49,8 +45,7 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
       interval = ?,
       lastinterval = ?,
       due = ?,
-      views = ?,
-      lapses = ?
+      views = ?
     where id = ?
   `)
   .run(
@@ -60,7 +55,6 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
     newInterval,
     due,
     card.views + 1,
-    lapses,
     card.id
   );
 
@@ -74,9 +68,8 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
       lastinterval,
       factor,
       viewtime,
-      studytime,
-      lapses
-    ) values (?,?,?,?,?,?,?,?,?,?)
+      studytime
+    ) values (?,?,?,?,?,?,?,?,?)
   `)
   .run(
     Date.now(),
@@ -87,8 +80,7 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
     lastInterval,
     factor,
     viewTime,
-    studyTime,
-    lapses
+    studyTime
   );
 }
 
