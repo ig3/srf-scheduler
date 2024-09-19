@@ -15,6 +15,8 @@ t.test('adjustCards', t => {
     select * from card
     limit 1
   `).get();
+  console.log('before: ' + before.due);
+  console.log('after: ' + after.due);
   t.ok(after.due < before.due, 'due is reduced');
   t.ok(after.interval < before.interval, 'interval is reduced');
   t.end();

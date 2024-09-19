@@ -6,44 +6,42 @@
  *
  * Configuration parameters:
  *  config.percentCorrectTarget
+ *  config.percentCorrectSensitivity
  *  config.learningThreshold
  *  config.maxInterval
- *  config.percentCorrectSensitivity
  *
- * adjustCards gets percent correct and if it is not 0, compares it to
- * percentCorrectTarget. If the error is more than 1, then the interval and
- * due times of all cards with interval between learningThreshold and
- * maxInterval are adjusted in proportion to the error, multiplied by
- * percentCorrectSensitivity.
+ * Adjust interval and due according to percent correct. The adjustment
+ * varies with the difference of percent correct and percentCorrectTarget,
+ * maxInterval and average reviews per day. The objective is to achieve
+ * target percent correct by decreasing intervals when percent correct is
+ * lower and increasing intervals when it is higher than the target.
+ *
+ * Cards are adjusted only if getPercentCorrect returns a value, and only
+ * for cards with intervals between learningThreshold and maxInterval.
  */
 'use strict';
 
 const getPercentCorrect = require('./getPercentCorrect.js');
+const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
 
-// Adjust the interval and due of cards according to the difference between
-// 'percent correct' and percentCorrectTarget. Only cards with interval
-// between learningThreshold and maxInterval are adjusted. The purpose of
-// this is to provide a low latency feedback from error rate (percent
-// correct) to interval.
 module.exports = function adjustCards () {
   const self = this;
 
   const percentCorrect = getPercentCorrect.call(self);
   if (percentCorrect) {
-    const error = percentCorrect - self.config.percentCorrectTarget;
-    if (Math.abs(error) > 1) {
-      const adjustment = Math.max(
-        -0.5,
-        error * self.config.percentCorrectSensitivity
+    const adjustment =
+      Math.floor(
+        (percentCorrect - self.config.percentCorrectTarget) *
+        self.config.percentCorrectSensitivity *
+        self.config.maxInterval /
+        (getAverageReviewsPerDay.call(self) + 1)
       );
+    if (adjustment !== 0) {
       self.db.prepare(`
         update card
         set
-          interval = min(
-            @maxInterval,
-            floor(interval + interval * @adjustment)
-          ),
-          due = floor(due + min(@maxInterval, interval * @adjustment))
+          interval = interval + @adjustment,
+          due = due + @adjustment
         where
           due > @now and
           interval > @minInterval and
