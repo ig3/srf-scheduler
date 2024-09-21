@@ -496,13 +496,10 @@ module.exports = function (opts = {}) {
 
   instance.db = opts.db;
   instance.srf = opts.srf;
-  instance.config = opts.config;
+  instance.config = opts.config || {};
+  defaultConfigParameters.call(instance);
   instance.reviewsToNextNew =
     Math.floor(instance.srf.getParam('reviewsToNextNew') || 0);
-
-  if (instance.config) {
-    defaultConfigParameters.call(instance);
-  }
 
   return instance;
 };

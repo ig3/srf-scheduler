@@ -513,3 +513,4 @@ The new interval and due are calculated according to the ease.
 ### 2.1.3 - 20240912
  * Remove lapses
  * Simplify adjustCards
+ * Handle the case that no configuration is provided
