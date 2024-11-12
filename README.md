@@ -97,44 +97,32 @@ learningThreshold or hardMaxInterval otherwise.
 
 If the ease of a review is Good, then the new interval is the greater of
  * goodMinInterval
- * actual time since last review multiplied by goodMinFactor
- * actual time since last review multiplied by the product of goodFactor
+ * recent average interval multiplied by goodMinFactor
+ * recent average interval multiplied by the product of goodFactor
    and the card factor
 
 The new interval is limited to the lesser of maxInterval or
 maxGoodInterval.
+
+The recent average interval is the average of the last
+config.recentIntervalWindow intervals (default 3). For the most recent
+interval, the actual interval is used rather than the scheduled interval.
+The actual interval will be longer than the scheduled interval when the
+card is not reviewed immediately when due.
 
 The card factor is the exponentially weighted moving average of ease
 weights, with a decay factor of decayFactor and ease weights of weightFail,
 weightHard, weightGood and weightEasy. This reflects how easy or difficult
 the card has been recently.
 
-Time since last review is used to calculate the new interval, rather than
-the previously scheduled interval. This will typically be longer than the
-previously sechedule interval because it is unlikely that the card will be
-reviewed as soon as it is due.
-
-This makes most difference for learning cards or in the case of a backlog.
-
-For learning cards, assuming one is not studying all day, there will be
-breaks in study. If a card has an interval of one hour but one does not
-study again until the next day, then the scheduled interval is one hour but
-the actual time since last review might be closer to 24 hours. If the card
-remains good after 24 hours, despite being scheduled for review in one
-hour, then the longer, actual interval is indicative of ability to recall
-the card.
-
-In the case of a backlog, a card might not be reviewed until long after it
-was scheduled for review. Again, the longer actual interval is more
-indicative of ability to recall the card.
 
 #### Easy
 
-If the ease of a review is Easy, then the new interval is the actual interval
-(i.e. time since the last review, rather than the interval scheduled at the
-last review) multiplied by the easyFactor and the card factor, with a
-minimum of easyMinInterval and maximum of the lower of maxEasyInterval and
-maxInteral.
+If the ease of a review is Easy, then the recent average interval
+multiplied by the easyFactor and the card factor, with a minimum of
+easyMinInterval and maximum of the lower of maxEasyInterval and maxInteral.
+
+The recent average interval is the same as for ease Good.
 
 ### Percent Correct
 
@@ -389,8 +377,7 @@ estimated time (seconds) to study all the cards due in the next 24 hours.
 
 Count is the number of cards due within the next 24 hours, excluding
 deferred cards (multiple cards from the same fieldset due within
-minTimeBetweenRelatedCards) and including recent average number of new
-cards per day.
+minTimeBetweenRelatedCards).
 
 Time is an estimate of the time to review all these cards, based on recent
 performance.
@@ -514,3 +501,7 @@ The new interval and due are calculated according to the ease.
  * Remove lapses
  * Simplify adjustCards
  * Handle the case that no configuration is provided
+ * increase maximum intervals for failed and hard reviews
+
+### 2.1.4 - WIP
+ * Change good and easy intervals to be based on longest recent interval

@@ -176,19 +176,16 @@ function intervalHard (card) {
 }
 
 function intervalGood (card) {
-  const self = this;
   return (
     Math.floor(
       Math.min(
-        self.config.maxInterval,
-        self.config.maxGoodInterval,
+        this.config.maxInterval,
+        this.config.maxGoodInterval,
         Math.max(
-          self.config.goodMinInterval,
-          getTimeSinceLastReview.call(self, card) * self.config.goodMinFactor,
-          (
-            getTimeSinceLastReview.call(self, card) *
-            self.config.goodFactor *
-            newCardFactor.call(self, card, 'good')
+          this.config.goodMinInterval,
+          getRecentInterval.call(this, card) * Math.max(
+            this.config.goodMinFactor,
+            this.config.goodFactor * newCardFactor.call(this, card, 'good')
           )
         )
       )
@@ -196,15 +193,38 @@ function intervalGood (card) {
   );
 }
 
+function getRecentInterval (card) {
+  // New cards don't have previous reviews
+  if (card.interval === 0) return 0;
+  const timeSinceLastReview = getTimeSinceLastReview.call(this, card);
+  let sum = timeSinceLastReview;
+  let n = 1;
+  // The card may have been reset. Ignore logs before interval of 0.
+  const recentIntervals =
+    this.db.prepare(`
+      select interval
+      from revlog
+      where cardid = ?
+      order by id desc
+      limit ?
+    `)
+    .all(card.id, this.config.recentIntervalWindow);
+  for (let i = 1; i < recentIntervals.length; i++) {
+    const interval = recentIntervals[i].interval;
+    if (interval === 0) break;
+    sum += interval;
+    n++;
+  }
+  return Math.floor(Math.max(timeSinceLastReview, sum / n));
+}
+
 function getTimeSinceLastReview (card) {
-  const self = this;
-  const timeLastSeen = getTimeCardLastSeen.call(self, card.id);
+  const timeLastSeen = getTimeCardLastSeen.call(this, card.id);
   return timeLastSeen ? now() - timeLastSeen : 0;
 }
 
 function getTimeCardLastSeen (id) {
-  const self = this;
-  const result = self.db.prepare(`
+  const result = this.db.prepare(`
     select max(id) as id
     from revlog
     where cardid = ?
@@ -214,19 +234,17 @@ function getTimeCardLastSeen (id) {
 }
 
 function intervalEasy (card) {
-  const self = this;
-
   return (
     Math.floor(
       Math.min(
-        self.config.maxInterval,
-        self.config.maxEasyInterval,
+        this.config.maxInterval,
+        this.config.maxEasyInterval,
         Math.max(
-          self.config.easyMinInterval,
+          this.config.easyMinInterval,
           (
-            getTimeSinceLastReview.call(self, card) *
-            self.config.easyFactor *
-            newCardFactor.call(self, card, 'easy')
+            getRecentInterval.call(this, card) *
+            this.config.easyFactor *
+            newCardFactor.call(this, card, 'easy')
           )
         )
       )
@@ -436,14 +454,14 @@ function defaultConfigParameters () {
     easyFactor: 1.5,
     easyMinInterval: '1 day',
     failFactor: 0.5,
-    failLearningMaxInterval: '5 minutes',
-    failMaxInterval: '1 day',
+    failLearningMaxInterval: '1 day',
+    failMaxInterval: '1 week',
     goodFactor: 1.0,
     goodMinFactor: 1.1,
     goodMinInterval: '2 minutes',
     hardFactor: 0.8,
-    hardLearningMaxInterval: '1 hour',
-    hardMaxInterval: '1 week',
+    hardLearningMaxInterval: '1 week',
+    hardMaxInterval: '1 month',
     learningThreshold: '1 week',
     matureThreshold: '21 days',
     maxEasyInterval: '1 year',
@@ -459,6 +477,7 @@ function defaultConfigParameters () {
     percentCorrectTarget: 90,
     percentCorrectWindow: '1 month',
     probabilityOldestDue: 0.2,
+    recentIntervalWindow: 3,
     studyTimeErrorSensitivity: 1.0,
     targetStudyTime: '30 minutes',
     weightEasy: 2,

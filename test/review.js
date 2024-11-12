@@ -669,8 +669,8 @@ function setup4 () {
       viewtime,
       studytime
     ) values
-      (@ts - (1000 * 60 * 60 * 24 * 10), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - (1000 * 60 * 60 * 24 * 11), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600)
+      (@ts - (1000 * 60 * 60 * 24 * 11), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - (1000 * 60 * 60 * 24 * 10), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(10),

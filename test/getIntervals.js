@@ -140,6 +140,20 @@ t.test('getIntervals', t => {
     t.equal(intervals.easy, 86400, 'interval easy');
     t.end();
   });
+
+  t.test('failed after good card', t => {
+    const scheduler = require('..')(setup1());
+    const intervals = scheduler.getIntervals({
+      id: 8,
+      interval: 60,
+      factor: 1.4,
+    });
+    t.equal(intervals.fail, 30, 'interval fail');
+    t.equal(intervals.hard, 48, 'interval hard');
+    t.equal(intervals.good, 66811, 'interval good');
+    t.equal(intervals.easy, 111274, 'interval easy');
+    t.end();
+  });
   t.end();
 });
 
@@ -226,6 +240,8 @@ function setup1 () {
       (@now - 1000 * 60 * 60 * 24 * 8, '2024-03-22', 5, 'good', 60 * 60 * 24 * 6, 60 * 60 * 24 * 3, 1.4, 10, 10),
       (@now - 1000 * 60 * 6, '2024-03-22', 6, 'good', 60 * 6, 60 * 3, 1.1, 10, 10),
       (@now - 1000 * 60 * 8, '2024-03-22', 7, 'good', 60 * 6, 60 * 3, 1.1, 10, 10),
+      (@now - 1000 * 60 * 7, '2024-03-22', 8, 'good', 60 * 60 * 24, 60 * 3, 1.1, 10, 10),
+      (@now - 1000 * 60, '2024-03-22', 8, 'fail', 60, 60 * 60, 1.1, 10, 10),
       (@now - 5000, '2024-03-22', 10, 'good', 60 * 60 * 7 * 24 + 5, 60, 1.8, 10, 10)
   `).run({
     now: Date.now(),
