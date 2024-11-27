@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function getAverageStudyTime (days = 14) {
+module.exports = function getAverageStudyTime (days = 7) {
   const self = this;
   return self.db.prepare(`
     select avg(n) as avg
