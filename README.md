@@ -503,7 +503,7 @@ The new interval and due are calculated according to the ease.
  * Handle the case that no configuration is provided
  * increase maximum intervals for failed and hard reviews
 
-### 2.1.4 - WIP
+### 2.1.4 - 20241206
  * Change good and easy intervals to be based on longest recent interval
  * Reduce window for average study time.
  * Update dependencies
