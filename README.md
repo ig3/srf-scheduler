@@ -506,3 +506,4 @@ The new interval and due are calculated according to the ease.
 ### 2.1.4 - WIP
  * Change good and easy intervals to be based on longest recent interval
  * Reduce window for average study time.
+ * Update dependencies
