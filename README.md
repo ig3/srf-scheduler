@@ -507,3 +507,6 @@ The new interval and due are calculated according to the ease.
  * Change good and easy intervals to be based on longest recent interval
  * Reduce window for average study time.
  * Update dependencies
+
+### 2.1.5 - WIP
+ * Reduce percentCorrectSensitivity

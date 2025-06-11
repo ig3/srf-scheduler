@@ -473,7 +473,7 @@ function defaultConfigParameters () {
     minStudyTime: '20 minutes',
     minTimeBetweenRelatedCards: '1 hour',
     newCardRateFactor: 0.9,
-    percentCorrectSensitivity: 0.0001,
+    percentCorrectSensitivity: 0.00001,
     percentCorrectTarget: 90,
     percentCorrectWindow: '1 month',
     probabilityOldestDue: 0.2,
