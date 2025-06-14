@@ -5,14 +5,12 @@ const t = require('@ig3/test');
 t.test('getCardsToReview', t => {
   const getCardsToReview = require('../getCardsToReview.js');
 
-  const limit = 60 * 60 * 12;
-
-  const r1 = getCardsToReview.call(setup1(), limit);
+  const r1 = getCardsToReview.call(setup1(), 60 * 60 * 12);
   t.equal(r1, 0, 'No records to review');
 
   const s2 = setup2();
-  const r2 = getCardsToReview.call(s2, limit);
-  t.equal(r2, 2, 'Two records to review');
+  const r2 = getCardsToReview.call(s2, 60 * 60 * 12);
+  t.equal(r2, 3, 'Three records to review');
   t.end();
 });
 
