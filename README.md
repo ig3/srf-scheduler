@@ -512,3 +512,4 @@ The new interval and due are calculated according to the ease.
  * Reduce percentCorrectSensitivity
  * Fix getCardsToReview
  * Reduce goodMinInterval
+ * Fix default maxGoodInterval

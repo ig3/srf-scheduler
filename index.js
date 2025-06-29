@@ -465,7 +465,7 @@ function defaultConfigParameters () {
     learningThreshold: '1 week',
     matureThreshold: '21 days',
     maxEasyInterval: '1 year',
-    maxGoodInteral: '1 year',
+    maxGoodInterval: '1 year',
     maxInterval: '1 year',
     maxNewCardsPerDay: 20,
     maxViewTime: '2 minutes',
