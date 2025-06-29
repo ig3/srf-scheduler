@@ -511,3 +511,4 @@ The new interval and due are calculated according to the ease.
 ### 2.1.5 - WIP
  * Reduce percentCorrectSensitivity
  * Fix getCardsToReview
+ * Reduce goodMinInterval
