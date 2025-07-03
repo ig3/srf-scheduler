@@ -6,6 +6,7 @@ const formatLocalDate = require('./formatLocalDate.js');
 // const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
+const getWeightedAverageStudyTime = require('./getWeightedAverageStudyTime.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -336,7 +337,7 @@ function getNewCardMode () {
   const studyTime =
     (
       (statsPast24Hours.time + statsNext24Hours.time) / 2 +
-      self.srf.getAverageStudyTime()
+      getWeightedAverageStudyTime.call(self)
     ) / 2;
 
   if (
@@ -506,6 +507,7 @@ const api = {
   getNextNew,
   getStatsNext24Hours,
   getTimeNextDue,
+  getWeightedAverageStudyTime,
   review,
   shutdown,
 };

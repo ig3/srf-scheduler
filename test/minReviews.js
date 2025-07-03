@@ -24,6 +24,7 @@ function setup1 () {
   const self = {};
 
   self.config = {
+    decayFactor: 0.95,
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
@@ -74,6 +75,7 @@ function setup2 () {
   const self = {};
 
   self.config = {
+    decayFactor: 0.95,
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
@@ -205,6 +207,7 @@ function setup3 () {
   const self = {};
 
   self.config = {
+    decayFactor: 0.95,
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
@@ -336,6 +339,7 @@ function setup4 () {
   const self = {};
 
   self.config = {
+    decayFactor: 0.95,
     percentCorrectWindow: 60 * 60 * 24 * 14,
     matureThreshold: 60 * 60 * 24 * 21,
     maxInterval: 60 * 60 * 24 * 365,
