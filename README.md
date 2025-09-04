@@ -514,3 +514,4 @@ The new interval and due are calculated according to the ease.
  * Reduce goodMinInterval
  * Fix default maxGoodInterval
  * Use a weighted average for study time
+ * Randomize due date to disperse clusters of cards

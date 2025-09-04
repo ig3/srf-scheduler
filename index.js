@@ -35,8 +35,48 @@ function review (card, viewTime, studyTime, ease) {
 function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
   const self = this;
   const factor = newCardFactor.call(self, card, ease);
-  const due = Math.floor(now() + newInterval);
+  // Randomize due date to disperse clusters
+  const due = Math.floor(now() + newInterval * (1 + Math.random() * 0.01));
   const lastInterval = getLastInterval.call(self, card.id);
+
+  self.db.prepare(`
+    insert into revlog (
+      id,
+      revdate,
+      cardid,
+      ease,
+      interval,
+      lastinterval,
+      due,
+      lastdue,
+      factor,
+      viewtime,
+      studytime,
+      backlog,
+      overdue
+    ) values (?,?,?,?,?,?,?,?,?,?,?,?,?)
+  `)
+  .run(
+    Date.now(),
+    formatLocalDate(new Date()),
+    card.id,
+    ease,
+    newInterval,
+    lastInterval,
+    due,
+    card.due,
+    factor,
+    viewTime,
+    studyTime,
+    self.srf.getCountCardsDueNow() - (
+      // This card is no longer due
+      (card.due < now()) ? 1 : 0
+    ),
+    self.srf.getCountCardsOverdue() - (
+      // This card is no longer overdue
+      (card.due < (now() - 60 * 60 * 24)) ? 1 : 0
+    )
+  );
 
   self.db.prepare(`
     update card
@@ -59,30 +99,6 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
     card.id
   );
 
-  self.db.prepare(`
-    insert into revlog (
-      id,
-      revdate,
-      cardid,
-      ease,
-      interval,
-      lastinterval,
-      factor,
-      viewtime,
-      studytime
-    ) values (?,?,?,?,?,?,?,?,?)
-  `)
-  .run(
-    Date.now(),
-    formatLocalDate(new Date()),
-    card.id,
-    ease,
-    newInterval,
-    lastInterval,
-    factor,
-    viewTime,
-    studyTime
-  );
 }
 
 function getLastInterval (id) {
