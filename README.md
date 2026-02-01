@@ -515,3 +515,4 @@ The new interval and due are calculated according to the ease.
  * Fix default maxGoodInterval
  * Use a weighted average for study time
  * Randomize due date to disperse clusters of cards
+ * Add latency, backlog and overdue to dailystats
