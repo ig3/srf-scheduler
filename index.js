@@ -68,7 +68,7 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
     factor,
     viewTime,
     studyTime,
-    self.srf.getCountCardsDueNow() - (
+    self.srf.getCountCardsDue() - (
       // This card is no longer due
       (card.due < now()) ? 1 : 0
     ),
