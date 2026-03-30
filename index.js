@@ -38,6 +38,8 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
   // Randomize due date to disperse clusters
   const due = Math.floor(now() + newInterval * (1 + Math.random() * 0.01));
   const lastInterval = getLastInterval.call(self, card.id);
+  // New cards have due = 0 but they are not 'overdue'
+  card.due ||= now();
 
   self.db.prepare(`
     insert into revlog (
