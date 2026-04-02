@@ -100,7 +100,6 @@ function updateSeenCard (card, viewTime, studyTime, ease, newInterval) {
     card.views + 1,
     card.id
   );
-
 }
 
 function getLastInterval (id) {

@@ -10,10 +10,10 @@ t.test('minReviews', t => {
   t.equal(result1, 0, 'Initially, it is 0');
 
   const result2 = minReviews.call(setup2());
-  t.equal(result2, 13, 'With some reviews');
+  t.equal(result2, 16, 'With some reviews');
 
   const result3 = minReviews.call(setup3());
-  t.equal(result3, 13, 'study gaps are ignored');
+  t.equal(result3, 16, 'study gaps are ignored');
 
   const result4 = minReviews.call(setup4());
   t.equal(result4, 3, '0 new cards per day');

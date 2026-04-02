@@ -107,7 +107,11 @@ t.test('getNextCard', t => {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null
+      studytime integer not null,
+      due integer,
+      lastdue integer,
+      backlog integer,
+      overdue
     )
   `).run();
   db.prepare(`
@@ -120,12 +124,16 @@ t.test('getNextCard', t => {
       lastinterval,
       factor,
       viewtime,
-      studytime
+      studytime,
+      due,
+      lastdue,
+      backlog,
+      overdue
     ) values
-      (@ts - 30 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30),
-      (@ts - 25 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30),
-      (@ts - 24 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30),
-      (@ts - 23 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30)
+      (@ts - 30 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, @ts - 30 * 24 * 60 * 60, @ts - 34 * 24 * 60 * 60, 4, 0),
+      (@ts - 25 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, @ts - 25 * 24 * 60 * 60, @ts - 26 * 24 * 60 * 60, 5, 0),
+      (@ts - 24 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, @ts - 24 * 24 * 60 * 60, @ts - 26 * 24 * 60 * 60, 6, 0),
+      (@ts - 23 * 24 * 60 * 60 * 1000, @date, 2, 'good', 60 * 60 * 24 * 45, 60 * 60 * 24 * 40, 1.8, 30, 30, @ts - 23 * 24 * 60 * 60, @ts - 24 * 24 * 60 * 60, 7, 0)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(30),
@@ -166,6 +174,9 @@ t.test('getNextCard', t => {
     },
     getAverageStudyTime: function () {
       return 1800;
+    },
+    getCountCardsDue: function () {
+      return 3;
     },
     resolveUnits: function (value) {
       if (typeof value === 'string') {

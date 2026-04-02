@@ -265,7 +265,11 @@ function setup1 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null
+      studytime integer not null,
+      due integer,
+      lastdue integer,
+      backlog integer,
+      overdue integer
     )
   `).run();
 
@@ -279,10 +283,14 @@ function setup1 () {
       lastinterval,
       factor,
       viewtime,
-      studytime
+      studytime,
+      due,
+      lastdue,
+      backlog,
+      overdue
     ) values
-      (@now - 1000 * 60 * 10, '2023-03-22', 1, 'good', 60 * 10, 60 * 8, 1.4, 10, 10),
-      (@now - 1000 * 60 * 60 * 24 * 90, '2023-03-22', 2, 'good', 60 * 60 * 24 * 90, 60 * 60 * 24 * 60, 1.4, 10, 10)
+      (@now - 1000 * 60 * 10, '2023-03-22', 1, 'good', 60 * 10, 60 * 8, 1.4, 10, 10, @now - 1000 * 60 * 10, @now = 1000 * 60 * 20, 5, 0),
+      (@now - 1000 * 60 * 60 * 24 * 90, '2023-03-22', 2, 'good', 60 * 60 * 24 * 90, 60 * 60 * 24 * 60, 1.4, 10, 10, @now = 1000 * 60 * 60 * 24 * 90, @now - 1000 * 60 * 60 * 24 * 91, 4, 0)
   `).run({
     now: Date.now(),
   });
@@ -302,6 +310,9 @@ function setup1 () {
     },
     getCountCardsOverdue: function () {
       return 0;
+    },
+    getCountCardsDue: function () {
+      return 5;
     },
     resolveUnits: resolveUnits,
     getParam: function (name) {
@@ -519,7 +530,11 @@ function setup3 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null
+      studytime integer not null,
+      due integer,
+      lastdue integer,
+      backlog integer,
+      overdue integer
     )
   `).run();
 
@@ -533,9 +548,13 @@ function setup3 () {
       lastinterval,
       factor,
       viewtime,
-      studytime
+      studytime,
+      due,
+      lastdue,
+      backlog,
+      overdue
     ) values
-      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 60000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, @ts - 60000, @ts - 90000, 3, 0)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
@@ -556,6 +575,9 @@ function setup3 () {
     },
     getCountCardsOverdue: function () {
       return 0;
+    },
+    getCountCardsDue: function () {
+      return 3;
     },
     resolveUnits: resolveUnits,
     getParam: function (name) {
@@ -653,7 +675,11 @@ function setup4 () {
       lastinterval integer not null,
       factor real not null,
       viewtime integer not null,
-      studytime integer not null
+      studytime integer not null,
+      due integer,
+      lastdue integer,
+      backlog integer,
+      overdue integer
     )
   `).run();
 
@@ -667,10 +693,14 @@ function setup4 () {
       lastinterval,
       factor,
       viewtime,
-      studytime
+      studytime,
+      due,
+      lastdue,
+      backlog,
+      overdue
     ) values
-      (@ts - (1000 * 60 * 60 * 24 * 11), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - (1000 * 60 * 60 * 24 * 10), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600)
+      (@ts - (1000 * 60 * 60 * 24 * 11), @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10, @ts - (1000 * 60 * 60 * 24 * 11), @ts - (1000 * 60 * 60 * 24 * 12), 6, 0),
+      (@ts - (1000 * 60 * 60 * 24 * 10), @date2, 1, 'good', 60 * 5, 0, 1.8, 10, 3600, @ts - (1000 * 60 * 60 * 24 * 11), @ts - (1000 * 60 * 60 * 24 * 12), 7, 0)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(10),
@@ -692,6 +722,9 @@ function setup4 () {
     },
     getCountCardsOverdue: function () {
       return 0;
+    },
+    getCountCardsDue: function () {
+      return 3;
     },
     resolveUnits: resolveUnits,
     getParam: function (name) {
