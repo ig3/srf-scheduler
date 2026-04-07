@@ -46,9 +46,37 @@ module.exports = function getPercentCorrect (on, window, minInterval, maxInterva
     from: (on - window) * 1000,
     to: on * 1000,
   });
-  return (
-    (result && result.count > self.config.minPercentCorrectCount)
-      ? result.average * 100
-      : 0
-  );
+  if (result && result.count > self.config.minPercentCorrectCount) {
+    console.log('getPercentCorrect - normal return');
+    return result.average * 100;
+  } else {
+    // Ignore the lower interval limit if there are insufficient
+    // reviews with greater interval.
+    const result = self.db.prepare(`
+      select
+        count() as count,
+        avg(
+          case ease
+          when 'fail' then 0
+          else 1
+          end
+        ) as average
+      from revlog
+      where
+        lastinterval < @maxInterval and
+        id > @from and
+        id < @to
+    `)
+    .get({
+      maxInterval: maxInterval,
+      from: (on - window) * 1000,
+      to: on * 1000,
+    });
+    console.log('getPercentCorrect - alternate return: ', result);
+    if (result && result.count > 0) {
+      return result.average * 100;
+    } else {
+      return 0;
+    }
+  }
 };

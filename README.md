@@ -126,12 +126,27 @@ The recent average interval is the same as for ease Good.
 
 ### Percent Correct
 
-Whenever a card is reviewed with a new interval greater than
-learningThreshold, then the intervals and due dates of all cards with
-interval between learningThreshold and maxInterval are adjusted according
-to the difference between 'percent correct' and percentCorrectTarget,
-multiplied by percentCorrectSensitivity.
+This is the percentage of reviews that are not rated 'Fail'.
 
+This is calculated with both a time window and an interval window.
+
+The time window is config.percentCorrectWindow. Only reviews within this
+window are considered.
+
+The interval window is config.matureThreshold to config.maxInterval
+(exclusive). This excludes reviews of new cards and cards at maximum
+interval. The excluded cards are not the target of review difficulty
+control.
+
+If there are fewer than config.minPercentCorrectCount reviews within
+these windows, then the lower bound on interval is removed.
+
+When a card is reviewed and the new interval is greater than
+config.learningThreshold, then the intervals and due dates of all cards with
+interval between learningThreshold and maxInterval are adjusted according
+to the difference between 'percent correct' and config.percentCorrectTarget,
+multiplied by percentCorrectSensitivity. This adjustment makes reviews
+sooner or later, to achieve the target percent correct.
 
 ## Configuration
 
@@ -517,3 +532,5 @@ The new interval and due are calculated according to the ease.
  * Randomize due date to disperse clusters of cards
  * Add latency, backlog and overdue to dailystats
  * Don't exclude current day from average new cards per day
+ * Calculate percent correct across all reviews if insufficient reviews
+   in the interval window

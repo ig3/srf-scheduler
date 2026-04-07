@@ -7,7 +7,7 @@ t.test('getPercentCorrect', t => {
   const result1 = getPercentCorrect.call(setup1());
   t.equal(result1, 0, 'no logs');
   const result2 = getPercentCorrect.call(setup2());
-  t.equal(result2, 0, 'less than 10 logs');
+  t.equal(result2, 55.55555555555556, 'less than 10 logs');
   const result3 = getPercentCorrect.call(setup3());
   t.equal(Math.floor(result3), 72, '1 more than 10 logs');
   const result4 = getPercentCorrect.call(setup4());
@@ -83,13 +83,13 @@ function setup2 () {
       studytime
     ) values
       (@ts - 5010, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
-      (@ts - 5009, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5009, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
       (@ts - 5008, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
-      (@ts - 5007, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5007, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
       (@ts - 5006, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
-      (@ts - 5005, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5005, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
       (@ts - 5004, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
-      (@ts - 5003, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10),
+      (@ts - 5003, '2023-10-16', 1, 'fail', 60 * 5, @interval, 1.8, 10, 10),
       (@ts - 5002, '2023-10-16', 1, 'good', 60 * 5, @interval, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
