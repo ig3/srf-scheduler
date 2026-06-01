@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:ig3/srf-scheduler.git"
+    "url": "https://codeberg.org/ig3/srf-scheduler.git"
   },
   "license": "ISC",
   "devDependencies": {

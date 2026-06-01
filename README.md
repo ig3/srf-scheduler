@@ -541,3 +541,4 @@ The new interval and due are calculated according to the ease.
  * Fix getAverageNewCardsPerDay
  * Remove obsolete minReviews
  * Fix getWeightedAverageStudyTime
+ * Change git repository to https://codeberg.org/ig3/srf-scheduler.git
