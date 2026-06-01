@@ -523,7 +523,7 @@ The new interval and due are calculated according to the ease.
  * Reduce window for average study time.
  * Update dependencies
 
-### 2.1.5 - WIP
+### 2.2.0 - 20260602
  * Reduce percentCorrectSensitivity
  * Fix getCardsToReview
  * Reduce goodMinInterval
