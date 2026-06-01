@@ -538,3 +538,4 @@ The new interval and due are calculated according to the ease.
  * Increase maxNewCardsPerDay to 50
  * Fix estimate of study time per card in getStatsNext24Hours
  * Allow new cards after 23 hours to avoid perpetual shift to later
+ * Fix getAverageNewCardsPerDay
