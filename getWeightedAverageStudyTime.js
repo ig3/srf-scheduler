@@ -9,17 +9,18 @@ module.exports = function getWeightedAverageStudyTime (days = 7) {
   const dailyTotals = self.db.prepare(`
     select sum(studytime) as t
     from revlog
-    where revdate != (select max(revdate) from revlog)
     group by revdate
     order by revdate desc
     limit ?
   `)
-  .all(days);
+  .all(days + 1);
+  if (dailyTotals.length === 0) return 0;
+  if (dailyTotals.length > 1) dailyTotals.shift();
   let s = 0;
   let d = 0;
   dailyTotals.forEach(record => {
     s = record.t + s * self.config.decayFactor;
     d = 1 + d * self.config.decayFactor;
   });
-  return dailyTotals.length ? s / d : 0;
+  return s / d;
 };

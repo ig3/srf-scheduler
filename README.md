@@ -540,3 +540,4 @@ The new interval and due are calculated according to the ease.
  * Allow new cards after 23 hours to avoid perpetual shift to later
  * Fix getAverageNewCardsPerDay
  * Remove obsolete minReviews
+ * Fix getWeightedAverageStudyTime
