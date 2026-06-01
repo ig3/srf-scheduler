@@ -535,3 +535,6 @@ The new interval and due are calculated according to the ease.
  * Calculate percent correct across all reviews if insufficient reviews
    in the interval window
  * Minimum 1 review per new card
+ * Increase maxNewCardsPerDay to 50
+ * Fix estimate of study time per card in getStatsNext24Hours
+ * Allow new cards after 23 hours to avoid perpetual shift to later

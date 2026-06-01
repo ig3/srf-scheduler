@@ -17,7 +17,7 @@ t.test('getStatsNext24Hours', t => {
     t.end();
   });
 
-  t.test('2 cards due', t => {
+  t.test('4 cards due', t => {
     const setup = setup2();
     const scheduler = require('..')({
       db: setup.db,
@@ -27,7 +27,7 @@ t.test('getStatsNext24Hours', t => {
 
     const stats = scheduler.getStatsNext24Hours();
     t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 1, 'time');
+    t.equal(stats.time, 20, 'time');
     t.end();
   });
 
@@ -194,8 +194,8 @@ function setup1 () {
 
 // New DB
 //  new cards
-//  no due cards
-//  no review logs
+//  four due cards
+//  four review logs
 
 function setup2 () {
   const db = require('better-sqlite3')();
@@ -258,7 +258,10 @@ function setup2 () {
       viewtime,
       studytime
     ) values
-      (@ts - 60 * 60 * 24 * 1, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 60 * 60 * 24 * 1 - 4, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1 - 3, @date, 2, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1 - 2, @date, 3, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1 - 1, @date, 4, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(1),

@@ -47,7 +47,6 @@ module.exports = function getPercentCorrect (on, window, minInterval, maxInterva
     to: on * 1000,
   });
   if (result && result.count > self.config.minPercentCorrectCount) {
-    console.log('getPercentCorrect - normal return');
     return result.average * 100;
   } else {
     // Ignore the lower interval limit if there are insufficient
@@ -72,7 +71,6 @@ module.exports = function getPercentCorrect (on, window, minInterval, maxInterva
       from: (on - window) * 1000,
       to: on * 1000,
     });
-    console.log('getPercentCorrect - alternate return: ', result);
     if (result && result.count > 0) {
       return result.average * 100;
     } else {

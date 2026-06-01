@@ -351,6 +351,13 @@ function getNewCardMode () {
   const statsPast24Hours = self.srf.getStatsPast24Hours();
   const statsNext24Hours = self.getStatsNext24Hours();
   const cardsOverdue = self.srf.getCountCardsOverdue();
+  const newCardsPast23Hours = self.db.prepare(`
+    select
+      sum(case when lastinterval = 0 then 1 else 0 end) as newCards
+    from revlog
+    where id >= ?
+  `)
+  .get((now() - 60 * 60 * 23) * 1000).newCards || 0;
   const studyTime =
     (
       (statsPast24Hours.time + statsNext24Hours.time) / 2 +
@@ -358,8 +365,10 @@ function getNewCardMode () {
     ) / 2;
 
   if (
-    studyTime < self.config.targetStudyTime &&
-    statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
+    studyTime < self.config.targetStudyTime && (
+      statsPast24Hours.newCards < self.config.maxNewCardsPerDay ||
+      newCardsPast23Hours < (self.config.maxNewCardsPerDay * 23 / 24)
+    ) &&
     cardsOverdue === 0
   ) {
     if (studyTime < self.config.minStudyTime) {
@@ -393,28 +402,34 @@ function getNextCard (overrideLimits = false) {
 
 function getStatsNext24Hours () {
   const self = this;
-  // Get the average time per unique card per day, averaged over the past
-  // 14 days of study. This will be the estimate of time per card due. It
-  // should factor in a typical balance of new cards (reviewed multiple
-  // times per day) and older cards (reviewed only once per day), and the
-  // average recent difficulty / study style. Exclude the current revdate
-  // because it will underestimate the total study time of short interval
-  // cards.
-  const timePerCard =
-    self.db.prepare(`
-      select avg(t/n) as avg
-      from (
-        select
-          count(distinct cardid) as n,
-          sum(studytime) as t
-        from revlog
-        where revdate != (select max(revdate) from revlog)
-        group by revdate
-        order by revdate desc
-        limit 14
-      )
-    `)
-    .get().avg || 0.5;
+  // Get the average time per unique card per day in minutes, averaged over
+  // the past 14 days of study. This will be the estimate of time per card
+  // due. It should factor in a typical balance of new cards (reviewed
+  // multiple times per day) and older cards (reviewed only once per day),
+  // and the average recent difficulty / study style. Exclude the current
+  // revdate because it will underestimate the total study time of short
+  // interval cards.
+  const timePerCard = (() => {
+    const hist = self.db.prepare(`
+      select
+        count(distinct cardid) as n,
+        sum(studytime) as t
+      from revlog
+      group by revdate
+      order by revdate desc
+      limit 15
+    `).all();
+    // If there are no reviews, default to 0.5 minutes per card
+    if (hist.length === 0) return (0.5);
+    // The most recent day (usually today) may be incomplete
+    // Ignore it if there are reviews previous days
+    if (hist.length > 1) hist.shift();
+    let sum = 0;
+    hist.forEach(record => {
+      sum += record.t / record.n;
+    });
+    return (sum / hist.length);
+  })();
 
   // Get the number of cards due, excluding those that will not be
   // presented due to minTimeBetweenRelatedCards and including average new
@@ -485,7 +500,7 @@ function defaultConfigParameters () {
     maxEasyInterval: '1 year',
     maxGoodInterval: '1 year',
     maxInterval: '1 year',
-    maxNewCardsPerDay: 20,
+    maxNewCardsPerDay: 50,
     maxViewTime: '2 minutes',
     minPercentCorrectCount: 10,
     minStudyTime: '20 minutes',
