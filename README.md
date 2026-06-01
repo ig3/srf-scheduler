@@ -534,3 +534,4 @@ The new interval and due are calculated according to the ease.
  * Don't exclude current day from average new cards per day
  * Calculate percent correct across all reviews if insufficient reviews
    in the interval window
+ * Minimum 1 review per new card

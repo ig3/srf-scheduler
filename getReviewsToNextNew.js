@@ -26,11 +26,12 @@ module.exports = function getReviewsToNextNew () {
     getAverageNewCardsPerDay.call(this)
   );
 
-  return Math.floor(
-    getCardsToReview.call(this, 60 * 60 * 24) / newCardsPerDay *
-    Math.max(
-      0,
-      1 + error * this.config.studyTimeErrorSensitivity
+  return Math.max(
+    1,
+    Math.floor(
+      getCardsToReview.call(this, 60 * 60 * 24) / newCardsPerDay * (
+        1 + error * this.config.studyTimeErrorSensitivity
+      )
     )
   );
 };
