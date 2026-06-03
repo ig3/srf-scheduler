@@ -545,3 +545,6 @@ The new interval and due are calculated according to the ease.
 
 ### 2.2.1 - WIP
  * Fix getAverageReviewsPerDay
+ * Revert changes to getNewCardMode
+ * Increase default maxNewCardsPerDay to 100
+ * Change getReviewsToNextNew

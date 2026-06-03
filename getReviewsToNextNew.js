@@ -15,7 +15,6 @@
 
 const getWeightedAverageStudyTime = require('./getWeightedAverageStudyTime.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
-const getCardsToReview = require('./getCardsToReview.js');
 
 module.exports = function getReviewsToNextNew () {
   const error =
@@ -26,10 +25,23 @@ module.exports = function getReviewsToNextNew () {
     getAverageNewCardsPerDay.call(this)
   );
 
+  const timePerReview = this.db.prepare(`
+    select avg(studytime) as avg
+    from (
+      select studytime
+      from revlog
+      order by id desc
+      limit 1000
+    )
+  `)
+  .get().avg || 30;
+
+  const reviewsPerDay = this.config.targetStudyTime / timePerReview;
+
   return Math.max(
     1,
-    Math.floor(
-      getCardsToReview.call(this, 60 * 60 * 24) / newCardsPerDay * (
+    Math.round(
+      reviewsPerDay / newCardsPerDay * (
         1 + error * this.config.studyTimeErrorSensitivity
       )
     )
