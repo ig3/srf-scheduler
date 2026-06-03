@@ -2,16 +2,21 @@
 
 module.exports = function getAverageReviewsPerDay (days = 14) {
   const self = this;
-  return self.db.prepare(`
-    select avg(n) as avg
-    from (
-      select count() as n
-      from revlog
-      where revdate != (select max(revdate) from revlog)
-      group by revdate
-      order by revdate desc
-      limit ?
-    )
+
+  const hist = self.db.prepare(`
+    select count() as n
+    from revlog
+    group by revdate
+    order by revdate desc
+    limit ?
   `)
-  .get(days).avg || 0;
+  .all(days + 1);
+
+  if (hist.length === 0) return 0;
+  if (hist.length > 1) hist.shift();
+  let sum = 0;
+  hist.forEach(record => {
+    sum += record.n;
+  });
+  return (sum / hist.length);
 };

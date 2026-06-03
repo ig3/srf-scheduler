@@ -542,3 +542,6 @@ The new interval and due are calculated according to the ease.
  * Remove obsolete minReviews
  * Fix getWeightedAverageStudyTime
  * Change git repository to https://codeberg.org/ig3/srf-scheduler.git
+
+### 2.2.1 - WIP
+ * Fix getAverageReviewsPerDay
