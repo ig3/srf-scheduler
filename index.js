@@ -351,13 +351,6 @@ function getNewCardMode () {
   const statsPast24Hours = self.srf.getStatsPast24Hours();
   const statsNext24Hours = self.getStatsNext24Hours();
   const cardsOverdue = self.srf.getCountCardsOverdue();
-  const newCardsPast23Hours = self.db.prepare(`
-    select
-      sum(case when lastinterval = 0 then 1 else 0 end) as newCards
-    from revlog
-    where id >= ?
-  `)
-  .get((now() - 60 * 60 * 23) * 1000).newCards || 0;
   const studyTime =
     (
       (statsPast24Hours.time + statsNext24Hours.time) / 2 +
@@ -365,10 +358,8 @@ function getNewCardMode () {
     ) / 2;
 
   if (
-    studyTime < self.config.targetStudyTime && (
-      statsPast24Hours.newCards < self.config.maxNewCardsPerDay ||
-      newCardsPast23Hours < (self.config.maxNewCardsPerDay * 23 / 24)
-    ) &&
+    studyTime < self.config.targetStudyTime &&
+    statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {
     if (studyTime < self.config.minStudyTime) {
@@ -500,7 +491,7 @@ function defaultConfigParameters () {
     maxEasyInterval: '1 year',
     maxGoodInterval: '1 year',
     maxInterval: '1 year',
-    maxNewCardsPerDay: 50,
+    maxNewCardsPerDay: 100,
     maxViewTime: '2 minutes',
     minPercentCorrectCount: 10,
     minStudyTime: '20 minutes',
