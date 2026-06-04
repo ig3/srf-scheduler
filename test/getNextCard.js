@@ -120,7 +120,7 @@ t.test('getNextCard', t => {
     });
 
     const card = scheduler.getNextCard();
-    t.ok(!card, 'no card');
+    t.ok(!!card, 'no card');
     t.end();
   });
 

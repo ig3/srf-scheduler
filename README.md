@@ -37,9 +37,10 @@ New cards are presented if:
  * new cards in the past 24 hours < configured max new cards per day; and
  * there are no overdue cards
 
-If average study time is less than configured minimum study time, then new
-cards are presented if there are no cards due, until the daily limit on new
-cards is reached.
+If average study time is less than configured minimum study time or
+estimated study time in the next 24 hours is less than configured target
+study time, then new cards are presented if there are no cards due.
+Otherwise, new cards are interleaved with review cards.
 
 For these controls, average study time is determined from:
  * actual study time in the past 24 hours
@@ -606,3 +607,4 @@ The new interval and due are calculated according to the ease.
  * Fix getStatsNext24Hours
  * Fix getAverageStudyTime
  * Fix getWeightedAverageStudyTime
+ * Change getNextCard to present new cards more aggressively

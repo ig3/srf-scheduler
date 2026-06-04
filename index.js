@@ -379,12 +379,20 @@ function getNextCard (overrideLimits = false) {
   if (overrideLimits) return self.getNextDue(true) || self.getNextNew();
 
   const newCardMode = getNewCardMode.call(self);
+  const statsNext24Hours = self.getStatsNext24Hours();
 
   const dueCard = self.getNextDue();
 
   if (
-    (newCardMode === 'go' && !dueCard) ||
-    (newCardMode !== 'stop' && self.reviewsToNextNew === 0)
+    newCardMode !== 'stop' &&
+    (
+      self.reviewToNextNew === 0 || (
+        !dueCard && (
+          newCardMode === 'go' ||
+          statsNext24Hours.time < self.config.targetStudyTime
+        )
+      )
+    )
   ) {
     return self.getNextNew();
   } else {
