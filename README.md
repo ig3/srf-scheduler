@@ -605,3 +605,4 @@ The new interval and due are calculated according to the ease.
  * Fix getAverageNewCardsPerDay
  * Fix getStatsNext24Hours
  * Fix getAverageStudyTime
+ * Fix getWeightedAverageStudyTime

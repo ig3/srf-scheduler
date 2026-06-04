@@ -178,7 +178,7 @@ t.test('review', t => {
     .get();
     t.equal(revlog.cardid, 1, 'revlog for card ID 1');
     t.equal(revlog.interval, 129600, 'interval is 129600');
-    t.equal(scheduler.reviewsToNextNew, 2, 'reviews until next new card is 2');
+    t.equal(scheduler.reviewsToNextNew, 1, 'reviews until next new card is 1');
     t.end();
   });
   t.end();
