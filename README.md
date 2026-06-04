@@ -602,3 +602,4 @@ The new interval and due are calculated according to the ease.
  * Increase default maxNewCardsPerDay to 100
  * Change getReviewsToNextNew
  * Include average new cards per day in estimate of cards in next 24 hours
+ * Fix getAverageNewCardsPerDay
