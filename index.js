@@ -404,6 +404,7 @@ function getStatsNext24Hours () {
   const timePerCard = (() => {
     const hist = self.db.prepare(`
       select
+        revdate,
         count(distinct cardid) as n,
         sum(studytime) as t
       from revlog
@@ -413,9 +414,12 @@ function getStatsNext24Hours () {
     `).all();
     // If there are no reviews, default to 0.5 minutes per card
     if (hist.length === 0) return (0.5);
-    // The most recent day (usually today) may be incomplete
-    // Ignore it if there are reviews previous days
-    if (hist.length > 1) hist.shift();
+    if (
+      hist.length > 1 &&
+      hist[0].revdate === formatLocalDate(new Date())
+    ) {
+      hist.shift();
+    }
     let sum = 0;
     hist.forEach(record => {
       sum += record.t / record.n;
