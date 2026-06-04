@@ -46,13 +46,66 @@ For these controls, average study time is determined from:
  * predicted study time in the next 24 hours
  * actual average study time in the past 14 days of study
 
-The number of reviews between new cards is adjusted according to the ratio
-of average study time to target study time per day, the number of cards due
-in the next 24 hours and the recent average number of new cards per day.
+The prediction of study time in the next 24 hours is problematic.
+Initially, there is no record of historic performance on which to base the
+prediction. It tends to overestimate the study time at least until there
+are a few days of study in the review log.
 
-For this control, average study time is the actual average study time over
-the previous 14 days of study. This excludes the current day and days on
-which no reviews were done.
+The estimate of study time in the next 24 hours assumes that the
+time per unique card studied will be the same in the future as in the past.
+This is problematic because initially there is no history of review and the
+mix of new cards and older, better known cards (and, therefore, requiring
+fewer reviews and less time per day) is not typical and changes rapidly as
+study progressing. The changing mix of cards makes future performance
+different from historic performance. But the algorithm assumes future
+performance will be the same as historic performance. This causes
+inaccurate predictions, particularly in early days of study.
+
+New cards are typically reviwed several times per day, until they are
+learned well enough to be recalled correctly after periods longer than 24
+hours. Older, better known cards are typically reviewed only once per day,
+with intervals of one or more days between reviews.
+
+On the first day of study, there are only new cards. On the one hand, these
+cards will each be reviewed many times, thus accumulating an unusually
+hight study time per card per day. On the other hand, until the day is
+complete the time per card is less than it will be. Thus the average time
+per card at some time on the first day of study is not a very good
+predictor of the time per card in the next 24 hours.
+
+As study progresses, the mix of cards changes and the average time per card
+will tend to decrease.
+
+During the first day of study, the only data available is for a partial day
+of study. It isn't perfect, but it is all that is available, so it is used.
+
+After the first day of study, records of the current day are excluded from
+calculation: only records of complete days of study are used. This tends to
+make the estimates more accurate, but the mix of cards (some new cards and
+a gradually increasing percentage of older, better known cards) changes.
+Initially the rate of change is high and the estimate will tend to be an
+over-estimate of study time. When the mix of cards stabilizes, the estimate
+will tend to be more accurate.
+
+The number of reviews between new cards is adjusted according to the ratio
+of average study time to target study time per day, the recent average time
+per review, the target study time per day and the recent average number of
+new cards per day.
+
+The average study time is an exponentially weighted average of actual study
+time per day over tha past 7 days of study, excluding the current day and
+days without any study. The exponential decay factor is
+`config.decayFactor`.
+
+The average time per review is the average of the last 1000 reviews.
+
+The average new cards per day is a linear average of new cards per day over
+the past 14 days of study, excluding the current day and days without any
+study.
+
+On the first day of study, the current day is included in calculation of
+daily averages, because there is no data available for complete days of
+study.
 
 ### review card selection
 
