@@ -386,7 +386,7 @@ function getNextCard (overrideLimits = false) {
   if (
     newCardMode !== 'stop' &&
     (
-      self.reviewToNextNew === 0 || (
+      self.reviewsToNextNew === 0 || (
         !dueCard && (
           newCardMode === 'go' ||
           statsNext24Hours.time < self.config.targetStudyTime
