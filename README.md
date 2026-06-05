@@ -93,10 +93,8 @@ of average study time to target study time per day, the recent average time
 per review, the target study time per day and the recent average number of
 new cards per day.
 
-The average study time is an exponentially weighted average of actual study
-time per day over tha past 7 days of study, excluding the current day and
-days without any study. The exponential decay factor is
-`config.decayFactor`.
+The average study time is a linear average of actual study time per day
+over tha past 7 days of study.
 
 The average time per review is the average of the last 1000 reviews.
 
@@ -598,14 +596,14 @@ The new interval and due are calculated according to the ease.
  * Change git repository to https://codeberg.org/ig3/srf-scheduler.git
 
 ### 2.2.1 - WIP
- * Fix getAverageReviewsPerDay
  * Increase default maxNewCardsPerDay to 100
  * Change getReviewsToNextNew
  * Include average new cards per day in estimate of cards in next 24 hours
  * Change getAverageNewCardsPerDay
  * Fix getStatsNext24Hours
  * Fix getAverageStudyTime
- * Fix getWeightedAverageStudyTime
+ * Remove getWeightedAverageStudyTime
  * Change getNextCard to present new cards more aggressively
  * Change getAverageStudyTime to getAverageStudyTimePerDay
  * Change changes to getNewCardMode
+ * Change getAverageReviewsPerDay
