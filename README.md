@@ -101,8 +101,8 @@ days without any study. The exponential decay factor is
 The average time per review is the average of the last 1000 reviews.
 
 The average new cards per day is a linear average of new cards per day over
-the past 14 days of study, excluding the current day and days without any
-study.
+the past 14 days (336 hours) of study. This is a sliding window ending at
+the current time, not calendar days.
 
 On the first day of study, the current day is included in calculation of
 daily averages, because there is no data available for complete days of
@@ -603,7 +603,7 @@ The new interval and due are calculated according to the ease.
  * Increase default maxNewCardsPerDay to 100
  * Change getReviewsToNextNew
  * Include average new cards per day in estimate of cards in next 24 hours
- * Fix getAverageNewCardsPerDay
+ * Change getAverageNewCardsPerDay
  * Fix getStatsNext24Hours
  * Fix getAverageStudyTime
  * Fix getWeightedAverageStudyTime

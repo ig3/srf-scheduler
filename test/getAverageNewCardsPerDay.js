@@ -10,13 +10,10 @@ t.test('getAverageNewCardsPerDay', t => {
   t.equal(result1, 0, '0 average if no revlog entries');
 
   const result2 = getAverageNewCardsPerDay.call(setup2());
-  t.equal(result2, 2.5, 'average with some logs');
-
-  const result3 = getAverageNewCardsPerDay.call(setup3());
-  t.equal(result3, 2.5, 'study gaps are ignored');
+  t.equal(result2, 0.5, 'average with some logs');
 
   const result4 = getAverageNewCardsPerDay.call(setup3(), 1);
-  t.equal(result4, 3.0, 'reviews older than days are ignored');
+  t.equal(result4, 4.0, 'reviews older than days are ignored');
   t.end();
 });
 
@@ -100,7 +97,8 @@ function setup2 () {
       (@ts - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       (@ts - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10),
       (@ts - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5001, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     d1: d1,
@@ -155,15 +153,18 @@ function setup3 () {
       viewtime,
       studytime
     ) values
-      (@ts - 5010, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 5009, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 10),
-      (@ts - 5008, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 5007, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 5006, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10),
-      (@ts - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10),
-      (@ts - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 68400000 * 20 - 10, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 68400000 * 20 - 9, @d1, 1, 'good', 60 * 5, 30, 1.8, 10, 10),
+      (@ts - 68400000 * 20 - 8, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 68400000 - 5007, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 68400000 - 5006, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10),
+      (@ts - 68400000 - 5005, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 68400000 - 5004, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10),
+      (@ts - 68400000 - 5003, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5002, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 5001, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 4999, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 4998, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     d1: d1,

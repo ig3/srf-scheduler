@@ -26,8 +26,8 @@ t.test('getStatsNext24Hours', t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 6, 'count');
-    t.equal(stats.time, 60, 'time');
+    t.equal(stats.count, 2, 'count');
+    t.equal(stats.time, 22, 'time');
     t.end();
   });
 
@@ -40,8 +40,8 @@ t.test('getStatsNext24Hours', t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 5, 'count');
-    t.equal(stats.time, 150, 'time');
+    t.equal(stats.count, 2, 'count');
+    t.equal(stats.time, 68, 'time');
     t.end();
   });
   t.end();

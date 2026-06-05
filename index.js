@@ -3,7 +3,6 @@
 const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
-// const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getCardsToReview = require('./getCardsToReview.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getWeightedAverageStudyTime = require('./getWeightedAverageStudyTime.js');
