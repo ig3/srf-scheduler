@@ -6,7 +6,7 @@ module.exports = function getAverageStudyTimePerDay (days = 7) {
   const studyTime = this.db.prepare(`
     select sum(studytime) as n
     from revlog
-    where id > ((unixepoch() - ? * 68400) * 1000)
+    where id > ((unixepoch() - ? * 86400) * 1000)
   `)
   .get(days).n;
 
