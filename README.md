@@ -608,3 +608,4 @@ The new interval and due are calculated according to the ease.
  * Fix getAverageStudyTime
  * Fix getWeightedAverageStudyTime
  * Change getNextCard to present new cards more aggressively
+ * Change getAverageStudyTime to getAverageStudyTimePerDay
