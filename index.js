@@ -5,7 +5,7 @@ const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
 const getCardsToReview = require('./getCardsToReview.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
-const getWeightedAverageStudyTime = require('./getWeightedAverageStudyTime.js');
+const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 
 // review is called when a card is reviewed
@@ -354,7 +354,7 @@ function getNewCardMode () {
   const studyTime =
     (
       (statsPast24Hours.time + statsNext24Hours.time) / 2 +
-      getWeightedAverageStudyTime.call(self)
+      self.getAverageStudyTimePerDay()
     ) / 2;
 
   if (
@@ -534,6 +534,7 @@ function shutdown () {
 }
 
 const api = {
+  getAverageStudyTimePerDay,
   getCountCardsDueToday,
   getIntervals,
   getNewCardMode,
@@ -542,7 +543,6 @@ const api = {
   getNextNew,
   getStatsNext24Hours,
   getTimeNextDue,
-  getWeightedAverageStudyTime,
   review,
   shutdown,
 };
