@@ -13,12 +13,12 @@
  */
 'use strict';
 
-const getWeightedAverageStudyTime = require('./getWeightedAverageStudyTime.js');
+const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 
 module.exports = function getReviewsToNextNew () {
   const error =
-    (getWeightedAverageStudyTime.call(this) / this.config.targetStudyTime) - 1;
+    (getAverageStudyTimePerDay.call(this) / this.config.targetStudyTime) - 1;
 
   const newCardsPerDay = Math.max(
     1,
