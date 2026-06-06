@@ -7,7 +7,7 @@ module.exports = function getAverageNewCardsPerDay (days = 14) {
   const newCards = self.db.prepare(`
     select count(case when lastinterval = 0 then 1 end) as n
     from revlog
-    where id > ((unixepoch() - ? * 68400) * 1000)
+    where id > ((unixepoch() - ? * 86400) * 1000)
   `)
   .get(days).n;
 
