@@ -464,8 +464,8 @@ function getStatsNext24Hours () {
   }
   cards += getAverageNewCardsPerDay.call(this);
   return ({
-    count: Math.floor(cards),
-    time: Math.floor(cards * timePerCard),
+    count: Math.round(cards),
+    time: Math.round(cards * timePerCard),
     minReviews: getReviewsToNextNew.call(self),
     reviewsToNextNew: self.reviewsToNextNew,
   });

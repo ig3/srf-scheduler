@@ -27,7 +27,7 @@ t.test('getStatsNext24Hours', t => {
 
     const stats = scheduler.getStatsNext24Hours();
     t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 22, 'time');
+    t.equal(stats.time, 23, 'time');
     t.end();
   });
 
@@ -41,7 +41,7 @@ t.test('getStatsNext24Hours', t => {
 
     const stats = scheduler.getStatsNext24Hours();
     t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 68, 'time');
+    t.equal(stats.time, 69, 'time');
     t.end();
   });
   t.end();
