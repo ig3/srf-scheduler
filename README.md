@@ -589,7 +589,7 @@ The new interval and due are calculated according to the ease.
  * Change git repository to https://codeberg.org/ig3/srf-scheduler.git
 
 ### 2.2.1 - WIP
- * Increase default maxNewCardsPerDay to 100
+ * Reduce default maxNewCardsPerDay to 20
  * Change getReviewsToNextNew
  * Include average new cards per day in estimate of cards in next 24 hours
  * Change getAverageNewCardsPerDay

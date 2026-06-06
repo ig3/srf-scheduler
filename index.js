@@ -506,7 +506,7 @@ function defaultConfigParameters () {
     maxEasyInterval: '1 year',
     maxGoodInterval: '1 year',
     maxInterval: '1 year',
-    maxNewCardsPerDay: 100,
+    maxNewCardsPerDay: 20,
     maxViewTime: '2 minutes',
     minPercentCorrectCount: 10,
     minStudyTime: '20 minutes',
