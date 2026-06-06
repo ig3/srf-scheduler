@@ -27,20 +27,18 @@ need to install this independently.
 ### new cards
 
 Average study time per day is controlled by adjusting the presentation of
-new cards. New cards are usually presented interleaved with review cards.
-If average study time is very low, they may be presented without
-intervening review cards. If average study time is high, new cards will not
-be presented.
+new cards.
 
 New cards are presented if:
  * average study time < configured target study time;
- * new cards in the past 24 hours < configured max new cards per day; and
+ * new cards in the current calendar day < `config.maxNewCardsPerDay`; and
  * there are no overdue cards
 
-If average study time is less than configured minimum study time or
-estimated study time in the next 24 hours is less than configured target
-study time, then new cards are presented if there are no cards due.
-Otherwise, new cards are interleaved with review cards.
+New cards are presented interleaved with review cards if there are cards
+due, unless estimated study time is less than `config.minStudyTime`.
+
+If average study time is less than `config.minStudyTime` then new cards
+are presented when there are no cards due.
 
 For these controls, average study time is determined from:
  * actual study time in the past 24 hours
@@ -49,8 +47,7 @@ For these controls, average study time is determined from:
 
 The prediction of study time in the next 24 hours is problematic.
 Initially, there is no record of historic performance on which to base the
-prediction. It tends to overestimate the study time at least until there
-are a few days of study in the review log.
+prediction. Also, actual performance varies from day to day.
 
 The estimate of study time in the next 24 hours assumes that the
 time per unique card studied will be the same in the future as in the past.
@@ -101,10 +98,6 @@ The average time per review is the average of the last 1000 reviews.
 The average new cards per day is a linear average of new cards per day over
 the past 14 days (336 hours) of study. This is a sliding window ending at
 the current time, not calendar days.
-
-On the first day of study, the current day is included in calculation of
-daily averages, because there is no data available for complete days of
-study.
 
 ### review card selection
 
@@ -291,7 +284,7 @@ maxInterval is an upper bound on interval after a Good or Easy response.
 ### config.maxNewCardsPerDay
 
 maxNewCardsPerDay is the maximum number of new cards which may be presented
-in a 24 hour period.
+in a local time calendar day.
 
 ### config.maxViewTime
 
@@ -398,7 +391,7 @@ there is a card due, otherwise the next new card.
 Otherwise, getNextCard returns the next new card if:
  * average study time in the past and next 24 hours is less than
    config.targetStudyTime; and
- * total new cards studied in the past 24 hours is less than
+ * total new cards studied in the current calendar day is less than
    config.maxNewCardsPerDay; and
  * there are no overdue cards; and
  * sufficient due cards have been reviewed since the last new card or there
@@ -607,3 +600,4 @@ The new interval and due are calculated according to the ease.
  * Change getAverageStudyTime to getAverageStudyTimePerDay
  * Change changes to getNewCardMode
  * Change getAverageReviewsPerDay
+ * Change getNewCardMode

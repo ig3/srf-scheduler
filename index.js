@@ -7,6 +7,8 @@ const getCardsToReview = require('./getCardsToReview.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
+const getCountNewCardsToday = require('./getCountNewCardsToday.js');
+const getStudyTime = require('./getStudyTime.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -348,18 +350,19 @@ function getNextNew () {
 function getNewCardMode () {
   const self = this;
 
-  const statsPast24Hours = self.srf.getStatsPast24Hours();
-  const statsNext24Hours = self.getStatsNext24Hours();
-  const cardsOverdue = self.srf.getCountCardsOverdue();
+  const studyTimePast24Hours = self.getStudyTime(24);
+  const studyTimeNext24Hours = self.getStatsNext24Hours().time;
+  const averageStudyTime = self.getAverageStudyTimePerDay();
   const studyTime =
     (
-      (statsPast24Hours.time + statsNext24Hours.time) / 2 +
-      self.getAverageStudyTimePerDay()
+      (studyTimePast24Hours + studyTimeNext24Hours) / 2 + averageStudyTime
     ) / 2;
+  const newCardsToday = self.getCountNewCardsToday();
+  const cardsOverdue = self.srf.getCountCardsOverdue();
 
   if (
     studyTime < self.config.targetStudyTime &&
-    statsPast24Hours.newCards < self.config.maxNewCardsPerDay &&
+    newCardsToday < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {
     if (studyTime < self.config.minStudyTime) {
@@ -536,12 +539,14 @@ function shutdown () {
 const api = {
   getAverageStudyTimePerDay,
   getCountCardsDueToday,
+  getCountNewCardsToday,
   getIntervals,
   getNewCardMode,
   getNextCard,
   getNextDue,
   getNextNew,
   getStatsNext24Hours,
+  getStudyTime,
   getTimeNextDue,
   review,
   shutdown,

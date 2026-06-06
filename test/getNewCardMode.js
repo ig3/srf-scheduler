@@ -7,22 +7,22 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
-    scheduler.srf.getStatsPast24Hours = () => {
-      return {
-        time: 0,
-        newCards: 0,
-      };
+    scheduler.getStudyTime = () => {
+      return 0;
     };
     scheduler.getStatsNext24Hours = () => {
       return {
         time: 0,
       };
     };
-    scheduler.srf.getCountCardsOverdue = () => {
+    scheduler.getAverageStudyTimePerDay = () => {
       return 0;
     };
-    scheduler.getAverageStudyTimePerDay = () => {
-      return 0.0;
+    scheduler.getCountNewCardsToday = () => {
+      return 0;
+    };
+    scheduler.srf.getCountCardsOverdue = () => {
+      return 0;
     };
 
     const mode = scheduler.getNewCardMode();
@@ -34,22 +34,22 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
-    scheduler.srf.getStatsPast24Hours = () => {
-      return {
-        time: 3600,
-        newCards: 0,
-      };
+    scheduler.getStudyTime = () => {
+      return 3600;
     };
     scheduler.getStatsNext24Hours = () => {
       return {
         time: 3600,
       };
     };
-    scheduler.srf.getCountCardsOverdue = () => {
+    scheduler.getAverageStudyTimePerDay = () => {
+      return 3600;
+    };
+    scheduler.getCountNewCardsToday = () => {
       return 0;
     };
-    scheduler.getAverageStudyTimePerDay = () => {
-      return 3600.0;
+    scheduler.srf.getCountCardsOverdue = () => {
+      return 0;
     };
 
     const mode = scheduler.getNewCardMode();
@@ -57,26 +57,26 @@ t.test('getNewCardMode', t => {
     t.end();
   });
 
-  t.test('new cards past 24 hours = maxNewCardsPerDay', t => {
+  t.test('new cards today = maxNewCardsPerDay', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
-    scheduler.srf.getStatsPast24Hours = () => {
-      return {
-        time: 300,
-        newCards: 20,
-      };
+    scheduler.getStudyTime = () => {
+      return 0;
     };
     scheduler.getStatsNext24Hours = () => {
       return {
-        time: 300,
+        time: 0,
       };
+    };
+    scheduler.getAverageStudyTimePerDay = () => {
+      return 0;
+    };
+    scheduler.getCountNewCardsToday = () => {
+      return 20;
     };
     scheduler.srf.getCountCardsOverdue = () => {
       return 0;
-    };
-    scheduler.getAverageStudyTimePerDay = () => {
-      return 300.0;
     };
 
     const mode = scheduler.getNewCardMode();
@@ -88,22 +88,22 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
-    scheduler.srf.getStatsPast24Hours = () => {
-      return {
-        time: 300,
-        newCards: 0,
-      };
+    scheduler.getStudyTime = () => {
+      return 0;
     };
     scheduler.getStatsNext24Hours = () => {
       return {
-        time: 300,
+        time: 0,
       };
+    };
+    scheduler.getAverageStudyTimePerDay = () => {
+      return 0;
+    };
+    scheduler.getCountNewCardsToday = () => {
+      return 0;
     };
     scheduler.srf.getCountCardsOverdue = () => {
       return 1;
-    };
-    scheduler.getAverageStudyTimePerDay = () => {
-      return 300.0;
     };
 
     const mode = scheduler.getNewCardMode();
@@ -115,22 +115,22 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
-    scheduler.srf.getStatsPast24Hours = () => {
-      return {
-        time: 300,
-        newCards: 0,
-      };
+    scheduler.getStudyTime = () => {
+      return 300;
     };
     scheduler.getStatsNext24Hours = () => {
       return {
         time: 300,
       };
     };
-    scheduler.srf.getCountCardsOverdue = () => {
+    scheduler.getAverageStudyTimePerDay = () => {
+      return 300;
+    };
+    scheduler.getCountNewCardsToday = () => {
       return 0;
     };
-    scheduler.getAverageStudyTimePerDay = () => {
-      return 300.0;
+    scheduler.srf.getCountCardsOverdue = () => {
+      return 0;
     };
 
     const mode = scheduler.getNewCardMode();
@@ -142,22 +142,22 @@ t.test('getNewCardMode', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
-    scheduler.srf.getStatsPast24Hours = () => {
-      return {
-        time: 1200,
-        newCards: 0,
-      };
+    scheduler.getStudyTime = () => {
+      return 1200;
     };
     scheduler.getStatsNext24Hours = () => {
       return {
         time: 1200,
       };
     };
-    scheduler.srf.getCountCardsOverdue = () => {
+    scheduler.getAverageStudyTimePerDay = () => {
+      return 1200;
+    };
+    scheduler.getCountNewCardsToday = () => {
       return 0;
     };
-    scheduler.getAverageStudyTimePerDay = () => {
-      return 1200.0;
+    scheduler.srf.getCountCardsOverdue = () => {
+      return 0;
     };
 
     const mode = scheduler.getNewCardMode();
