@@ -26,8 +26,8 @@ t.test('getStatsNext24Hours', t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 23, 'time');
+    t.equal(stats.count, 4, 'count');
+    t.equal(stats.time, 40, 'time');
     t.end();
   });
 
@@ -40,8 +40,8 @@ t.test('getStatsNext24Hours', t => {
     });
 
     const stats = scheduler.getStatsNext24Hours();
-    t.equal(stats.count, 2, 'count');
-    t.equal(stats.time, 69, 'time');
+    t.equal(stats.count, 4, 'count');
+    t.equal(stats.time, 120, 'time');
     t.end();
   });
   t.end();
@@ -258,10 +258,10 @@ function setup2 () {
       viewtime,
       studytime
     ) values
-      (@ts - 60 * 60 * 24 * 1 - 4, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1 - 3, @date, 2, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1 - 2, @date, 3, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1 - 1, @date, 4, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 60 * 60 * 24 * 1000 - 4, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1000 - 3, @date, 2, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1000 - 2, @date, 3, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1000 - 1, @date, 4, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(1),
@@ -390,9 +390,9 @@ function setup3 () {
       viewtime,
       studytime
     ) values
-      (@ts - 60 * 60 * 24 * 1, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1 + 1, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1 + 2, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 60 * 60 * 24 * 1000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1000 + 1, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 60 * 60 * 24 * 1000 + 2, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(1),
@@ -410,7 +410,7 @@ function setup3 () {
       viewtime,
       studytime
     ) values
-      (@ts - 60 * 60 * 24 * 1 + 5, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 60 * 1000 + 5, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),

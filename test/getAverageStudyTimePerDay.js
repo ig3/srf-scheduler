@@ -10,10 +10,10 @@ t.test('getAverageStudyTime', t => {
   t.equal(result1, 0, 'no revlog entries');
 
   const result2 = getAverageStudyTimePerDay.call(setup2());
-  t.equal(result2, 20, 'average with some logs');
+  t.equal(result2, 50, 'average with some logs');
 
   const result4 = getAverageStudyTimePerDay.call(setup2(), 1);
-  t.equal(result4, 70, 'reviews older than days are ignored');
+  t.equal(result4, 80, 'reviews older than days are ignored');
   t.end();
 });
 
@@ -102,7 +102,7 @@ function setup2 () {
       (unixepoch() * 1000 - 4, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       (unixepoch() * 1000 - 3, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       (unixepoch() * 1000 - 2, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (unixepoch() * 1000 - 1, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (unixepoch() * 1000 - 1, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 20)
   `).run({
     ts: Date.now(),
     d1: d1,

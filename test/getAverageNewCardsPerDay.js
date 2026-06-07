@@ -10,7 +10,7 @@ t.test('getAverageNewCardsPerDay', t => {
   t.equal(result1, 0, '0 average if no revlog entries');
 
   const result2 = getAverageNewCardsPerDay.call(setup2());
-  t.equal(result2, 0.5, 'average with some logs');
+  t.equal(result2, 7, 'average with some logs');
 
   const result4 = getAverageNewCardsPerDay.call(setup3(), 1);
   t.equal(result4, 4.0, 'reviews older than days are ignored');

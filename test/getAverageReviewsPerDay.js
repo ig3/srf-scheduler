@@ -10,10 +10,10 @@ t.test('getAverageReviewsPerDay', t => {
   t.equal(result1, 0, '0 if no revlog entries');
 
   const result2 = getAverageReviewsPerDay.call(setup2());
-  t.equal(result2, 1, 'average 1 with 14 reviews total');
+  t.equal(result2, 5, '15 reviews in 3 days');
 
   const result4 = getAverageReviewsPerDay.call(setup2(), 1);
-  t.equal(result4, 7, 'reviews older than days are ignored');
+  t.equal(result4, 8, '8 reviews in 1 day - prior days are ignored');
   t.end();
 });
 
@@ -96,6 +96,7 @@ function setup2 () {
       ((unixepoch() * 1000) - 86400000 - 3, @d2, 1, 'good', 60 * 5, 500, 1.8, 10, 10),
       ((unixepoch() * 1000) - 86400000 - 2, @d2, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       ((unixepoch() * 1000) - 86400000 - 1, @d2, 1, 'good', 60 * 5, 1000000, 1.8, 10, 10),
+      ((unixepoch() * 1000) - 8, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       ((unixepoch() * 1000) - 7, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       ((unixepoch() * 1000) - 6, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
       ((unixepoch() * 1000) - 5, @d3, 1, 'good', 60 * 5, 0, 1.8, 10, 10),

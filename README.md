@@ -592,12 +592,13 @@ The new interval and due are calculated according to the ease.
  * Reduce default maxNewCardsPerDay to 20
  * Change getReviewsToNextNew
  * Include average new cards per day in estimate of cards in next 24 hours
- * Change getAverageNewCardsPerDay
  * Fix getStatsNext24Hours
  * Fix getAverageStudyTime
  * Remove getWeightedAverageStudyTime
  * Change getNextCard to present new cards more aggressively
  * Change getAverageStudyTime to getAverageStudyTimePerDay
  * Change changes to getNewCardMode
- * Change getAverageReviewsPerDay
  * Change getNewCardMode
+ * Change getAverageNewCardsPerDay
+ * Change getAverageReviewsPerDay
+ * Change getAverageStudyTimePerDay
