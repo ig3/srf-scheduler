@@ -360,10 +360,26 @@ factor by a process of moving average exponential decay.
 
 ## API
 
+### getAverageStudyTimePerCard
+
+Returns the average study time per card in seconds, averaged over the
+specified number of study days. Days without study are ignored. The current
+day is ignored if there are prior study days.
+
+The purpose of this function is to provide an estimate of the study time
+in the next 24 hours per card due in the next 24 hours. This is used to
+calculate the new card mode. It is a factor in calculating the estimated
+forward looking average study time.
+
 ### getCountCardsDueToday
 
 Returns the number of cards to be reviewed between now and the end of the
 current day in localtime, excluding deferred cards.
+
+### getCountNewCardsToday
+
+Returns the number of new cards studied since the start of the current
+calendar day.
 
 ### getIntervals(card)
 
@@ -454,6 +470,10 @@ Updates the given card, setting new interval and due, according to ease and
 creates a revlog record recording the review of the card.
 
 The new interval and due are calculated according to the ease.
+
+### shutdown
+
+Save state and disconnect from database.
 
 ## Changes
 
@@ -602,3 +622,4 @@ The new interval and due are calculated according to the ease.
  * Change getAverageNewCardsPerDay
  * Change getAverageReviewsPerDay
  * Change getAverageStudyTimePerDay
+ * Add getAverageStudyTimePerCard

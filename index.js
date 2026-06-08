@@ -3,11 +3,12 @@
 const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
-const getCardsToReview = require('./getCardsToReview.js');
-const getReviewsToNextNew = require('./getReviewsToNextNew.js');
-const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
+const getAverageStudyTimePerCard = require('./getAverageStudyTimePerCard.js');
+const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
+const getCardsToReview = require('./getCardsToReview.js');
 const getCountNewCardsToday = require('./getCountNewCardsToday.js');
+const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getStudyTime = require('./getStudyTime.js');
 
 // review is called when a card is reviewed
@@ -404,38 +405,7 @@ function getNextCard (overrideLimits = false) {
 
 function getStatsNext24Hours () {
   const self = this;
-  // Get the average time per unique card per day in minutes, averaged over
-  // the past 14 days of study. This will be the estimate of time per card
-  // due. It should factor in a typical balance of new cards (reviewed
-  // multiple times per day) and older cards (reviewed only once per day),
-  // and the average recent difficulty / study style. Exclude the current
-  // revdate because it will underestimate the total study time of short
-  // interval cards.
-  const timePerCard = (() => {
-    const hist = self.db.prepare(`
-      select
-        revdate,
-        count(distinct cardid) as n,
-        sum(studytime) as t
-      from revlog
-      group by revdate
-      order by revdate desc
-      limit 15
-    `).all();
-    // If there are no reviews, default to 0.5 minutes per card
-    if (hist.length === 0) return (0.5);
-    if (
-      hist.length > 1 &&
-      hist[0].revdate === formatLocalDate(new Date())
-    ) {
-      hist.shift();
-    }
-    let sum = 0;
-    hist.forEach(record => {
-      sum += record.t / record.n;
-    });
-    return (sum / hist.length);
-  })();
+  const timePerCard = this.getAverageStudyTimePerCard();
 
   // Get the number of cards due, excluding those that will not be
   // presented due to minTimeBetweenRelatedCards and including average new
@@ -537,6 +507,7 @@ function shutdown () {
 }
 
 const api = {
+  getAverageStudyTimePerCard,
   getAverageStudyTimePerDay,
   getCountCardsDueToday,
   getCountNewCardsToday,
