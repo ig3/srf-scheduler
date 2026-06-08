@@ -366,7 +366,10 @@ function getNewCardMode () {
     newCardsToday < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {
-    if (studyTime < self.config.minStudyTime) {
+    if (
+      studyTime < self.config.minStudyTime ||
+      studyTimeNext24Hours < self.config.targetStudyTime
+    ) {
       return 'go';
     } else {
       return 'slow';
@@ -382,18 +385,12 @@ function getNextCard (overrideLimits = false) {
   if (overrideLimits) return self.getNextDue(true) || self.getNextNew();
 
   const newCardMode = getNewCardMode.call(self);
-  const statsNext24Hours = self.getStatsNext24Hours();
-
   const dueCard = self.getNextDue();
 
   if (
-    newCardMode !== 'stop' &&
-    (
+    newCardMode !== 'stop' && (
       self.reviewsToNextNew === 0 || (
-        !dueCard && (
-          newCardMode === 'go' ||
-          statsNext24Hours.time < self.config.targetStudyTime
-        )
+        !dueCard && newCardMode === 'go'
       )
     )
   ) {

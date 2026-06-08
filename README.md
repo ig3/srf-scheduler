@@ -623,3 +623,4 @@ Save state and disconnect from database.
  * Change getAverageReviewsPerDay
  * Change getAverageStudyTimePerDay
  * Add getAverageStudyTimePerCard
+ * Refactor getNextCard

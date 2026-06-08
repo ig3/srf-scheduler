@@ -138,7 +138,7 @@ t.test('getNewCardMode', t => {
     t.end();
   });
 
-  t.test('studyTime = minStudyTime', t => {
+  t.test('studyTime = minStudyTime, projected < targetStudyTime', t => {
     const scheduler = require('..')(setup());
 
     // Mock supporting functions
@@ -148,6 +148,33 @@ t.test('getNewCardMode', t => {
     scheduler.getStatsNext24Hours = () => {
       return {
         time: 1200,
+      };
+    };
+    scheduler.getAverageStudyTimePerDay = () => {
+      return 1200;
+    };
+    scheduler.getCountNewCardsToday = () => {
+      return 0;
+    };
+    scheduler.srf.getCountCardsOverdue = () => {
+      return 0;
+    };
+
+    const mode = scheduler.getNewCardMode();
+    t.equal(mode, 'go', 'Mode go');
+    t.end();
+  });
+
+  t.test('studyTime = minStudyTime, projected = targetStudyTime', t => {
+    const scheduler = require('..')(setup());
+
+    // Mock supporting functions
+    scheduler.getStudyTime = () => {
+      return 1200;
+    };
+    scheduler.getStatsNext24Hours = () => {
+      return {
+        time: 3600,
       };
     };
     scheduler.getAverageStudyTimePerDay = () => {
