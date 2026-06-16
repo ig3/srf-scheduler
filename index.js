@@ -280,19 +280,11 @@ function intervalEasy (card) {
 // Normally, only due cards may be returned but if overrideLimits is true
 // then cards are sorted by due date and may be returned even if their due
 // date is in the future.
-function getNextDue (overrideLimits = false) {
+function getNextDue () {
   const self = this;
 
   let cards;
-  if (overrideLimits) {
-    cards = self.db.prepare(`
-      select *
-      from card
-      where interval > 0
-      order by due, templateid
-      limit 5
-    `).all();
-  } else if (Math.random() < self.config.probabilityOldestDue) {
+  if (Math.random() < self.config.probabilityOldestDue) {
     cards = self.db.prepare(`
       select *
       from card
@@ -382,9 +374,7 @@ function getNewCardMode () {
 function getNextCard (overrideLimits = false) {
   const self = this;
 
-  if (overrideLimits) return self.getNextDue(true) || self.getNextNew();
-
-  const newCardMode = getNewCardMode.call(self);
+  const newCardMode = overrideLimits ? 'go' : getNewCardMode.call(self);
   const dueCard = self.getNextDue();
 
   if (

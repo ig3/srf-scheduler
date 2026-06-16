@@ -42,10 +42,8 @@ t.test('getNextCard', t => {
 
     const card = scheduler.getNextCard(true);
     t.ok(card, 'got a card');
-    t.ok(card, 'got a card');
-    t.ok(card.due > now(), 'card is already due');
-    t.ok(card.interval !== 0, 'card interval is not zero');
-    t.ok(card.id === 1, 'got card 1');
+    t.ok(card.due === 0, 'New card');
+    t.ok(card.interval === 0, 'New card');
     t.end();
   });
 

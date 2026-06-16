@@ -401,8 +401,9 @@ Stop if new cards will not be presented.
 
 Returns the next card to be studied or undefined.
 
-If overrideLimits is true then getNextCard returns the next due card if
-there is a card due, otherwise the next new card.
+If overrideLimits is true then getNextCard always returns a card: a new
+card if nothing is due. It is perpetual 'go' mode, returning new cards in
+excess of maxNewCardsPerDay and regardless of targetStudyTime.
 
 Otherwise, getNextCard returns the next new card if:
  * average study time in the past and next 24 hours is less than
@@ -624,3 +625,6 @@ Save state and disconnect from database.
  * Add getAverageStudyTimePerCard
  * Refactor getNextCard
  * Change getReviewsToNextNew
+
+### 3.0.1 - WIP
+ * Fix getNextCard(true)
