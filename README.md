@@ -608,7 +608,7 @@ Save state and disconnect from database.
  * Fix getWeightedAverageStudyTime
  * Change git repository to https://codeberg.org/ig3/srf-scheduler.git
 
-### 2.2.1 - WIP
+### 3.0.0 - 20260617
  * Reduce default maxNewCardsPerDay to 20
  * Include average new cards per day in estimate of cards in next 24 hours
  * Fix getStatsNext24Hours
