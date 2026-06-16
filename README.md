@@ -610,7 +610,6 @@ Save state and disconnect from database.
 
 ### 2.2.1 - WIP
  * Reduce default maxNewCardsPerDay to 20
- * Change getReviewsToNextNew
  * Include average new cards per day in estimate of cards in next 24 hours
  * Fix getStatsNext24Hours
  * Fix getAverageStudyTime
@@ -624,3 +623,4 @@ Save state and disconnect from database.
  * Change getAverageStudyTimePerDay
  * Add getAverageStudyTimePerCard
  * Refactor getNextCard
+ * Change getReviewsToNextNew

@@ -15,6 +15,7 @@
 
 const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
+const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
 
 module.exports = function getReviewsToNextNew () {
   const error =
@@ -25,18 +26,7 @@ module.exports = function getReviewsToNextNew () {
     getAverageNewCardsPerDay.call(this)
   );
 
-  const timePerReview = this.db.prepare(`
-    select avg(studytime) as avg
-    from (
-      select studytime
-      from revlog
-      order by id desc
-      limit 1000
-    )
-  `)
-  .get().avg || 30;
-
-  const reviewsPerDay = this.config.targetStudyTime / timePerReview;
+  const reviewsPerDay = getAverageReviewsPerDay.call(this);
 
   return Math.max(
     1,
