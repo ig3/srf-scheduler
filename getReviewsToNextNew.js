@@ -30,7 +30,7 @@ module.exports = function getReviewsToNextNew () {
 
   return Math.max(
     1,
-    Math.round(
+    Math.floor(
       reviewsPerDay / newCardsPerDay * (
         1 + error * this.config.studyTimeErrorSensitivity
       )
