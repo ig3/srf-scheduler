@@ -446,18 +446,31 @@ been reviewed within config.minTimeBetweenRelatedCards.
 ### getStatsNext24Hours
 
 Returns an object with properties:
+ * cardsDue
  * count
+ * minReviews
+ * reviewsToNextNew
  * time
 
-Where count is the number of cards due in the next 24 hours and time is the
-estimated time (seconds) to study all the cards due in the next 24 hours.
+cardsDue is the number of cards with a due date less than 24 hours from
+now.
 
-Count is the number of cards due within the next 24 hours, excluding
-deferred cards (multiple cards from the same fieldset due within
-minTimeBetweenRelatedCards).
+count is the estimated number of cards to be reviewed in the next 24 hours.
+This is cardsDue plus the average number of new cards per day.
 
-Time is an estimate of the time to review all these cards, based on recent
-performance.
+minReviews is the minimum number of reviews between new cards when new card
+mode is `slow`. This is what reviewsToNextNew will be set to after viewing
+a new card.
+
+reviewsToNextNew is the number of reviews before the next new card in
+`slow` mode. This is decremented after each review. When it is 0, a new
+card will be presented, when in `slow` mode.
+
+time is an estimate of the time to review the estimated number of cards to
+be reviewed in the next 24 hours. This is the number of cards multiplied by
+the average time per card per day. This is not the average time per review.
+It factors in the average number of reviews of a card in a day. It is the
+average total time per card per day.
 
 ### getTimeNextDue
 
@@ -630,3 +643,4 @@ Save state and disconnect from database.
  * Fix getNextCard(true)
  * Add getAverageNewCardsPerDay and getAverageReviewPerDay to api
  * Fix getStatsNext24Hours estimation of cards due
+ * Add cardsDue to getStatsNext24Hours
