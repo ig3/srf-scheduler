@@ -629,3 +629,4 @@ Save state and disconnect from database.
 ### 3.0.1 - WIP
  * Fix getNextCard(true)
  * Add getAverageNewCardsPerDay and getAverageReviewPerDay to api
+ * Fix getStatsNext24Hours estimation of cards due

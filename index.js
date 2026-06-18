@@ -398,29 +398,30 @@ function getStatsNext24Hours () {
   // Get the number of cards due, excluding those that will not be
   // presented due to minTimeBetweenRelatedCards and including average new
   // cards per day.
-  const t2 = now() + 60 * 60 * 24;
-  const t1 = Math.min(t2, now() + self.config.minTimeBetweenRelatedCards);
-  let cards =
-    self.db.prepare(`
+  const secondsPerDay = 60 * 60 * 24;
+  const limit = now() + secondsPerDay;
+  let cards;
+  if (self.config.minTimeBetweenRelatedCards < secondsPerDay) {
+    cards = self.db.prepare(`
+      select count() as count
+      from card
+      where
+        due < ? and
+        interval > 0
+    `)
+    .get(limit).count;
+  } else {
+    cards = self.db.prepare(`
       select count(distinct fieldsetid) as count
       from card
       where
         due < ? and
         interval > 0
     `)
-    .get(t1).count;
-  if (t2 > t1) {
-    cards +=
-      self.db.prepare(`
-        select count() as count
-        from card
-        where
-          due >= ? and
-          due < ?
-      `)
-      .get(t1, t2).count;
+    .get(limit).count;
   }
   cards += getAverageNewCardsPerDay.call(this);
+
   return ({
     count: Math.round(cards),
     time: Math.round(cards * timePerCard),
