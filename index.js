@@ -360,8 +360,10 @@ function getNewCardMode () {
     cardsOverdue === 0
   ) {
     if (
-      studyTime < self.config.minStudyTime ||
-      studyTimeNext24Hours < self.config.targetStudyTime
+      studyTime < self.config.minStudyTime || (
+        studyTime < self.config.targetStudyTime * 0.9 &&
+        studyTimeNext24Hours < self.config.targetStudyTime
+      )
     ) {
       return 'go';
     } else {
