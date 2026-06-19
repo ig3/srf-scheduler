@@ -644,3 +644,4 @@ Save state and disconnect from database.
  * Add getAverageNewCardsPerDay and getAverageReviewPerDay to api
  * Fix getStatsNext24Hours estimation of cards due
  * Add cardsDue to getStatsNext24Hours
+ * Fix getAverageNewCardsPerDay
