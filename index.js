@@ -7,7 +7,7 @@ const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
 const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
 const getAverageStudyTimePerCard = require('./getAverageStudyTimePerCard.js');
 const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
-const getCardsToReview = require('./getCardsToReview.js');
+const getCardsDue = require('./getCardsDue.js');
 const getCountNewCardsToday = require('./getCountNewCardsToday.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getStudyTime = require('./getStudyTime.js');
@@ -436,7 +436,7 @@ function getCountCardsDueToday () {
   const self = this;
   const endOfDay =
     Math.floor(new Date().setHours(23, 59, 59, 999).valueOf() / 1000);
-  return (getCardsToReview.call(self, endOfDay - now()));
+  return (getCardsDue.call(self, endOfDay - now()));
 }
 
 // Seconds since the epoch, right now.
@@ -502,6 +502,7 @@ const api = {
   getAverageReviewsPerDay,
   getAverageStudyTimePerCard,
   getAverageStudyTimePerDay,
+  getCardsDue,
   getCountCardsDueToday,
   getCountNewCardsToday,
   getIntervals,

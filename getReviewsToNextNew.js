@@ -6,34 +6,27 @@
  *
  * Configuration parameters:
  *   config.targetStudyTime
- *   config.maxNewCardsPerDay
+ *   config.studyTimeErrorSensitivity
  *
  * getReviewsToNextNew returns the number of reviews to be completed before
- * the next new card is shown.
+ * the next new card is shown, when new card mode is `slow`.
+ *
+ * Actual reviews will usually be more than the number returned by
+ * getCardsToRevew() because this does not include multiple reviews of
+ * cards with short intervals or new cards. This results in a lower number
+ * of reviews between new cards than required to space them out throughout
+ * the entire day of study.
  */
 'use strict';
 
-const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
-const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
-const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
-
 module.exports = function getReviewsToNextNew () {
-  const error =
-    (getAverageStudyTimePerDay.call(this) / this.config.targetStudyTime) - 1;
-
-  const newCardsPerDay = Math.max(
-    1,
-    getAverageNewCardsPerDay.call(this)
+  const error = this.config.studyTimeErrorSensitivity * (
+    (this.getAverageStudyTimePerDay() - this.config.targetStudyTime) /
+      this.config.targetStudyTime
   );
 
-  const reviewsPerDay = getAverageReviewsPerDay.call(this);
-
-  return Math.max(
-    1,
-    Math.floor(
-      reviewsPerDay / newCardsPerDay * (
-        1 + error * this.config.studyTimeErrorSensitivity
-      )
-    )
+  return Math.floor(
+    (1 + error) *
+    this.getCardsDue(86400) / (1 + this.getAverageNewCardsPerDay())
   );
 };

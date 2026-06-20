@@ -645,3 +645,5 @@ Save state and disconnect from database.
  * Fix getStatsNext24Hours estimation of cards due
  * Add cardsDue to getStatsNext24Hours
  * Fix getAverageNewCardsPerDay
+ * Rename getCardsToReview to getCardsDue
+ * Change getReviewsToNextNew
