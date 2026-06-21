@@ -12,6 +12,7 @@ t.test('getNewCardMode', t => {
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 0,
+      getAverageReviewsPerCard: () => 10,
       getAverageStudyTimePerDay: () => 0,
       getCardsDue: () => 0,
     };
@@ -29,12 +30,13 @@ t.test('getNewCardMode', t => {
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 9,
+      getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 30 * 60,
       getCardsDue: () => 70,
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 7, 'reviews');
+    t.equal(n, 14, 'reviews');
     t.end();
   });
   t.test('Adjusts to high study time', t => {
@@ -46,12 +48,13 @@ t.test('getNewCardMode', t => {
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 9,
+      getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 45 * 60,
       getCardsDue: () => 70,
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 10, 'reviews');
+    t.equal(n, 21, 'reviews');
     t.end();
   });
   t.test('Adjusts to low study time', t => {
@@ -63,12 +66,13 @@ t.test('getNewCardMode', t => {
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 9,
+      getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 15 * 60,
       getCardsDue: () => 70,
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 3, 'reviews');
+    t.equal(n, 7, 'reviews');
     t.end();
   });
   t.test('Adjusts to higher sensitivity', t => {
@@ -80,12 +84,13 @@ t.test('getNewCardMode', t => {
         studyTimeErrorSensitivity: 2.0,
       },
       getAverageNewCardsPerDay: () => 9,
+      getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 45 * 60,
       getCardsDue: () => 70,
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 14, 'reviews');
+    t.equal(n, 28, 'reviews');
     t.end();
   });
   t.test('Adjusts to lower sensitivity', t => {
@@ -97,12 +102,13 @@ t.test('getNewCardMode', t => {
         studyTimeErrorSensitivity: 0.5,
       },
       getAverageNewCardsPerDay: () => 9,
+      getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 45 * 60,
       getCardsDue: () => 70,
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 8, 'reviews');
+    t.equal(n, 17, 'reviews');
     t.end();
   });
   t.end();

@@ -4,6 +4,7 @@ const adjustCards = require('./adjustCards.js');
 const deferRelated = require('./deferRelated.js');
 const formatLocalDate = require('./formatLocalDate.js');
 const getAverageNewCardsPerDay = require('./getAverageNewCardsPerDay.js');
+const getAverageReviewsPerCard = require('./getAverageReviewsPerCard.js');
 const getAverageReviewsPerDay = require('./getAverageReviewsPerDay.js');
 const getAverageStudyTimePerCard = require('./getAverageStudyTimePerCard.js');
 const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
@@ -499,6 +500,7 @@ function shutdown () {
 
 const api = {
   getAverageNewCardsPerDay,
+  getAverageReviewsPerCard,
   getAverageReviewsPerDay,
   getAverageStudyTimePerCard,
   getAverageStudyTimePerDay,

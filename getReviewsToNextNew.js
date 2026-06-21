@@ -27,6 +27,7 @@ module.exports = function getReviewsToNextNew () {
 
   return Math.floor(
     (1 + error) *
-    this.getCardsDue(86400) / (1 + this.getAverageNewCardsPerDay())
+    this.getCardsDue(86400) * this.getAverageReviewsPerCard() /
+    (1 + this.getAverageNewCardsPerDay())
   );
 };
