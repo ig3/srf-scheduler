@@ -24,6 +24,17 @@ need to install this independently.
 
 ## Algorithms
 
+There are two fundamental algorithms:
+ * determining the next card to be reviewed
+ * determining the next due date after a card is reviewed
+
+There are two fundamental control mechanisms:
+ * regulating the introduction of new cards
+ * adjusting the interval between reviews
+
+There are many details, heuristics and supporting algorithms. These are
+described in some detail in the following sub-sections.
+
 ### new cards
 
 Average study time per day is controlled by adjusting the presentation of
@@ -112,10 +123,11 @@ two algorithms is used to select the next card for review:
 
 The algorithm is selected randomly, with probability of the earliest due
 cards being selected first determined by configuration parameter
-probabilityOldestDue.
+config.probabilityOldestDue.
 
 For both algorithms, the first five cards are determined and one of these
-is selected at random. 
+is selected at random. The randomization ensures that cards are not
+reviewed in a fixed order, making the review more independent.
 
 ### interval adjustments
 
