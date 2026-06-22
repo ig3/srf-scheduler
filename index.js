@@ -383,9 +383,9 @@ function getStatsNext24Hours () {
   // cards per day.
   const secondsPerDay = 60 * 60 * 24;
   const limit = now() + secondsPerDay;
-  let cards;
+  let cardsDue;
   if (self.config.minTimeBetweenRelatedCards < secondsPerDay) {
-    cards = self.db.prepare(`
+    cardsDue = self.db.prepare(`
       select count() as count
       from card
       where
@@ -394,7 +394,7 @@ function getStatsNext24Hours () {
     `)
     .get(limit).count;
   } else {
-    cards = self.db.prepare(`
+    cardsDue = self.db.prepare(`
       select count(distinct fieldsetid) as count
       from card
       where
@@ -403,10 +403,11 @@ function getStatsNext24Hours () {
     `)
     .get(limit).count;
   }
+  const cards = Math.round(cardsDue + getAverageNewCardsPerDay.call(this));
 
   return ({
-    count: Math.round(cards + getAverageNewCardsPerDay.call(this)),
-    cardsDue: cards,
+    count: cards,
+    cardsDue: cardsDue,
     time: Math.round(cards * timePerCard),
     minReviews: getReviewsToNextNew.call(self),
     reviewsToNextNew: self.reviewsToNextNew,
