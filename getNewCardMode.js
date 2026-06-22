@@ -14,7 +14,8 @@ module.exports = function getNewCardMode () {
   const cardsOverdue = self.srf.getCountCardsOverdue();
 
   if (
-    studyTime < self.config.targetStudyTime &&
+    studyTime < self.config.studyTimeTarget &&
+    studyTimeNext24Hours < self.config.studyTimeLimit &&
     newCardsToday < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {

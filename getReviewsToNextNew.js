@@ -5,7 +5,7 @@
  * object.
  *
  * Configuration parameters:
- *   config.targetStudyTime
+ *   config.studyTimeTarget
  *   config.studyTimeErrorSensitivity
  *
  * getReviewsToNextNew returns the number of reviews to be completed before
@@ -21,8 +21,8 @@
 
 module.exports = function getReviewsToNextNew () {
   const error = this.config.studyTimeErrorSensitivity * (
-    (this.getAverageStudyTimePerDay() - this.config.targetStudyTime) /
-      this.config.targetStudyTime
+    (this.getAverageStudyTimePerDay() - this.config.studyTimeTarget) /
+      this.config.studyTimeTarget
   );
 
   return Math.floor(

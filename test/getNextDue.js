@@ -193,7 +193,7 @@ function setup1 () {
     percentCorrectTarget: 90,
     percentCorrectWindow: 60 * 60 * 24 * 30,
     probabilityOldestDue: 0.5,
-    targetStudyTime: 3600,
+    studyTimeTarget: 3600,
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,
@@ -307,7 +307,7 @@ function setup2 () {
     percentCorrectTarget: 90,
     percentCorrectWindow: 60 * 60 * 24 * 30,
     probabilityOldestDue: 0.5,
-    targetStudyTime: 3600,
+    studyTimeTarget: 3600,
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,
@@ -326,7 +326,7 @@ function setup2 () {
 //  new cards available
 //  One card due now
 //  Study time past 24 hours < config.minStudyTime
-//  Study time next 24 hours < conig.targetStudyTime
+//  Study time next 24 hours < conig.studyTimeTarget
 //  New cards past 24 hours < config.maxNewCardsPerDay
 function setup3 () {
   const db = require('better-sqlite3')();
@@ -439,7 +439,7 @@ function setup3 () {
     percentCorrectTarget: 90,
     percentCorrectWindow: 60 * 60 * 24 * 30,
     probabilityOldestDue: 0.5,
-    targetStudyTime: 3600,
+    studyTimeTarget: 3600,
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,

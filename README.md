@@ -313,9 +313,9 @@ calculated. Reviews longer ago than this do not contribute.
 probabilityOldestDue is the probability the scheduler will select cards
 according to due date rather than interval.
 
-### config.targetStudyTime
+### config.studyTimeTarget
 
-targetStudyTime is an upper bound on study time in a 24 hour period above
+studyTimeTarget is an upper bound on study time in a 24 hour period above
 which new cards will not be presented.
 
 ### config.weightEasy
@@ -372,7 +372,8 @@ Returns 'go', 'slow' or 'stop'. This determines whether and when new cards
 will be presented. See getNextCard() for details.
 
 Mode is `stop` if:
- * predicted average study time is more than config.targetStudyTime OR
+ * predicted average study time is more than config.studyTimeTarget OR
+ * predicted study time next 24 hours is more than config.studyTimeLimit OR
  * the number of new cards today is more than config.maxNewCardsPerDay OR
  * there are overdue cards
 
@@ -388,7 +389,7 @@ Returns the next card to be studied or undefined.
 
 If overrideLimits is true then getNextCard always returns a card: a new
 card if nothing is due. It forces 'go' mode, returning new cards in
-excess of maxNewCardsPerDay and regardless of targetStudyTime.
+excess of maxNewCardsPerDay and regardless of studyTimeTarget.
 
 If new card mode is `stop`, getNextCard returns the next due card if there
 is one, otherwise nothing.

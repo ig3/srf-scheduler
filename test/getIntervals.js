@@ -296,7 +296,7 @@ function setup1 () {
     percentCorrectTarget: 90,
     percentCorrectWindow: 60 * 60 * 24 * 30,
     probabilityOldestDue: 0.5,
-    targetStudyTime: 3600,
+    studyTimeTarget: 3600,
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,

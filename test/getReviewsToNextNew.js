@@ -8,7 +8,7 @@ t.test('getNewCardMode', t => {
 
     const context = {
       config: {
-        targetStudyTime: 30 * 60,
+        studyTimeTarget: 30 * 60,
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 0,
@@ -26,7 +26,7 @@ t.test('getNewCardMode', t => {
 
     const context = {
       config: {
-        targetStudyTime: 30 * 60,
+        studyTimeTarget: 30 * 60,
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 9,
@@ -44,7 +44,7 @@ t.test('getNewCardMode', t => {
 
     const context = {
       config: {
-        targetStudyTime: 30 * 60,
+        studyTimeTarget: 30 * 60,
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 9,
@@ -62,7 +62,7 @@ t.test('getNewCardMode', t => {
 
     const context = {
       config: {
-        targetStudyTime: 30 * 60,
+        studyTimeTarget: 30 * 60,
         studyTimeErrorSensitivity: 1.0,
       },
       getAverageNewCardsPerDay: () => 9,
@@ -80,7 +80,7 @@ t.test('getNewCardMode', t => {
 
     const context = {
       config: {
-        targetStudyTime: 30 * 60,
+        studyTimeTarget: 30 * 60,
         studyTimeErrorSensitivity: 2.0,
       },
       getAverageNewCardsPerDay: () => 9,
@@ -98,7 +98,7 @@ t.test('getNewCardMode', t => {
 
     const context = {
       config: {
-        targetStudyTime: 30 * 60,
+        studyTimeTarget: 30 * 60,
         studyTimeErrorSensitivity: 0.5,
       },
       getAverageNewCardsPerDay: () => 9,

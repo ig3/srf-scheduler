@@ -17,7 +17,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -38,7 +39,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -59,7 +61,30 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
+      }
+    });
+
+    t.equal(mode, 'stop', 'Stop mode');
+    t.end();
+  });
+  t.test('Study time next 24 hours === studyTimeLimit', t => {
+    const getNewCardMode = require('../getNewCardMode.js');
+
+    const mode = getNewCardMode.call({
+      getAverageStudyTimePerDay: () => 0,
+      getCountNewCardsToday: () => 0,
+      getStatsNext24Hours: () => ({ time: 35 * 60 }),
+      getStudyTime: () => 0,
+      srf: {
+        getCountCardsOverdue: () => 0,
+      },
+      config: {
+        goModeThreshold: 28 * 60,
+        maxNewCardsPerDay: 20,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -80,7 +105,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -101,7 +127,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -122,7 +149,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -143,7 +171,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -164,7 +193,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 
@@ -185,7 +215,8 @@ t.test('getNewCardMode', t => {
       config: {
         goModeThreshold: 28 * 60,
         maxNewCardsPerDay: 20,
-        targetStudyTime: 30 * 60,
+        studyTimeLimit: 35 * 60,
+        studyTimeTarget: 30 * 60,
       }
     });
 

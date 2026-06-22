@@ -357,7 +357,7 @@ function getNewCardMode () {
   const cardsOverdue = self.srf.getCountCardsOverdue();
 
   if (
-    studyTime < self.config.targetStudyTime &&
+    studyTime < self.config.studyTimeTarget &&
     newCardsToday < self.config.maxNewCardsPerDay &&
     cardsOverdue === 0
   ) {
@@ -460,7 +460,8 @@ function defaultConfigParameters () {
     probabilityOldestDue: 0.2,
     recentIntervalWindow: 3,
     studyTimeErrorSensitivity: 1.0,
-    targetStudyTime: '30 minutes',
+    studyTimeLimit: '35 minutes',
+    studyTimeTarget: '30 minutes',
     weightEasy: 2,
     weightFail: 0,
     weightGood: 1.5,
