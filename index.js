@@ -10,6 +10,7 @@ const getAverageStudyTimePerCard = require('./getAverageStudyTimePerCard.js');
 const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getCardsDue = require('./getCardsDue.js');
 const getCountNewCardsToday = require('./getCountNewCardsToday.js');
+const getNextCard = require('./getNextCard.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getStudyTime = require('./getStudyTime.js');
 
@@ -361,10 +362,8 @@ function getNewCardMode () {
     cardsOverdue === 0
   ) {
     if (
-      studyTime < self.config.minStudyTime || (
-        studyTime < self.config.targetStudyTime * 0.9 &&
-        studyTimeNext24Hours < self.config.targetStudyTime
-      )
+      studyTime < self.config.goModeThreshold ||
+      studyTimeNext24Hours < self.config.goModeThreshold
     ) {
       return 'go';
     } else {
@@ -372,25 +371,6 @@ function getNewCardMode () {
     }
   } else {
     return 'stop';
-  }
-}
-
-function getNextCard (overrideLimits = false) {
-  const self = this;
-
-  const newCardMode = overrideLimits ? 'go' : getNewCardMode.call(self);
-  const dueCard = self.getNextDue();
-
-  if (
-    newCardMode !== 'stop' && (
-      self.reviewsToNextNew === 0 || (
-        !dueCard && newCardMode === 'go'
-      )
-    )
-  ) {
-    return self.getNextNew();
-  } else {
-    return dueCard;
   }
 }
 
@@ -457,6 +437,7 @@ function defaultConfigParameters () {
     failFactor: 0.5,
     failLearningMaxInterval: '1 day',
     failMaxInterval: '1 week',
+    goModeThreshold: '28 minutes',
     goodFactor: 1.0,
     goodMinFactor: 1.0,
     goodMinInterval: '30 seconds',
@@ -471,7 +452,6 @@ function defaultConfigParameters () {
     maxNewCardsPerDay: 20,
     maxViewTime: '2 minutes',
     minPercentCorrectCount: 10,
-    minStudyTime: '20 minutes',
     minTimeBetweenRelatedCards: '1 hour',
     newCardRateFactor: 0.9,
     percentCorrectSensitivity: 0.00001,

@@ -34,11 +34,10 @@ New cards are presented if:
  * new cards in the current calendar day < `config.maxNewCardsPerDay`; and
  * there are no overdue cards
 
-New cards are presented interleaved with review cards if there are cards
-due, unless estimated study time is less than `config.minStudyTime`.
-
-If average study time is less than `config.minStudyTime` then new cards
-are presented when there are no cards due.
+New cards are presented when there are no due cards if either average study
+time or predicted study time in the next 24 hours are less than
+`config.goModeThreshold`. Otherwise new cards are presented interleaved
+between due cards.
 
 For these controls, average study time is determined from:
  * actual study time in the past 24 hours
@@ -49,41 +48,17 @@ The prediction of study time in the next 24 hours is problematic.
 Initially, there is no record of historic performance on which to base the
 prediction. Also, actual performance varies from day to day.
 
-The estimate of study time in the next 24 hours assumes that the
-time per unique card studied will be the same in the future as in the past.
-This is problematic because initially there is no history of review and the
-mix of new cards and older, better known cards (and, therefore, requiring
-fewer reviews and less time per day) is not typical and changes rapidly as
-study progressing. The changing mix of cards makes future performance
-different from historic performance. But the algorithm assumes future
-performance will be the same as historic performance. This causes
-inaccurate predictions, particularly in early days of study.
+The estimate of study time in the next 24 hours assumes:
+ * time per card will be the same as recent average
+ * number of new cards will be the same as recent average
 
-New cards are typically reviwed several times per day, until they are
-learned well enough to be recalled correctly after periods longer than 24
-hours. Older, better known cards are typically reviewed only once per day,
-with intervals of one or more days between reviews.
+Time per card is higher than time per review when cards are reviewed more
+than once per day. When the mix of cards reviewed includes more cards with
+short intervals, average time per card increases. 
 
-On the first day of study, there are only new cards. On the one hand, these
-cards will each be reviewed many times, thus accumulating an unusually
-hight study time per card per day. On the other hand, until the day is
-complete the time per card is less than it will be. Thus the average time
-per card at some time on the first day of study is not a very good
-predictor of the time per card in the next 24 hours.
-
-As study progresses, the mix of cards changes and the average time per card
-will tend to decrease.
-
-During the first day of study, the only data available is for a partial day
-of study. It isn't perfect, but it is all that is available, so it is used.
-
-After the first day of study, records of the current day are excluded from
-calculation: only records of complete days of study are used. This tends to
-make the estimates more accurate, but the mix of cards (some new cards and
-a gradually increasing percentage of older, better known cards) changes.
-Initially the rate of change is high and the estimate will tend to be an
-over-estimate of study time. When the mix of cards stabilizes, the estimate
-will tend to be more accurate.
+The estimated study time is the predicted number of card to be studied (the
+number of cards due plus the average number of new cards per day)
+multiplied by the average time per card.
 
 The number of reviews between new cards is adjusted according to the ratio
 of average study time to target study time per day, the recent average time
@@ -226,6 +201,11 @@ card with interval less than learningThreshold.
 ### config.failMaxInterval
 
 failMaxInterval is the maximum interval after a Fail response.
+
+### config.goModeThreshold
+
+Predicted study time below which new cards are presented in `go` mode
+rather than `slow` mode.
 
 ### config.goodFactor
 
@@ -388,36 +368,37 @@ given card.
 
 ### getNewCardMode()
 
-Returns 'go', 'slow' or 'stop'.
+Returns 'go', 'slow' or 'stop'. This determines whether and when new cards
+will be presented. See getNextCard() for details.
 
-Go if new cards will be presented when there are no cards due.
+Mode is `stop` if:
+ * predicted average study time is more than config.targetStudyTime OR
+ * the number of new cards today is more than config.maxNewCardsPerDay OR
+ * there are overdue cards
 
-Slow if new cards will be presented, interleaved with due cards but not if
-there are no cards due.
+Otherwise, mode is `go` if:
+ * predicted average study time is less than config.goModeThreshold OR
+ * predicted study time in next 24 hours is less than config.goModeThreshold
 
-Stop if new cards will not be presented.
+Otherwise, mode is `slow`.
 
 ### getNextCard(overrideLimits)
 
 Returns the next card to be studied or undefined.
 
 If overrideLimits is true then getNextCard always returns a card: a new
-card if nothing is due. It is perpetual 'go' mode, returning new cards in
+card if nothing is due. It forces 'go' mode, returning new cards in
 excess of maxNewCardsPerDay and regardless of targetStudyTime.
 
-Otherwise, getNextCard returns the next new card if:
- * average study time in the past and next 24 hours is less than
-   config.targetStudyTime; and
- * total new cards studied in the current calendar day is less than
-   config.maxNewCardsPerDay; and
- * there are no overdue cards; and
- * sufficient due cards have been reviewed since the last new card or there
-   is no due card and average study time is less than
-   config.minStudyTime
+If new card mode is `stop`, getNextCard returns the next due card if there
+is one, otherwise nothing.
 
-Otherwise, getNextCard returns the next due card if there is a card due.
+If new card mode is `slow`, getNextCard returns the next new card if cards
+to next new is 0, otherwise the next due card or no card if there is no
+card due.
 
-Otherwise, getNextCard returns undefined.
+If new card mode is `go`, getNextCard returns the next new card if cards to
+next new is 0 or if there is no due card, otherwise the next due card.
 
 ### getNextDue(overrideLimits)
 
@@ -647,3 +628,4 @@ Save state and disconnect from database.
  * Fix getAverageNewCardsPerDay
  * Rename getCardsToReview to getCardsDue
  * Change getReviewsToNextNew
+ * Change getNewCardMode
