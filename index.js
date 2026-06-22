@@ -375,42 +375,16 @@ function getNewCardMode () {
 }
 
 function getStatsNext24Hours () {
-  const self = this;
+  const cardsDue = this.getCardsDue(86400);
+  const cards = Math.round(cardsDue + this.getAverageNewCardsPerDay());
   const timePerCard = this.getAverageStudyTimePerCard();
-
-  // Get the number of cards due, excluding those that will not be
-  // presented due to minTimeBetweenRelatedCards and including average new
-  // cards per day.
-  const secondsPerDay = 60 * 60 * 24;
-  const limit = now() + secondsPerDay;
-  let cardsDue;
-  if (self.config.minTimeBetweenRelatedCards < secondsPerDay) {
-    cardsDue = self.db.prepare(`
-      select count() as count
-      from card
-      where
-        due < ? and
-        interval > 0
-    `)
-    .get(limit).count;
-  } else {
-    cardsDue = self.db.prepare(`
-      select count(distinct fieldsetid) as count
-      from card
-      where
-        due < ? and
-        interval > 0
-    `)
-    .get(limit).count;
-  }
-  const cards = Math.round(cardsDue + getAverageNewCardsPerDay.call(this));
 
   return ({
     count: cards,
     cardsDue: cardsDue,
     time: Math.round(cards * timePerCard),
-    minReviews: getReviewsToNextNew.call(self),
-    reviewsToNextNew: self.reviewsToNextNew,
+    minReviews: this.getReviewsToNextNew,
+    reviewsToNextNew: this.reviewsToNextNew,
   });
 }
 
