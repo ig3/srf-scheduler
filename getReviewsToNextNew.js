@@ -25,9 +25,12 @@ module.exports = function getReviewsToNextNew () {
       this.config.studyTimeTarget
   );
 
-  return Math.floor(
-    (1 + error) *
-    this.getCardsDue(86400) * this.getAverageReviewsPerCard() /
-    (1 + this.getAverageNewCardsPerDay())
+  return Math.max(
+    1,
+    Math.floor(
+      (1 + error) *
+      this.getCardsDue(86400) * this.getAverageReviewsPerCard() /
+      (1 + this.getAverageNewCardsPerDay())
+    )
   );
 };

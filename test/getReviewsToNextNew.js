@@ -18,7 +18,7 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 0, 'Minimum');
+    t.equal(n, 1, 'Minimum');
     t.end();
   });
   t.test('At capacity', t => {
