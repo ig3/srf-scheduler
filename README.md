@@ -30,27 +30,44 @@ Average study time per day is controlled by adjusting the presentation of
 new cards.
 
 New cards are presented if:
- * average study time < configured target study time;
+ * predicted average study time < `config.studyTimeTarget`; and
+ * predicted study time in the next 24 hours < config.studyTimeLimit; and
  * new cards in the current calendar day < `config.maxNewCardsPerDay`; and
  * there are no overdue cards
 
-New cards are presented when there are no due cards if either average study
-time or predicted study time in the next 24 hours are less than
-`config.goModeThreshold`. Otherwise new cards are presented interleaved
-between due cards.
+When the above conditions are satisfied and there are cards due, new cards
+are presented interleaved with the due cards. The number of reviews between
+new cards is adjusted so that they are spaced out throughout the day's
+study.
 
-For these controls, average study time is determined from:
- * actual study time in the past 24 hours
- * predicted study time in the next 24 hours
- * actual average study time in the past 14 days of study
+When there are no cards due, a new card will be presented if, in addition
+to the conditions noted above:
+ * predicted average study time < config.goModeThreshold; or
+ * predicted study time in the next 24 hours < config.goModeThreshold.
 
-The prediction of study time in the next 24 hours is problematic.
+Predicted study time in the next 24 hours is based on:
+ * the number of cards due in the next 24 hours
+ * the recent average number of new cards per day
+ * the recent average study time per day per card
+
+Predicted average study time is based on:
+ * the actual study time in the past 24 hours (25%)
+ * the predicted study time in the next 24 hours (25%)
+ * the recent average study time per day (50%)
+
+The predictions do not account for all variables so that actual study time
+will fluctuate around the target study time (config.studyTimeTarget), but
+with reasonable consistent study and cards of reasonably consistent
+difficulty (i.e. study time per review), it is hoped the variations will
+not be too large.
+
+The prediction of study time in the next 24 hours is most problematic.
 Initially, there is no record of historic performance on which to base the
 prediction. Also, actual performance varies from day to day.
 
 The estimate of study time in the next 24 hours assumes:
- * time per card will be the same as recent average
- * number of new cards will be the same as recent average
+ * time per card will be the same as recent average time per card
+ * number of new cards will be the same as recent average new cards per day
 
 Time per card is higher than time per review when cards are reviewed more
 than once per day. When the mix of cards reviewed includes more cards with
@@ -60,19 +77,28 @@ The estimated study time is the predicted number of card to be studied (the
 number of cards due plus the average number of new cards per day)
 multiplied by the average time per card.
 
-The number of reviews between new cards is adjusted according to the ratio
-of average study time to target study time per day, the recent average time
-per review, the target study time per day and the recent average number of
-new cards per day.
+The number of reviews between new cards is set to the predicted number of
+reviews in the next 24 hours divided by the recent average number of new
+cards per day. The predicted number of reviews is the number of cards due
+in the next 24 hours multiplied by the recent average number of reviews per
+day per card. This excludes reviews of new cards that may be presented, so
+it should always be possible to view at least the recent average number of
+new cards.
 
-The average study time is a linear average of actual study time per day
-over tha past 7 days of study.
+The number of reviews between new cards is then adjusted according to the
+different between recent average study time per day and the target study
+time (config.studyTimeTarget). The sensitivity to this difference is
+config.studyTimeErrorSensitivity. The number of reviews between new cards
+will be reduced when study time is lower and increased when it is higer.
 
-The average time per review is the average of the last 1000 reviews.
+These heuristics have been developed to provide a reasonably stable study
+time per day, reasonably close to the target study time. At least in my own
+study, they work well enough.
 
-The average new cards per day is a linear average of new cards per day over
-the past 14 days (336 hours) of study. This is a sliding window ending at
-the current time, not calendar days.
+Despite all this, it is always possible to study more cards if one wishes.
+They Study button on the home page will provide either a due card or a new
+card to study, regardless of recent or predicted study time or the number
+of new cards already seen.
 
 ### review card selection
 
