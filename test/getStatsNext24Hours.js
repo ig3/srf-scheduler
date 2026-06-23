@@ -10,10 +10,14 @@ t.test('getStatsNext24Hours', t => {
       srf: setup.srf,
       config: setup.config,
     });
+    scheduler.reviewsToNextNew = 'x';
 
     const stats = scheduler.getStatsNext24Hours();
     t.equal(stats.count, 0, '0 count');
     t.equal(stats.time, 0, '0 time');
+    t.equal(stats.cardsDue, 0, '0 cards due');
+    t.equal(stats.minReviews, 1, '1 review between new cards');
+    t.equal(stats.reviewsToNextNew, 'x', 'reviews to next new card');
     t.end();
   });
 

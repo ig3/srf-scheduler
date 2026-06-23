@@ -383,7 +383,7 @@ function getStatsNext24Hours () {
     count: cards,
     cardsDue: cardsDue,
     time: Math.round(cards * timePerCard),
-    minReviews: this.getReviewsToNextNew,
+    minReviews: this.getReviewsToNextNew(),
     reviewsToNextNew: this.reviewsToNextNew,
   });
 }
@@ -468,6 +468,7 @@ const api = {
   getNextCard,
   getNextDue,
   getNextNew,
+  getReviewsToNextNew,
   getStatsNext24Hours,
   getStudyTime,
   getTimeNextDue,
