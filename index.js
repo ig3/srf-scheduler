@@ -13,6 +13,7 @@ const getCountNewCardsToday = require('./getCountNewCardsToday.js');
 const getNextCard = require('./getNextCard.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getStudyTime = require('./getStudyTime.js');
+const getStudyTimeToday = require('./getStudyTimeToday.js');
 
 // review is called when a card is reviewed
 function review (card, viewTime, studyTime, ease) {
@@ -471,6 +472,7 @@ const api = {
   getReviewsToNextNew,
   getStatsNext24Hours,
   getStudyTime,
+  getStudyTimeToday,
   getTimeNextDue,
   review,
   shutdown,
