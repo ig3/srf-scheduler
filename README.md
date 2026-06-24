@@ -40,76 +40,26 @@ described in some detail in the following sub-sections.
 Average study time per day is controlled by adjusting the presentation of
 new cards.
 
-New cards are presented if:
- * predicted average study time < `config.studyTimeTarget`; and
- * predicted study time in the next 24 hours < config.studyTimeLimit; and
- * new cards in the current calendar day < `config.maxNewCardsPerDay`; and
- * there are no overdue cards
+New cards are presented, interleaved with reviews, unless the number of new
+cards seen in the current calendar day is more than
+`config.maxNewCardsPerDay`.
 
-When the above conditions are satisfied and there are cards due, new cards
-are presented interleaved with the due cards. The number of reviews between
-new cards is adjusted so that they are spaced out throughout the day's
-study.
-
-When there are no cards due, a new card will be presented if, in addition
-to the conditions noted above:
- * predicted average study time < config.goModeThreshold; or
- * predicted study time in the next 24 hours < config.goModeThreshold.
-
-Predicted study time in the next 24 hours is based on:
- * the number of cards due in the next 24 hours
- * the recent average number of new cards per day
- * the recent average study time per day per card
-
-Predicted average study time is based on:
- * the actual study time in the past 24 hours (25%)
- * the predicted study time in the next 24 hours (25%)
- * the recent average study time per day (50%)
-
-The predictions do not account for all variables so that actual study time
-will fluctuate around the target study time (config.studyTimeTarget), but
-with reasonable consistent study and cards of reasonably consistent
-difficulty (i.e. study time per review), it is hoped the variations will
-not be too large.
-
-The prediction of study time in the next 24 hours is most problematic.
-Initially, there is no record of historic performance on which to base the
-prediction. Also, actual performance varies from day to day.
-
-The estimate of study time in the next 24 hours assumes:
- * time per card will be the same as recent average time per card
- * number of new cards will be the same as recent average new cards per day
-
-Time per card is higher than time per review when cards are reviewed more
-than once per day. When the mix of cards reviewed includes more cards with
-short intervals, average time per card increases. 
-
-The estimated study time is the predicted number of card to be studied (the
-number of cards due plus the average number of new cards per day)
-multiplied by the average time per card.
+The number of reviews between new cards is adjusted according to the
+difference between average study time per day and `config.studyTimeTarget`.
+Sensitivity to this error signal is set by
+`config.studyTimeErrorSensitivity`.
 
 The number of reviews between new cards is set to the predicted number of
 reviews in the next 24 hours divided by the recent average number of new
-cards per day. The predicted number of reviews is the number of cards due
-in the next 24 hours multiplied by the recent average number of reviews per
-day per card. This excludes reviews of new cards that may be presented, so
-it should always be possible to view at least the recent average number of
-new cards.
+cards per day, adjusted up or down according to the difference between
+average study time and target study time.
 
-The number of reviews between new cards is then adjusted according to the
-different between recent average study time per day and the target study
-time (config.studyTimeTarget). The sensitivity to this difference is
-config.studyTimeErrorSensitivity. The number of reviews between new cards
-will be reduced when study time is lower and increased when it is higer.
+The predicted number of reviews is the number of cards due in the next 24
+hours multiplied by the recent average number of reviews per day per card.
 
-These heuristics have been developed to provide a reasonably stable study
-time per day, reasonably close to the target study time. At least in my own
-study, they work well enough.
-
-Despite all this, it is always possible to study more cards if one wishes.
-They Study button on the home page will provide either a due card or a new
-card to study, regardless of recent or predicted study time or the number
-of new cards already seen.
+It is possible to study more cards if one wishes. The `Study` button on the
+home page will provide either a due card or a new card to study, regardless
+of the number of new cards already seen.
 
 ### review card selection
 
@@ -239,11 +189,6 @@ card with interval less than learningThreshold.
 ### config.failMaxInterval
 
 failMaxInterval is the maximum interval after a Fail response.
-
-### config.goModeThreshold
-
-Predicted study time below which new cards are presented in `go` mode
-rather than `slow` mode.
 
 ### config.goodFactor
 
@@ -384,10 +329,8 @@ Returns the average study time per card in seconds, averaged over the
 specified number of study days. Days without study are ignored. The current
 day is ignored if there are prior study days.
 
-The purpose of this function is to provide an estimate of the study time
-in the next 24 hours per card due in the next 24 hours. This is used to
-calculate the new card mode. It is a factor in calculating the estimated
-forward looking average study time.
+The purpose of this function is to estimate the study time in the next 24
+hours, calculated as the number of cards due multiplied by this average.
 
 ### getAverageStudyTimePerDay
 
@@ -413,40 +356,18 @@ calendar day.
 Returns an object with the new interval for each possible ease for the
 given card.
 
-### getNewCardMode()
-
-Returns 'go', 'slow' or 'stop'. This determines whether and when new cards
-will be presented. See getNextCard() for details.
-
-Mode is `stop` if:
- * predicted average study time is more than config.studyTimeTarget OR
- * predicted study time next 24 hours is more than config.studyTimeLimit OR
- * the number of new cards today is more than config.maxNewCardsPerDay OR
- * there are overdue cards
-
-Otherwise, mode is `go` if:
- * predicted average study time is less than config.goModeThreshold OR
- * predicted study time in next 24 hours is less than config.goModeThreshold
-
-Otherwise, mode is `slow`.
-
 ### getNextCard(overrideLimits)
 
 Returns the next card to be studied or undefined.
 
-If overrideLimits is true then getNextCard always returns a card: a new
-card if nothing is due. It forces 'go' mode, returning new cards in
-excess of maxNewCardsPerDay and regardless of studyTimeTarget.
+If overrideLimits is true or the number of new cards in the current
+calendar day is less than `config.maxNewCardsPerDay`, then if
+`reviewsToNextNew` is 0, then the next new card is returned or, if there is
+no new card available, then the next due card or, if there is no due card
+available, then undefined.
 
-If new card mode is `stop`, getNextCard returns the next due card if there
-is one, otherwise nothing.
-
-If new card mode is `slow`, getNextCard returns the next new card if cards
-to next new is 0, otherwise the next due card or no card if there is no
-card due.
-
-If new card mode is `go`, getNextCard returns the next new card if cards to
-next new is 0 or if there is no due card, otherwise the next due card.
+Otherwise the next due card is returned or, if there is no due card
+available, then undefined.
 
 ### getNextDue(overrideLimits)
 
@@ -487,13 +408,13 @@ now.
 count is the estimated number of cards to be reviewed in the next 24 hours.
 This is cardsDue plus the average number of new cards per day.
 
-minReviews is the minimum number of reviews between new cards when new card
-mode is `slow`. This is what reviewsToNextNew will be set to after viewing
-a new card.
+minReviews is the minimum number of reviews between new cards. This is what
+reviewsToNextNew will be set to after viewing a new card.
 
-reviewsToNextNew is the number of reviews before the next new card in
-`slow` mode. This is decremented after each review. When it is 0, a new
-card will be presented, when in `slow` mode.
+reviewsToNextNew is the number of reviews before a new card may be selected
+by getNextCard. This is decremented after each review. When it is 0, a new
+card will be presented, unless the number of new cards seen in the current
+calendar day is more than `config.maxNewCardsPerDay`.
 
 time is an estimate of the time to review the estimated number of cards to
 be reviewed in the next 24 hours. This is the number of cards multiplied by
@@ -678,3 +599,4 @@ Save state and disconnect from database.
  * Change getNewCardMode
  * Change getStatsNext24Hours
  * Change getAverageStudyTimePerDay
+ * Remove getNewCardMode
