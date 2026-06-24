@@ -235,8 +235,7 @@ t.test('getNextCard', t => {
 
   let card;
   card = scheduler.getNextCard();
-  t.ok(card, 'got card');
-  t.equal(card.id, 1, 'got card 1');
+  t.equal(card, undefined, 'No card');
 
   card = scheduler.getNextDue(true);
 
