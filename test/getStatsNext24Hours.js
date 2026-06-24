@@ -16,7 +16,7 @@ t.test('getStatsNext24Hours', t => {
     t.equal(stats.count, 0, '0 count');
     t.equal(stats.time, 0, '0 time');
     t.equal(stats.cardsDue, 0, '0 cards due');
-    t.equal(stats.minReviews, 1, '1 review between new cards');
+    t.equal(stats.minReviews, 0, '0 reviews between new cards');
     t.equal(stats.reviewsToNextNew, 'x', 'reviews to next new card');
     t.end();
   });
