@@ -26,7 +26,7 @@ module.exports = function getReviewsToNextNew () {
   );
 
   return Math.max(
-    1,
+    (this.getCardsDue(0) ? 1 : 0),
     Math.floor(
       (1 + error) *
       this.getCardsDue(86400) * this.getAverageReviewsPerCard() /

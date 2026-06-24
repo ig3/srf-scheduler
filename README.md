@@ -395,6 +395,21 @@ New cards are ignored if a card from the same fieldset is due within
 config.minTimeBetweenRelatedCards or if a card from the same fieldset has
 been reviewed within config.minTimeBetweenRelatedCards.
 
+### getReviewsToNextNew
+
+Returns the number of reviews to be completed before the next new card is
+presented.
+
+The number is the predicted number of reviews in the next 24 hours divided
+by the average number of new cards per day, adjusted according to the
+difference between average study time and `config.studyTimeTarget`.
+
+The predicted number of reviews in the next 24 hours is the number of cards
+due in the next 24 hours multiplied by the average number of reviews per
+card per day.
+
+If there are cards due, then the minimum is 1, otherwise it is 0.
+
 ### getStatsNext24Hours
 
 Returns an object with properties:
@@ -596,9 +611,9 @@ Save state and disconnect from database.
  * Add cardsDue to getStatsNext24Hours
  * Fix getAverageNewCardsPerDay
  * Rename getCardsToReview to getCardsDue
- * Change getReviewsToNextNew
  * Change getNewCardMode
  * Change getStatsNext24Hours
  * Change getAverageStudyTimePerDay
  * Remove getNewCardMode
  * Change getNextCard
+ * Change getReviewsToNextNew

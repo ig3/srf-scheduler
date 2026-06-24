@@ -18,6 +18,24 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
+    t.equal(n, 0, 'Minimum');
+    t.end();
+  });
+  t.test('Card due', t => {
+    const getReviewsToNextNew = require('../getReviewsToNextNew.js');
+
+    const context = {
+      config: {
+        studyTimeTarget: 30 * 60,
+        studyTimeErrorSensitivity: 1.0,
+      },
+      getAverageNewCardsPerDay: () => 0,
+      getAverageReviewsPerCard: () => 10,
+      getAverageStudyTimePerDay: () => 0,
+      getCardsDue: () => 1,
+    };
+
+    const n = getReviewsToNextNew.call(context);
     t.equal(n, 1, 'Minimum');
     t.end();
   });
