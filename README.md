@@ -389,6 +389,15 @@ in the next 24 hours per card due in the next 24 hours. This is used to
 calculate the new card mode. It is a factor in calculating the estimated
 forward looking average study time.
 
+### getAverageStudyTimePerDay
+
+Returns an exponentially weighted moving average of study time per day as
+seconds per day. The smoothing factor, alpha, is a function of the number
+of days averaged: `2 / (days + 1)`. The `days` are intervals of 86400
+seconds (24 hours), counting back from current, limited to days since first
+review. Days without study are included in the average. The default window
+is 7 days.
+
 ### getCountCardsDueToday
 
 Returns the number of cards to be reviewed between now and the end of the
@@ -668,3 +677,4 @@ Save state and disconnect from database.
  * Change getReviewsToNextNew
  * Change getNewCardMode
  * Change getStatsNext24Hours
+ * Change getAverageStudyTimePerDay
