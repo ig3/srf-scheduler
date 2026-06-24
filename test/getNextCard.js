@@ -275,5 +275,21 @@ t.test('getNextCard', t => {
     t.equal(card, 'new', 'New card');
     t.end();
   });
+  t.test('Override, no new, due, no reviewsToNextNew', t => {
+    const getNextCard = require('../getNextCard.js');
+
+    const card = getNextCard.call({
+      getCountNewCardsToday: () => 20,
+      getNextDue: () => 'due',
+      getNextNew: () => null,
+      reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
+    }, true);
+
+    t.equal(card, 'due', 'Due card');
+    t.end();
+  });
   t.end();
 });
