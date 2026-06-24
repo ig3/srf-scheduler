@@ -360,11 +360,13 @@ given card.
 
 Returns the next card to be studied or undefined.
 
-If overrideLimits is true or the number of new cards in the current
-calendar day is less than `config.maxNewCardsPerDay`, then if
-`reviewsToNextNew` is 0, then the next new card is returned or, if there is
-no new card available, then the next due card or, if there is no due card
-available, then undefined.
+If overrideLimits is true, a card is returned unless there are no due cards
+and no new cards available. If `reviewsToNextNew` is 0 then a new card is
+preferred, otherwise a due card is preferred.
+
+Otherwise, if the number of new cards seen today is less than
+`config.maxNewCardsPerDay` and `reviewsToNextNew` is 0, then a new card is
+returned or, if no new card is available, then a due card is returned or, if no due card is available, then undefined is returned.
 
 Otherwise the next due card is returned or, if there is no due card
 available, then undefined.
@@ -590,7 +592,6 @@ Save state and disconnect from database.
  * Change getReviewsToNextNew
 
 ### 3.0.1 - WIP
- * Fix getNextCard(true)
  * Add getAverageNewCardsPerDay and getAverageReviewPerDay to api
  * Add cardsDue to getStatsNext24Hours
  * Fix getAverageNewCardsPerDay
@@ -600,3 +601,4 @@ Save state and disconnect from database.
  * Change getStatsNext24Hours
  * Change getAverageStudyTimePerDay
  * Remove getNewCardMode
+ * Change getNextCard

@@ -3,17 +3,18 @@
 module.exports = function getNextCard (overrideLimits = false) {
   const self = this;
 
-  const newCardMode = overrideLimits ? 'go' : self.getNewCardMode();
-  const dueCard = self.getNextDue();
-  const newCard = self.getNextNew();
-
-  if (newCardMode !== 'stop') {
+  if (overrideLimits) {
     if (self.reviewsToNextNew === 0) {
-      return newCard || dueCard;
+      return self.getNextNew() || self.getNextDue();
     }
-    if (newCardMode === 'go') {
-      return dueCard || newCard;
-    }
+    return self.getNextDue() || self.getNextNew();
   }
-  return dueCard;
+
+  if (
+    self.getCountNewCardsToday() < self.config.maxNewCardsPerDay &&
+    self.reviewsToNextNew === 0
+  ) {
+    return self.getNextNew() || self.getNextDue();
+  }
+  return self.getNextDue();
 };

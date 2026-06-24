@@ -7,270 +7,189 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'go',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, 'new', 'Get a new card');
     t.end();
   });
-  t.test('Stop, no new, no due', t => {
+  t.test('No cards available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => null,
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, null, 'No card');
     t.end();
   });
-  t.test('Stop, no new, due', t => {
+  t.test('Due card available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, 'due', 'Due card');
     t.end();
   });
-  t.test('Stop, new, no due', t => {
+  t.test('New card available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
-    t.equal(card, null, 'No card');
+    t.equal(card, 'new', 'New card');
     t.end();
   });
-  t.test('Stop, new, due', t => {
+  t.test('New and due cards available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => 'new',
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, 'new', 'New card');
     t.end();
   });
-  t.test('Slow, no new, no due', t => {
+  t.test('1 review to next new, no cards available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => null,
-      reviewsToNextNew: 0,
+      reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, null, 'No card');
     t.end();
   });
-  t.test('Slow, no new, due, reviewsToNextNew', t => {
+  t.test('1 review to next new, due card available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
+      getCountNewCardsToday: () => 0,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, 'due', 'Due card');
     t.end();
   });
-  t.test('Slow, new, no due, reviewsToNextNew', t => {
+  t.test('1 review to next new, new and due cards available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
-      getNextDue: () => null,
+      getCountNewCardsToday: () => 0,
+      getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
+    });
+
+    t.equal(card, 'due', 'Due card');
+    t.end();
+  });
+  t.test('Max new cards, no cards available', t => {
+    const getNextCard = require('../getNextCard.js');
+
+    const card = getNextCard.call({
+      getCountNewCardsToday: () => 20,
+      getNextDue: () => null,
+      getNextNew: () => null,
+      reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, null, 'No card');
     t.end();
   });
-  t.test('Slow, new, due, reviewsToNextNew', t => {
+  t.test('Max new cards, due card available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
-      getNextNew: () => 'new',
-      reviewsToNextNew: 1,
+      getNextNew: () => null,
+      reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, 'due', 'Due card');
     t.end();
   });
-  t.test('Slow, no new, no due, no reviewsToNextNew', t => {
+  t.test('Max new cards, new card available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => null,
-      getNextNew: () => null,
+      getNextNew: () => 'new',
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, null, 'No card');
     t.end();
   });
-  t.test('Slow, no new, due, no reviewsToNextNew', t => {
+  t.test('Max new cards, new and due cards available', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
-      getNextDue: () => 'due',
-      getNextNew: () => null,
-      reviewsToNextNew: 0,
-    });
-
-    t.equal(card, 'due', 'Due card');
-    t.end();
-  });
-  t.test('Slow, new, no due, no reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
-      getNextDue: () => null,
-      getNextNew: () => 'new',
-      reviewsToNextNew: 0,
-    });
-
-    t.equal(card, 'new', 'New card');
-    t.end();
-  });
-  t.test('Slow, new, due, no reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'slow',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
-    });
-
-    t.equal(card, 'new', 'New card');
-    t.end();
-  });
-  t.test('Go, no new, no due, no reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => null,
-      getNextNew: () => null,
-      reviewsToNextNew: 0,
-    });
-
-    t.equal(card, null, 'No card');
-    t.end();
-  });
-  t.test('Go, no new, due, no reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => 'due',
-      getNextNew: () => null,
-      reviewsToNextNew: 0,
-    });
-
-    t.equal(card, 'due', 'Due card');
-    t.end();
-  });
-  t.test('Go, new, no due, no reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => null,
-      getNextNew: () => 'new',
-      reviewsToNextNew: 0,
-    });
-
-    t.equal(card, 'new', 'New card');
-    t.end();
-  });
-  t.test('Go, new, due, no reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => 'new',
-      getNextNew: () => 'new',
-      reviewsToNextNew: 0,
-    });
-
-    t.equal(card, 'new', 'New card');
-    t.end();
-  });
-  t.test('Go, no new, no due, reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => null,
-      getNextNew: () => null,
-      reviewsToNextNew: 1,
-    });
-
-    t.equal(card, null, 'No card');
-    t.end();
-  });
-  t.test('Go, no new, due, reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => 'due',
-      getNextNew: () => null,
-      reviewsToNextNew: 1,
-    });
-
-    t.equal(card, 'due', 'Due card');
-    t.end();
-  });
-  t.test('Go, new, no due, reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => null,
-      getNextNew: () => 'new',
-      reviewsToNextNew: 1,
-    });
-
-    t.equal(card, 'new', 'New card');
-    t.end();
-  });
-  t.test('Go, new, due, reviewsToNextNew', t => {
-    const getNextCard = require('../getNextCard.js');
-
-    const card = getNextCard.call({
-      getNewCardMode: () => 'go',
-      getNextDue: () => 'due',
-      getNextNew: () => 'new',
-      reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     });
 
     t.equal(card, 'due', 'Due card');
@@ -280,10 +199,13 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => null,
       getNextNew: () => null,
       reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     }, true);
 
     t.equal(card, null, 'No card');
@@ -293,10 +215,13 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     }, true);
 
     t.equal(card, 'due', 'Due card');
@@ -306,10 +231,13 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     }, true);
 
     t.equal(card, 'new', 'New card');
@@ -319,10 +247,13 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 1,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     }, true);
 
     t.equal(card, 'due', 'Due card');
@@ -332,10 +263,13 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
-      getNewCardMode: () => 'stop',
+      getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+      }
     }, true);
 
     t.equal(card, 'new', 'New card');
