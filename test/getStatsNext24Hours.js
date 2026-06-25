@@ -31,8 +31,8 @@ t.test('getStatsNext24Hours', t => {
 
     const stats = scheduler.getStatsNext24Hours();
     t.equal(stats.cardsDue, 4, 'count');
-    t.equal(stats.count, 8, 'count');
-    t.equal(stats.time, 80, 'time');
+    t.equal(stats.count, 6, 'count');
+    t.equal(stats.time, 60, 'time');
     t.end();
   });
 
@@ -396,9 +396,9 @@ function setup3 () {
       viewtime,
       studytime
     ) values
-      (@ts - 60 * 60 * 24 * 1000, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1000 + 1, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
-      (@ts - 60 * 60 * 24 * 1000 + 2, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 86400000 - 30, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 86400000 - 20, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 86400000 - 10, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(1),
@@ -416,7 +416,9 @@ function setup3 () {
       viewtime,
       studytime
     ) values
-      (@ts - 60 * 1000 + 5, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+      (@ts - 30, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 20, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 10, @date, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
   `).run({
     ts: Date.now(),
     date: dateDaysAgo(0),
