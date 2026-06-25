@@ -7,7 +7,7 @@ module.exports = function getAverageStudyTimePerDay (days = 7) {
       select min(id) as id from revlog
     `)
     .get().id || new Date();
-    this.days = Math.max(1, Math.floor((new Date() - firstID) / 86400000));
+    this.days = 1 + Math.floor((new Date() - firstID) / 86400000);
     days = Math.min(days, this.days);
   }
 

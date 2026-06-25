@@ -10,7 +10,7 @@ t.test('getAverageStudyTime', t => {
   t.equal(result1, 0, 'no revlog entries');
 
   const result2 = getAverageStudyTimePerDay.call(setup2());
-  t.equal(result2, 60, 'average with some logs');
+  t.equal(result2, 50, 'average with some logs');
 
   const result4 = getAverageStudyTimePerDay.call(setup2(), 1);
   t.equal(result4, 80, 'reviews older than days are ignored');
