@@ -619,3 +619,4 @@ Save state and disconnect from database.
  * Remove getNewCardMode
  * Change getNextCard
  * Change getReviewsToNextNew
+ * Change studyTimeErrorSensitivity
