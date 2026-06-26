@@ -20,8 +20,12 @@
 'use strict';
 
 module.exports = function getReviewsToNextNew () {
+  const studyTime = Math.max(
+    this.getAverageStudyTimePerDay(),
+    this.getStudyTimeToday()
+  );
   const error = this.config.studyTimeErrorSensitivity * (
-    (this.getAverageStudyTimePerDay() - this.config.studyTimeTarget) /
+    (studyTime - this.config.studyTimeTarget) /
       this.config.studyTimeTarget
   );
 

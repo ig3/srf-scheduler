@@ -15,6 +15,7 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 10,
       getAverageStudyTimePerDay: () => 0,
       getCardsDue: () => 0,
+      getStudyTimeToday: () => 0,
     };
 
     const n = getReviewsToNextNew.call(context);
@@ -33,6 +34,7 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 10,
       getAverageStudyTimePerDay: () => 0,
       getCardsDue: () => 1,
+      getStudyTimeToday: () => 0,
     };
 
     const n = getReviewsToNextNew.call(context);
@@ -51,6 +53,7 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 30 * 60,
       getCardsDue: () => 70,
+      getStudyTimeToday: () => 0,
     };
 
     const n = getReviewsToNextNew.call(context);
@@ -69,6 +72,26 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 45 * 60,
       getCardsDue: () => 70,
+      getStudyTimeToday: () => 0,
+    };
+
+    const n = getReviewsToNextNew.call(context);
+    t.equal(n, 21, 'reviews');
+    t.end();
+  });
+  t.test('Adjusts to high study time today', t => {
+    const getReviewsToNextNew = require('../getReviewsToNextNew.js');
+
+    const context = {
+      config: {
+        studyTimeTarget: 30 * 60,
+        studyTimeErrorSensitivity: 1.0,
+      },
+      getAverageNewCardsPerDay: () => 9,
+      getAverageReviewsPerCard: () => 2,
+      getAverageStudyTimePerDay: () => 30 * 60,
+      getCardsDue: () => 70,
+      getStudyTimeToday: () => 45 * 60,
     };
 
     const n = getReviewsToNextNew.call(context);
@@ -87,6 +110,7 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 15 * 60,
       getCardsDue: () => 70,
+      getStudyTimeToday: () => 0,
     };
 
     const n = getReviewsToNextNew.call(context);
@@ -105,6 +129,7 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 45 * 60,
       getCardsDue: () => 70,
+      getStudyTimeToday: () => 0,
     };
 
     const n = getReviewsToNextNew.call(context);
@@ -123,6 +148,7 @@ t.test('getNewCardMode', t => {
       getAverageReviewsPerCard: () => 2,
       getAverageStudyTimePerDay: () => 45 * 60,
       getCardsDue: () => 70,
+      getStudyTimeToday: () => 0,
     };
 
     const n = getReviewsToNextNew.call(context);

@@ -402,7 +402,9 @@ presented.
 
 The number is the predicted number of reviews in the next 24 hours divided
 by the average number of new cards per day, adjusted according to the
-difference between average study time and `config.studyTimeTarget`.
+difference between study time and `config.studyTimeTarget`.
+
+Study time is the maximum of average study time and study time today.
 
 The predicted number of reviews in the next 24 hours is the number of cards
 due in the next 24 hours multiplied by the average number of reviews per
