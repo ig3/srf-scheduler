@@ -28,13 +28,14 @@ module.exports = function getReviewsToNextNew () {
     (studyTime - this.config.studyTimeTarget) /
       this.config.studyTimeTarget
   );
+  const newCardsPerDay = Math.max(0.1, this.getAverageNewCardsPerDay());
 
   return Math.max(
     (this.getCardsDue(0) ? 1 : 0),
     Math.floor(
       (1 + error) *
-      this.getCardsDue(86400) * this.getAverageReviewsPerCard() /
-      (1 + this.getAverageNewCardsPerDay())
+        this.getCardsDue(86400) * this.getAverageReviewsPerCard() /
+        newCardsPerDay
     )
   );
 };

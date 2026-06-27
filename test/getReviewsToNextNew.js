@@ -57,7 +57,7 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 14, 'reviews');
+    t.equal(n, 15, 'reviews');
     t.end();
   });
   t.test('Adjusts to high study time', t => {
@@ -76,7 +76,7 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 21, 'reviews');
+    t.equal(n, 23, 'reviews');
     t.end();
   });
   t.test('Adjusts to high study time today', t => {
@@ -95,7 +95,7 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 21, 'reviews');
+    t.equal(n, 23, 'reviews');
     t.end();
   });
   t.test('Adjusts to low study time', t => {
@@ -133,7 +133,7 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 28, 'reviews');
+    t.equal(n, 31, 'reviews');
     t.end();
   });
   t.test('Adjusts to lower sensitivity', t => {
@@ -152,7 +152,7 @@ t.test('getNewCardMode', t => {
     };
 
     const n = getReviewsToNextNew.call(context);
-    t.equal(n, 17, 'reviews');
+    t.equal(n, 19, 'reviews');
     t.end();
   });
   t.end();
