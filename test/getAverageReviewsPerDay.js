@@ -10,10 +10,10 @@ t.test('getAverageReviewsPerDay', t => {
   t.equal(result1, 0, '0 if no revlog entries');
 
   const result2 = getAverageReviewsPerDay.call(setup2());
-  t.equal(result2, 5, '15 reviews in 3 days');
+  t.equal(result2.toFixed(2), '7.50', '15 reviews in approx 2 days');
 
   const result4 = getAverageReviewsPerDay.call(setup2(), 1);
-  t.equal(result4, 8, '8 reviews in 1 day - prior days are ignored');
+  t.equal(result4, 8, '8 reviews in 1 whole day - prior days are ignored');
   t.end();
 });
 

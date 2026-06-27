@@ -1,5 +1,8 @@
 'use strict';
 // Returns the average reviews per card per day.
+// This is the average per day that a card is studied. Most cards are not
+// studied every day in the window. Therefore, the average must first be
+// determined on a daily basis.
 module.exports = function getAverageReviewsPerCard (days = 14) {
   const hist = this.db.prepare(`
     select

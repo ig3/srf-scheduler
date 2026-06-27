@@ -1,21 +1,25 @@
 'use strict';
 // Returns the average number of reviews per day (24 hours)
-// over the sliding window of the given number of days
-// ending at the current time.
+// over a sliding window. The window begins at the later of the specified
+// days ago or time of the first review and ends at current time. Thus, at
+// the beginning of study, the effective window will be less than
+// requested, rather than including time before study began in the average.
 module.exports = function getAverageReviewsPerDay (days = 14) {
-  if (!this.days || this.days < days) {
-    const firstID = this.db.prepare(`
+  if (!this.firstID) {
+    this.firstID = this.db.prepare(`
       select min(id) as id from revlog
     `)
-    .get().id || new Date();
-    this.days = 1 + Math.floor((new Date() - firstID) / 86400000);
-    days = Math.min(days, this.days);
+    .get().id;
   }
+  if (!this.firstID) return 0;
+
+  const now = Date.now();
+  const limit = Math.max(this.firstID, now - 86400000 * days);
 
   return this.db.prepare(`
     select count() as n
     from revlog
-    where id > ?
+    where id >= ?
   `)
-  .get((new Date()) - 86400000 * days).n / days;
+  .get(limit).n * (86400000 / (now - limit));
 };
