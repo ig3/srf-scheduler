@@ -5,6 +5,9 @@
 // the beginning of study, the effective window will be less than
 // requested, rather than including time before study began in the average.
 module.exports = function getAverageStudyTimePerDay (days = 7) {
+  if (this.getAverageStudyTimePerDayCache !== undefined) {
+    return this.getAverageStudyTimePerDayCache;
+  }
   if (!this.firstID) {
     this.firstID = this.db.prepare(`
       select min(id) as id from revlog
@@ -16,11 +19,19 @@ module.exports = function getAverageStudyTimePerDay (days = 7) {
   const now = Date.now();
   const limit = Math.max(this.firstID, now - 86400000 * days);
 
-  return this.db.prepare(`
+  this.getAverageStudyTimePerDayCache = this.db.prepare(`
     select
       sum(studytime) as time
     from revlog
     where id >= ?
   `)
   .get(limit).time * Math.min(1, (86400000 / (now - limit)));
+
+  setTimeout(
+    () => {
+      delete this.getAverageStudyTimePerDayCache;
+    },
+    50
+  );
+  return this.getAverageStudyTimePerDayCache;
 };
