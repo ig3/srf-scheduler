@@ -22,7 +22,8 @@
 module.exports = function getReviewsToNextNew () {
   const studyTime = Math.max(
     this.getAverageStudyTimePerDay(),
-    this.getStudyTimeToday()
+    this.getStudyTimeToday(),
+    this.getPredictedStudyTime()
   );
   const error = this.config.studyTimeErrorSensitivity * (
     (studyTime - this.config.studyTimeTarget) /

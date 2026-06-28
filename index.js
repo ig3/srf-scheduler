@@ -11,6 +11,7 @@ const getAverageStudyTimePerDay = require('./getAverageStudyTimePerDay.js');
 const getCardsDue = require('./getCardsDue.js');
 const getCountNewCardsToday = require('./getCountNewCardsToday.js');
 const getNextCard = require('./getNextCard.js');
+const getPredictedStudyTime = require('./getPredictedStudyTime.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
 const getStatsNext24Hours = require('./getStatsNext24Hours.js');
 const getStudyTime = require('./getStudyTime.js');
@@ -422,6 +423,7 @@ const api = {
   getNextCard,
   getNextDue,
   getNextNew,
+  getPredictedStudyTime,
   getReviewsToNextNew,
   getStatsNext24Hours,
   getStudyTime,
