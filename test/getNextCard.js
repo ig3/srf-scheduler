@@ -7,12 +7,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -23,12 +25,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => null,
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -39,12 +43,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -55,12 +61,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -71,12 +79,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => 'new',
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -87,12 +97,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => null,
       getNextNew: () => null,
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -103,12 +115,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -119,12 +133,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 0,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -135,12 +151,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => null,
       getNextNew: () => null,
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -151,12 +169,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -167,12 +187,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -183,12 +205,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     });
 
@@ -199,12 +223,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => null,
       getNextNew: () => null,
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     }, true);
 
@@ -215,12 +241,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     }, true);
 
@@ -231,12 +259,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => null,
       getNextNew: () => 'new',
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     }, true);
 
@@ -247,12 +277,14 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 1,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     }, true);
 
@@ -263,12 +295,32 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => 'new',
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
+      }
+    }, true);
+
+    t.equal(card, 'new', 'New card');
+    t.end();
+  });
+  t.test('Override, new, due, no reviewsToNextNew, high average', t => {
+    const getNextCard = require('../getNextCard.js');
+
+    const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 1800,
+      getCountNewCardsToday: () => 20,
+      getNextDue: () => 'due',
+      getNextNew: () => 'new',
+      reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     }, true);
 
@@ -279,16 +331,36 @@ t.test('getNextCard', t => {
     const getNextCard = require('../getNextCard.js');
 
     const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 0,
       getCountNewCardsToday: () => 20,
       getNextDue: () => 'due',
       getNextNew: () => null,
       reviewsToNextNew: 0,
       config: {
         maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
       }
     }, true);
 
     t.equal(card, 'due', 'Due card');
+    t.end();
+  });
+  t.test('Override, high average study time', t => {
+    const getNextCard = require('../getNextCard.js');
+
+    const card = getNextCard.call({
+      getAverageStudyTimePerDay: () => 1800,
+      getCountNewCardsToday: () => 20,
+      getNextDue: () => 'due',
+      getNextNew: () => 'new',
+      reviewsToNextNew: 0,
+      config: {
+        maxNewCardsPerDay: 20,
+        studyTimeTarget: 1800,
+      }
+    }, true);
+
+    t.equal(card, 'new', 'New card');
     t.end();
   });
   t.end();

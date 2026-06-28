@@ -11,6 +11,7 @@ module.exports = function getNextCard (overrideLimits = false) {
   }
 
   if (
+    self.getAverageStudyTimePerDay() < self.config.studyTimeTarget &&
     self.getCountNewCardsToday() < self.config.maxNewCardsPerDay &&
     self.reviewsToNextNew === 0
   ) {

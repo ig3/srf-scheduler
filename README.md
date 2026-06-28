@@ -364,12 +364,17 @@ If overrideLimits is true, a card is returned unless there are no due cards
 and no new cards available. If `reviewsToNextNew` is 0 then a new card is
 preferred, otherwise a due card is preferred.
 
-Otherwise, if the number of new cards seen today is less than
-`config.maxNewCardsPerDay` and `reviewsToNextNew` is 0, then a new card is
-returned or, if no new card is available, then a due card is returned or, if no due card is available, then undefined is returned.
+Otherwise, if all the following conditions are satisfied:
+ * average study time per day is less than `config.studyTimeTarget`
+ * new cards seen today is less than `config.maxNewCardsPerDay`
+ * reviews to next new card is 0
+
+Then the next new card is returned, or the next due card, if there is no
+new card available, or no card if there is neither a new card nor a due
+card available.
 
 Otherwise the next due card is returned or, if there is no due card
-available, then undefined.
+available, then no card is returned.
 
 ### getNextDue(overrideLimits)
 

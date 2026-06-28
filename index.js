@@ -404,7 +404,6 @@ function defaultConfigParameters () {
     probabilityOldestDue: 0.2,
     recentIntervalWindow: 3,
     studyTimeErrorSensitivity: 2.0,
-    studyTimeLimit: '35 minutes',
     studyTimeTarget: '30 minutes',
     weightEasy: 2,
     weightFail: 0,
