@@ -12,6 +12,7 @@ const getCardsDue = require('./getCardsDue.js');
 const getCountNewCardsToday = require('./getCountNewCardsToday.js');
 const getNextCard = require('./getNextCard.js');
 const getReviewsToNextNew = require('./getReviewsToNextNew.js');
+const getStatsNext24Hours = require('./getStatsNext24Hours.js');
 const getStudyTime = require('./getStudyTime.js');
 const getStudyTimeToday = require('./getStudyTimeToday.js');
 
@@ -342,20 +343,6 @@ function getNextNew () {
     (now() - self.config.minTimeBetweenRelatedCards) * 1000
   );
   return card;
-}
-
-function getStatsNext24Hours () {
-  const cardsDue = this.getCardsDue(86400);
-  const cards = Math.round(cardsDue + this.getAverageNewCardsPerDay());
-  const timePerCard = this.getAverageStudyTimePerCard();
-
-  return ({
-    count: cards,
-    cardsDue: cardsDue,
-    time: Math.round(cards * timePerCard),
-    minReviews: this.getReviewsToNextNew(),
-    reviewsToNextNew: this.reviewsToNextNew,
-  });
 }
 
 function getCountCardsDueToday () {
