@@ -15,6 +15,16 @@ t.test('getAverageStudyTimePerCard', t => {
 
   const result4 = getAverageStudyTimePerCard.call(setup2(), 1);
   t.equal(result4, 40, 'reviews older than days are ignored');
+
+  t.test('caching', t => {
+    const setup = setup2();
+    const result1 = getAverageStudyTimePerCard.call(setup);
+    delete setup.db;
+    // With db gone, result must be from cache
+    const result2 = getAverageStudyTimePerCard.call(setup);
+    t.equal(result1, result2, 'result2 from cache');
+    t.end();
+  });
   t.end();
 });
 

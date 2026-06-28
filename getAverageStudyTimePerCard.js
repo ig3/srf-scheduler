@@ -5,7 +5,10 @@ const formatLocalDate = require('./formatLocalDate.js');
 // divided by unique cards per calendar day. Only days with study
 // are included in the average. The purpose is to provide an estimate
 // of study time in the next 24 hours per card due in the next 24 hours.
-module.exports = function getAverageStudyTimePerDay (days = 14) {
+module.exports = function getAverageStudyTimePerCard (days = 14) {
+  if (this.getAverageStudyTimePerCardCache !== undefined) {
+    return this.getAverageStudyTimePerCardCache;
+  }
   const hist = this.db.prepare(`
     select
       revdate,
@@ -17,16 +20,26 @@ module.exports = function getAverageStudyTimePerDay (days = 14) {
     limit ?
   `).all(days + 1);
   // If there are no reviews, default to 30 seconds per card
-  if (hist.length === 0) return (30);
-  if (
-    hist.length > 1 &&
-    hist[0].revdate === formatLocalDate(new Date())
-  ) {
-    hist.shift();
+  if (hist.length === 0) {
+    this.getAverageStudyTimePerCardCache = 30;
+  } else {
+    if (
+      hist.length > 1 &&
+      hist[0].revdate === formatLocalDate(new Date())
+    ) {
+      hist.shift();
+    }
+    let sum = 0;
+    hist.forEach(record => {
+      sum += record.t / record.n;
+    });
+    this.getAverageStudyTimePerCardCache = (sum / hist.length);
   }
-  let sum = 0;
-  hist.forEach(record => {
-    sum += record.t / record.n;
-  });
-  return (sum / hist.length);
+  setTimeout(
+    () => {
+      delete this.getAverageStudyTimePerCardCache;
+    },
+    50
+  );
+  return this.getAverageStudyTimePerCardCache;
 };
