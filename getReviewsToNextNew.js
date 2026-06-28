@@ -31,8 +31,10 @@ module.exports = function getReviewsToNextNew () {
   );
   const newCardsPerDay = Math.max(0.1, this.getAverageNewCardsPerDay());
 
+  const cardsDue = this.getCardsDue(0);
+
   return Math.max(
-    (this.getCardsDue(0) ? 1 : 0),
+    (cardsDue ? Math.min(5, cardsDue) : 0),
     Math.floor(
       (1 + error) *
         this.getCardsDue(86400) * this.getAverageReviewsPerCard() /

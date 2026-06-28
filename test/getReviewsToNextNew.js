@@ -43,6 +43,26 @@ t.test('getNewCardMode', t => {
     t.equal(n, 1, 'Minimum');
     t.end();
   });
+  t.test('Many cards due', t => {
+    const getReviewsToNextNew = require('../getReviewsToNextNew.js');
+
+    const context = {
+      config: {
+        studyTimeTarget: 30 * 60,
+        studyTimeErrorSensitivity: 1.0,
+      },
+      getAverageNewCardsPerDay: () => 0,
+      getAverageReviewsPerCard: () => 10,
+      getAverageStudyTimePerDay: () => 0,
+      getCardsDue: () => 10,
+      getPredictedStudyTime: () => 0,
+      getStudyTimeToday: () => 0,
+    };
+
+    const n = getReviewsToNextNew.call(context);
+    t.equal(n, 5, 'minimum');
+    t.end();
+  });
   t.test('At capacity', t => {
     const getReviewsToNextNew = require('../getReviewsToNextNew.js');
 
