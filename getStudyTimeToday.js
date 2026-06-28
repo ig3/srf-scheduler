@@ -1,6 +1,6 @@
 'use strict';
 // Returns study time (seconds) since start of calendar day
-module.exports = function getStudyTime () {
+module.exports = function getStudyTimeToday () {
   const startOfDay =
     Math.floor(new Date().setHours(0, 0, 0, 0).valueOf() / 1000);
 
