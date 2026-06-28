@@ -22,5 +22,5 @@ module.exports = function getAverageStudyTimePerDay (days = 7) {
     from revlog
     where id >= ?
   `)
-  .get(limit).time * (86400000 / (now - limit));
+  .get(limit).time * Math.min(1, (86400000 / (now - limit)));
 };

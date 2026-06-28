@@ -12,7 +12,10 @@ t.test('getAverageNewCardsPerDay', t => {
   const result2 = getAverageNewCardsPerDay.call(setup2());
   t.equal(result2.toFixed(2), '4.50', 'average with some logs');
 
-  const result4 = getAverageNewCardsPerDay.call(setup3(), 1);
+  const result3 = getAverageNewCardsPerDay.call(setup3(), 1);
+  t.equal(result3.toFixed(2), '4.00', 'reviews older than days are ignored');
+
+  const result4 = getAverageNewCardsPerDay.call(setup4());
   t.equal(result4.toFixed(2), '4.00', 'reviews older than days are ignored');
   t.end();
 });
@@ -172,6 +175,58 @@ function setup3 () {
     d1: d1,
     d2: d2,
     d3: d3,
+  });
+
+  return self;
+}
+
+function setup4 () {
+  const self = {};
+
+  self.config = {
+    percentCorrectWindow: 60 * 60 * 24 * 14,
+    matureThreshold: 60 * 60 * 24 * 21,
+    maxInterval: 60 * 60 * 24 * 365,
+    minPercentCorrectCount: 10,
+  };
+
+  self.db = require('better-sqlite3')();
+  self.db.prepare(`
+    create table revlog (
+      id integer primary key,
+      revdate text not null,
+      cardid integar not null,
+      ease text not null,
+      interval integer not null,
+      lastinterval integer not null,
+      factor real not null,
+      viewtime integer not null,
+      studytime integer not null
+    )
+  `).run();
+
+  const date = new Date();
+  const d1 = formatLocalDate(date);
+
+  self.db.prepare(`
+    insert into revlog (
+      id,
+      revdate,
+      cardid,
+      ease,
+      interval,
+      lastinterval,
+      factor,
+      viewtime,
+      studytime
+    ) values
+      (@ts - 40, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 30, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 20, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10),
+      (@ts - 10, @d1, 1, 'good', 60 * 5, 0, 1.8, 10, 10)
+  `).run({
+    ts: Date.now(),
+    d1: d1,
   });
 
   return self;

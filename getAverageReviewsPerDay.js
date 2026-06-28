@@ -21,5 +21,5 @@ module.exports = function getAverageReviewsPerDay (days = 14) {
     from revlog
     where id >= ?
   `)
-  .get(limit).n * (86400000 / (now - limit));
+  .get(limit).n * Math.min(1, (86400000 / (now - limit)));
 };
