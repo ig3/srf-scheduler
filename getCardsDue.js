@@ -15,8 +15,9 @@
 // New cards, increasing the number of reviews.
 //
 module.exports = function getCardsDue (secs) {
-  const self = this;
-  return self.db.prepare(`
+  if (this.getCardsDueCache !== undefined) return this.getCardsDueCache;
+
+  this.getCardsDueCache = this.db.prepare(`
       select count() as count
       from card
       where
@@ -24,4 +25,11 @@ module.exports = function getCardsDue (secs) {
         due < ?
     `)
   .get(Math.floor(Date.now() / 1000) + secs).count;
+  setTimeout(
+    () => {
+      delete this.getCardsDueCache;
+    },
+    50
+  );
+  return this.getCardsDueCache;
 };
