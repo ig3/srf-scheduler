@@ -6,6 +6,9 @@
 // requested, rather than including time before study began in the average.
 
 module.exports = function getAverageNewCardsPerDay (days = 14) {
+  if (this.getAverageNewCardsPerDayCache !== undefined) {
+    return this.getAverageNewCardsPerDayCache;
+  }
   if (!this.firstID) {
     this.firstID = this.db.prepare(`
       select min(id) as id from revlog
@@ -17,10 +20,18 @@ module.exports = function getAverageNewCardsPerDay (days = 14) {
   const now = Date.now();
   const limit = Math.max(this.firstID, now - 86400000 * days);
 
-  return this.db.prepare(`
+  this.getAverageNewCardsPerDayCache = this.db.prepare(`
     select count(case when lastinterval = 0 then 1 end) as n
     from revlog
     where id >= ?
   `)
   .get(limit).n * Math.min(1, (86400000 / (now - limit)));
+
+  setTimeout(
+    () => {
+      delete this.getAverageNewCardsPerDayCache;
+    },
+    50
+  );
+  return this.getAverageNewCardsPerDayCache;
 };
